@@ -7,7 +7,7 @@ function App() {
 
   useEffect(() => {
     // Gọi API của Flask. Nếu dùng proxy, chỉ cần đường dẫn tương đối.
-    fetch('/api/data') 
+    fetch('https://food-recommending-web.onrender.com/api/data') 
       .then(res => res.json())
       .then(data => {
         setData(data);
