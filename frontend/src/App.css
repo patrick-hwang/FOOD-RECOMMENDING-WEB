@@ -40,3 +40,47 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Styles for the simple GO button UI */
+.App {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  color: #111827;
+}
+
+.App-header {
+  text-align: center;
+  padding: 2rem;
+}
+
+.controls {
+  margin: 1.5rem 0;
+}
+
+.go-button {
+  font-size: 2rem;
+  padding: 0.6rem 2rem;
+  border-radius: 10px;
+  border: none;
+  background-color: #10b981; /* teal/green */
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(16,185,129,0.25);
+  transition: transform 140ms ease, box-shadow 140ms ease, opacity 140ms ease;
+}
+
+.go-button:hover,
+.go-button:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(16,185,129,0.28);
+  outline: none;
+}
+
+.started-text {
+  margin-top: 0.5rem;
+  color: #065f46;
+  font-weight: 600;
+}
