@@ -1,86 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Sofia+Sans+Extra+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap');
 #root {
-  max-width: 1280px;
+  max-width: 1920px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0rem;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #e0e0e0;
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-/* Styles for the simple GO button UI */
 .App {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  min-width: 100vw;
+  background: linear-gradient(180deg, #b2c5b2 0%, #3c5148 100%);
   color: #111827;
 }
 
-.App-header {
-  text-align: center;
-  padding: 2rem;
-}
+.title-button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;;
 
-.controls {
-  margin: 1.5rem 0;
-}
-
-.go-button {
-  font-size: 2rem;
-  padding: 0.6rem 2rem;
-  border-radius: 10px;
+  min-width: 400px;
+  padding: 20px 50px;
   border: none;
-  background-color: #10b981; /* teal/green */
-  color: white;
+  border-radius: 50px;
+
+  background: linear-gradient(180deg, #e6ef9e 0%, #7ec64b 75%); /* Adjusted gradient from your image */
+
+  box-shadow: 
+    0 8px 20px rgba(0,0,0,0.2),
+    0 0 30px rgba(135,88,241,0.3);
+
+  color: #333;
   cursor: pointer;
-  box-shadow: 0 6px 18px rgba(16,185,129,0.25);
-  transition: transform 140ms ease, box-shadow 140ms ease, opacity 140ms ease;
+  transition: all 0.3s ease;
 }
 
-.go-button:hover,
-.go-button:focus {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(16,185,129,0.28);
-  outline: none;
+.title-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 
+    0 12px 25px rgba(0,0,0,0.3),
+    0 0 40px rgba(135,88,241,0.5);
 }
 
-.started-text {
-  margin-top: 0.5rem;
-  color: #065f46;
-  font-weight: 600;
+.top-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9em; 
+  font-weight: 200; /* Bold */
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.main-text {
+  font-family: 'Dancing Script', cursive;
+  font-size: 5em;
+  font-weight: 700;
+  line-height: 1;
+  color: #222;
 }

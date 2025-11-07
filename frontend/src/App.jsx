@@ -18,29 +18,10 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>{data.message ? data.message : 'Welcome'}</h1>
-
-        <div className="controls">
-          <button
-            className="go-button"
-            aria-label="Start"
-            onClick={() => setStarted(prev => !prev)}
-          >
-            GO
-          </button>
-        </div>
-
-        {started && <p className="started-text">Started!</p>}
-
-        {data.users && (
-          <ul>
-            {data.users.map((user, index) => (
-              <li key={index}>{user}</li>
-            ))}
-          </ul>
-        )}
-      </header>
+      <button class="title-button">
+        <span class="top-text">BEST TRIPS WITH</span>
+        <span class="main-text">FOOD FOR MORE</span>
+      </button>
     </div>
   );
 }
