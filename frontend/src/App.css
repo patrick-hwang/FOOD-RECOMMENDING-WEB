@@ -1,86 +1,252 @@
+@import url('https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 #root {
-  max-width: 1280px;
+  max-width: 1920px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0rem;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-/* Styles for the simple GO button UI */
 .App {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  min-width: 100vw;
+  background: linear-gradient(90deg, #F3F5F4 0%, #9AAE9C 80%);
   color: #111827;
+  position: relative; /* needed for entrance rectangles */
+  overflow: hidden;
 }
 
-.App-header {
+.EntranceEffect {
+  flex-direction: column;
+}
+
+.entrance-slide-rect {
+  position: absolute;
+  left: 50%; /* center horizontally */
+  height: 50vh;
+  width: 100vw;
+  transform: translate(-50%, 0); /* will be overridden by .top/.bottom initial transforms */
+  transition: transform 700ms cubic-bezier(.22,.9,.35,1), opacity 400ms ease;
+  z-index: 40;
+  pointer-events: none;
+  font-family: Old Standard TT;
+  font-size: 4em;
+  font-weight: 700;
+}
+
+.entrance-slide-rect.top {
+  top: 0;
+  transform: translate(-50%, -100%);
+  background: #D9D9D933;
+  color: #3c5148;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
   text-align: center;
-  padding: 2rem;
 }
 
-.controls {
-  margin: 1.5rem 0;
+.entrance-slide-rect.bottom {
+  bottom: 0;
+  transform: translate(-50%, 100%);
+  background: #668D4C33;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  text-align: center;
 }
 
-.go-button {
-  font-size: 2rem;
-  padding: 0.6rem 2rem;
-  border-radius: 10px;
-  border: none;
-  background-color: #10b981; /* teal/green */
-  color: white;
-  cursor: pointer;
-  box-shadow: 0 6px 18px rgba(16,185,129,0.25);
-  transition: transform 140ms ease, box-shadow 140ms ease, opacity 140ms ease;
+.entrance-slide-rect.in.top {
+  transform: translate(-50%, 0);
+  background: #D9D9D933;
 }
 
-.go-button:hover,
-.go-button:focus {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(16,185,129,0.28);
-  outline: none;
+.entrance-slide-rect.in.bottom {
+  transform: translate(-50%, 0);
+  background: #668D4C82;
 }
 
-.started-text {
-  margin-top: 0.5rem;
-  color: #065f46;
+.entrance-slide-rect.in {
+  opacity: 1;
+}
+
+/* Entrance text pop-in: appear from nothing (scale + fade) */
+.entrance-text {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(8px) scale(0.6);
+  transition: transform 420ms cubic-bezier(.22,.9,.35,1), opacity 320ms ease;
+  color: inherit;
+}
+
+.entrance-text.in {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Slightly different anchor for top vs bottom (top text pops from bottom) */
+.entrance-slide-rect.top .entrance-text {
+  transform-origin: center bottom;
+}
+
+.entrance-slide-rect.bottom .entrance-text {
+  transform-origin: center top;
+}
+
+/* Thiết lập chung và font */
+.choose-mode-container {
+  font-family: Arial, sans-serif; /* Thay thế bằng font bạn muốn (vd: Roboto, Poppins) */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(180deg, #f8fffb, #f4f4f4, #9aae9c); /* Màu nền nhẹ cho toàn bộ trang */
+}
+
+/* Header (Logo) */
+.header {
+  width: 100%;
+  max-width: 600px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.logo {
+  margin-right: 1rem;
+  margin-left: 1rem;
+  margin-top: 1rem;
+  color: #4CAF50; /* Màu xanh lá cây */
+  height: 3rem;
+}
+
+.logo-text {
+  margin-right: 1rem;
+  margin-top: 1rem;
+  color: #4CAF50; /* Màu xanh lá cây */
+}
+
+/* Khu vực nội dung chính */
+.choose-mode-content-container {
+  text-align: center;
+  width: 100%;
+  max-width: 600px;
+  flex-grow: 1; /* Cho phép nó mở rộng và đẩy footer xuống */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Căn giữa nội dung theo chiều dọc */
+}
+
+.choose-mode-title {
+  font-size: 2em;
   font-weight: 600;
+  font-family: Montserrat;
+  color: #333; /* Màu chữ đậm */
+  color: #4CAF50; /* Màu xanh lá cây giống hình */
+}
+
+.choose-mode-subtitle {
+  font-size: 1.8em;
+  font-weight: 400;
+  font-family: Montserrat;
+  margin-bottom: 3rem;
+  color: #555;
+}
+
+/* Grid Lựa chọn (Cards) */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Một cột trên màn hình nhỏ */
+  gap: 20px;
+}
+
+@media (min-width: 500px) {
+  .options-grid {
+    grid-template-columns: 1fr 1fr; /* Hai cột trên màn hình lớn hơn */
+  }
+}
+
+.option-card {
+  padding: 3rem 2rem;
+  border-radius: 15px;
+  color: #333;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-height: 20px; /* Đảm bảo chiều cao tối thiểu */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+}
+
+.option-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card-icon {
+  font-size: 3em; /* Kích thước lớn cho icon */
+  margin: 15px 0;
+  /* Thay thế bằng hình ảnh thực tế nếu cần */
+}
+
+.card-description {
+  font-size: 0.9em;
+  color: #555;
+  margin-top: 10px;
+}
+
+/* Thẻ 1: Quick & Random (Màu vàng-xanh) */
+.random-card {
+  /* Gradient từ trái sang phải, từ vàng sang xanh lá nhạt */
+  background: radial-gradient(farthest-corner at 0px 0px, #f8ff6f 0%, #a6d577 100%); 
+  border: 1px solid #d9f99d;
+}
+
+/* Thẻ 2: Test your Taste (Màu xanh dương) */
+.taste-card {
+  /* Gradient từ trên xuống, từ xanh nhạt sang xanh đậm hơn */
+  background: radial-gradient(farthest-corner at 0px 0px, #fcffc1 0%, #98b6e7 100%); 
+  color: #3b82f6; /* Màu chữ chính cho card này */
+  border: 1px solid #93c5fd;
+}
+
+.taste-card .card-description, .taste-card .card-title {
+    color: #1e3a8a; /* Màu chữ đậm hơn cho card xanh */
+}
+
+/* Footer (Help?) */
+.footer {
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.help-link {
+  color: #777;
+  text-decoration: none;
+  font-size: 0.9em;
+}
+
+.help-link:hover {
+  text-decoration: underline;
 }
