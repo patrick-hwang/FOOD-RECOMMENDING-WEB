@@ -1,20 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Sofia+Sans+Extra+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 #root {
   max-width: 1920px;
   margin: 0 auto;
   padding: 0rem;
   text-align: center;
-}
-
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #e0e0e0;
-  margin: 0;
-  font-family: 'Montserrat', sans-serif;
 }
 
 .App {
@@ -23,53 +14,239 @@ body {
   justify-content: center;
   min-height: 100vh;
   min-width: 100vw;
-  background: linear-gradient(180deg, #b2c5b2 0%, #3c5148 100%);
+  background: linear-gradient(90deg, #F3F5F4 0%, #9AAE9C 80%);
   color: #111827;
+  position: relative; /* needed for entrance rectangles */
+  overflow: hidden;
 }
 
-.title-button {
+.EntranceEffect {
+  flex-direction: column;
+}
+
+.entrance-slide-rect {
+  position: absolute;
+  left: 50%; /* center horizontally */
+  height: 50vh;
+  width: 100vw;
+  transform: translate(-50%, 0); /* will be overridden by .top/.bottom initial transforms */
+  transition: transform 700ms cubic-bezier(.22,.9,.35,1), opacity 400ms ease;
+  z-index: 40;
+  pointer-events: none;
+  font-family: Old Standard TT;
+  font-size: 4em;
+  font-weight: 700;
+}
+
+.entrance-slide-rect.top {
+  top: 0;
+  transform: translate(-50%, -100%);
+  background: #D9D9D933;
+  color: #3c5148;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  text-align: center;
+}
+
+.entrance-slide-rect.bottom {
+  bottom: 0;
+  transform: translate(-50%, 100%);
+  background: #668D4C33;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.entrance-slide-rect.in.top {
+  transform: translate(-50%, 0);
+  background: #D9D9D933;
+}
+
+.entrance-slide-rect.in.bottom {
+  transform: translate(-50%, 0);
+  background: #668D4C82;
+}
+
+.entrance-slide-rect.in {
+  opacity: 1;
+}
+
+/* Entrance text pop-in: appear from nothing (scale + fade) */
+.entrance-text {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(8px) scale(0.6);
+  transition: transform 420ms cubic-bezier(.22,.9,.35,1), opacity 320ms ease;
+  color: inherit;
+}
+
+.entrance-text.in {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Slightly different anchor for top vs bottom (top text pops from bottom) */
+.entrance-slide-rect.top .entrance-text {
+  transform-origin: center bottom;
+}
+
+.entrance-slide-rect.bottom .entrance-text {
+  transform-origin: center top;
+}
+
+/* Thiết lập chung và font */
+.choose-mode-container {
+  font-family: Arial, sans-serif; /* Thay thế bằng font bạn muốn (vd: Roboto, Poppins) */
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;;
+  align-items: center;
+  justify-content: space-between;
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(180deg, #f8fffb, #f4f4f4, #9aae9c); /* Màu nền nhẹ cho toàn bộ trang */
+}
 
-  min-width: 400px;
-  padding: 20px 50px;
-  border: none;
-  border-radius: 50px;
+/* Header (Logo) */
+.header {
+  width: 100%;
+  max-width: 600px;
+}
 
-  background: linear-gradient(180deg, #e6ef9e 0%, #7ec64b 75%); /* Adjusted gradient from your image */
+.logo-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  font-weight: bold;
+}
 
-  box-shadow: 
-    0 8px 20px rgba(0,0,0,0.2),
-    0 0 30px rgba(135,88,241,0.3);
+.logo {
+  margin-right: 1rem;
+  margin-left: 1rem;
+  margin-top: 1rem;
+  color: #4CAF50; /* Màu xanh lá cây */
+  height: 3rem;
+}
 
+.logo-text {
+  margin-right: 1rem;
+  margin-top: 1rem;
+  color: #4CAF50; /* Màu xanh lá cây */
+}
+
+/* Khu vực nội dung chính */
+.choose-mode-content-container {
+  text-align: center;
+  width: 100%;
+  max-width: 600px;
+  flex-grow: 1; /* Cho phép nó mở rộng và đẩy footer xuống */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Căn giữa nội dung theo chiều dọc */
+}
+
+.choose-mode-title {
+  font-size: 2em;
+  font-weight: 600;
+  font-family: Montserrat;
+  color: #333; /* Màu chữ đậm */
+  color: #4CAF50; /* Màu xanh lá cây giống hình */
+}
+
+.choose-mode-subtitle {
+  font-size: 1.8em;
+  font-weight: 400;
+  font-family: Montserrat;
+  margin-bottom: 3rem;
+  color: #555;
+}
+
+/* Grid Lựa chọn (Cards) */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Một cột trên màn hình nhỏ */
+  gap: 20px;
+}
+
+@media (min-width: 500px) {
+  .options-grid {
+    grid-template-columns: 1fr 1fr; /* Hai cột trên màn hình lớn hơn */
+  }
+}
+
+.option-card {
+  padding: 3rem 2rem;
+  border-radius: 15px;
   color: #333;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-height: 20px; /* Đảm bảo chiều cao tối thiểu */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
 }
 
-.title-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 
-    0 12px 25px rgba(0,0,0,0.3),
-    0 0 40px rgba(135,88,241,0.5);
+.option-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-.top-text {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 0.9em; 
-  font-weight: 200; /* Bold */
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 5px;
-  color: #333;
+.card-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
-.main-text {
-  font-family: 'Dancing Script', cursive;
-  font-size: 5em;
-  font-weight: 700;
-  line-height: 1;
-  color: #222;
+.card-icon {
+  font-size: 3em; /* Kích thước lớn cho icon */
+  margin: 15px 0;
+  /* Thay thế bằng hình ảnh thực tế nếu cần */
+}
+
+.card-description {
+  font-size: 0.9em;
+  color: #555;
+  margin-top: 10px;
+}
+
+/* Thẻ 1: Quick & Random (Màu vàng-xanh) */
+.random-card {
+  /* Gradient từ trái sang phải, từ vàng sang xanh lá nhạt */
+  background: radial-gradient(farthest-corner at 0px 0px, #f8ff6f 0%, #a6d577 100%); 
+  border: 1px solid #d9f99d;
+}
+
+/* Thẻ 2: Test your Taste (Màu xanh dương) */
+.taste-card {
+  /* Gradient từ trên xuống, từ xanh nhạt sang xanh đậm hơn */
+  background: radial-gradient(farthest-corner at 0px 0px, #fcffc1 0%, #98b6e7 100%); 
+  color: #3b82f6; /* Màu chữ chính cho card này */
+  border: 1px solid #93c5fd;
+}
+
+.taste-card .card-description, .taste-card .card-title {
+    color: #1e3a8a; /* Màu chữ đậm hơn cho card xanh */
+}
+
+/* Footer (Help?) */
+.footer {
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.help-link {
+  color: #777;
+  text-decoration: none;
+  font-size: 0.9em;
+}
+
+.help-link:hover {
+  text-decoration: underline;
 }

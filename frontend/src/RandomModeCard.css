@@ -1,0 +1,187 @@
+.random-results-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100vw;
+  background-color: #d8e0d4; /* Màu xanh rêu nhạt */
+}
+
+.results-grid {
+  display: grid;
+  /* Tạo 3 cột có kích thước bằng nhau (1fr 1fr 1fr) */
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 25px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+.result-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Entrance animation for each result card */
+.result-card {
+  opacity: 0;
+  transform: translateY(12px) scale(0.995);
+  animation: cardIn 420ms ease forwards;
+}
+
+@keyframes cardIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.card-image-container {
+  width: 100%;
+  padding-top: 100%; 
+  position: relative;
+  overflow: hidden; 
+  border-radius: 16px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.card-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Đảm bảo ảnh che phủ container mà không bị méo */
+}
+
+.card-name {
+  margin-top: 0.85rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+  text-align: center;
+}
+
+/* Văn bản Placeholder */
+.card-text-placeholder {
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; /* Font chữ có chân giúp chữ trông gọn gàng hơn */
+  font-size: 0.85em;
+  color: #333;
+}
+
+.shuffle-row {
+  padding: 1.25rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.back-row {
+  padding: 1rem 0 0 1rem;
+}
+
+.shuffle-button,
+.back-button {
+  background: linear-gradient(180deg, #fff 0%, #f3f4f6 100%);
+  border: 1px solid rgba(0,0,0,0.08);
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+  transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+}
+
+.shuffle-button:hover,
+.back-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(15,23,42,0.08);
+}
+
+.shuffle-button:active,
+.back-button:active {
+  transform: translateY(0);
+}
+
+/* Subtle pulse for shuffle to draw attention */
+.shuffle-button {
+  animation: pulse 2400ms ease-in-out infinite;
+  opacity: 0.98;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 6px 18px rgba(15,23,42,0.04); }
+  50% { box-shadow: 0 12px 28px rgba(15,23,42,0.06); }
+  100% { box-shadow: 0 6px 18px rgba(15,23,42,0.04); }
+}
+
+/* Filter options panel */
+.filter-options {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+  padding: 0.75rem 1rem 1.25rem 1rem;
+  animation: fadeIn 260ms ease;
+}
+
+.filter-option {
+  padding: 0.45rem 0.8rem;
+  background: #ffffff;
+  border: 1px solid rgba(15,23,42,0.06);
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.filter-option:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(15,23,42,0.06);
+}
+
+.filter-item.active {
+  outline: 2px solid rgba(59,130,246,0.18);
+  background: rgba(59,130,246,0.06);
+  border-radius: 8px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 2. Hàng Bộ lọc (Icons) */
+.filters-row {
+  display: flex;
+  /* Căn đều các item theo chiều ngang */
+  justify-content: space-around; 
+  align-items: center;
+  width: 100%;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column; /* Icon và text xếp theo chiều dọc */
+  align-items: center;
+  font-size: 0.8em;
+  color: #555;
+  cursor: pointer;
+  
+  position: relative;
+}
+
+.filter-item span[role="img"] {
+  font-size: 1.5em; 
+  
+  background-color: rgba(255, 255, 255, 0.7); /* Màu trắng trong suốt */
+  border-radius: 50%;
+  padding: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
