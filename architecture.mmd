@@ -1,0 +1,32 @@
+flowchart LR
+  U[User Browser]
+
+  subgraph FE[Frontend - React SPA]
+    R[React App]
+    H[HTML]
+    S[CSS]
+  end
+
+  subgraph BE[Backend API FastAPI]
+    API[/REST Endpoints<br/>/api/filter-random/]
+  end
+
+  subgraph DB[MongoDB Atlas]
+    COL[(quan_an collection)]
+  end
+
+  subgraph EXT[External APIs]
+    L[Leaflet JS]
+    OSM[OpenStreetMap Tiles]
+  end
+
+  U --> FE
+  R --> H
+  R --> S
+
+  R -- "POST /api/filter-random<br/>JSON { tags, count, geo? }" --> API
+  API -- "AND filter + optional $geoNear" --> COL
+  API -- "JSON results" --> R
+
+  R -- "init map, markers" --> L
+  L -- "tile requests" --> OSM
