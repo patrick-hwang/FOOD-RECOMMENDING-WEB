@@ -252,23 +252,6 @@ function App() {
     .catch(err => console.error('Error fetching data:', err));
   }, []);
 
-// --- (Các component con TagRow, UserIcon giữ nguyên) ---
-const TagRow = ({ label, data }) => {
-  if (!data) return null;
-  let content;
-  if (Array.isArray(data)) {
-    content = (
-      <div className="flex flex-wrap pt-2">
-        {data.map((item, index) => (
-          <span key={index} className="mr-2 mb-2 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-            {item}
-          </span>
-        ))}
-      </div>
-    );
-  } else {
-    content = <span className="text-gray-900 font-medium capitalize">{data}</span>;
-  }
   return (
     <div className="App">
       {mode === 'entrance' && <AppEntranceEffect onDone={() => setMode('choosing')} />}
@@ -285,4 +268,4 @@ const TagRow = ({ label, data }) => {
   );
 }
 
-export default RestaurantDetail;
+export default App;
