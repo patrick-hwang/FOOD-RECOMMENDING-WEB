@@ -1,4 +1,4 @@
-import uvicorn
+import os
 import certifi
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,7 +9,11 @@ from pydantic import BaseModel
 from typing import Any, Dict, List, Optional
 
 # --- 1. CẤU HÌNH ---
-CONNECTION_STRING = "mongodb+srv://lequocvi2412_db_user:123456789#@cluster0.ujbl7hs.mongodb.net/?appName=Cluster0"
+# Prefer environment variables in production; fall back to hardcoded string for local dev
+CONNECTION_STRING = os.getenv(
+    "MONGODB_URI",
+    "mongodb+srv://lequocvi2412_db_user:123456789#@cluster0.ujbl7hs.mongodb.net/?appName=Cluster0",
+)
 DATABASE_NAME = "du_lich_am_thuc"
 COLLECTION_NAME = "quan_an"
 
@@ -282,4 +286,9 @@ async def admin_set_speciality_vn(payload: SpecialityVNUpdate):
 # (Hàm main để chạy app)
 if __name__ == "__main__":
     print("Khởi chạy API server tại http://127.0.0.1:8000")
+    # Local dev: run with Uvicorn. In production (e.g., Render), use either
+    #   uvicorn backend.app:app --host 0.0.0.0 --port $PORT
+    # or gunicorn with uvicorn workers:
+    #   gunicorn -k uvicorn.workers.UvicornWorker -w 2 -b 0.0.0.0:$PORT backend.app:app
+    import uvicorn
     uvicorn.run("app:app", host="127.0.0.1", port=8000, reload=True)
