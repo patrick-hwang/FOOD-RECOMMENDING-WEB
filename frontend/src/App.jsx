@@ -101,13 +101,13 @@ function AppChooseMode({ onRandom, onTaste }) {
 }
 
 const resultsData = [
-  { id: 1, name: "Yori Korean Restaurant", imageUrl: example_restaurant , description: ""},
-  { id: 2, name: "Donguri Japanese Restaurant", imageUrl: example_restaurant_2 },
-  { id: 3, name: "Artisan Bakery SAV3", imageUrl: example_restaurant_3 },
-  { id: 4, name: "The Ech", imageUrl: example_restaurant_4 },
+  { id: 1, name: "Yori Korean Restaurant", imageUrl: example_restaurant , description: "A Korean Restaurant"},
+  { id: 2, name: "Donguri Japanese Restaurant", imageUrl: example_restaurant_2, description: "A Japanese Restaurant" },
+  { id: 3, name: "Artisan Bakery SAV3", imageUrl: example_restaurant_3, description: "A Vietnamese Bakery" },
+  { id: 4, name: "The Ech", imageUrl: example_restaurant_4, description: "A Vietnamese Restaurant" }
 ];
 
-const ResultCard = ({ name, imageUrl }) => (
+const ResultCard = ({ name, imageUrl, description }) => (
   <div className="result-card">
     <div className="card-image-container">
       <img src={imageUrl} alt={name} className="card-image" />
@@ -116,10 +116,7 @@ const ResultCard = ({ name, imageUrl }) => (
     <h3 className="card-name">{name}</h3>
 
     <p className="card-text-placeholder">
-      abcdefghijk<br/>
-      abcdefghijk<br/>
-      abcdefghijk<br/>
-      abcdefghijk
+      {description}
     </p>
   </div>
 );
@@ -133,7 +130,16 @@ function RandomModeCard({ onBack }) {
     origin: ['Local', 'Asian', 'European', 'American'],
     distance: ['< 1 km', '1 - 3 km', '> 3 km'],
     speciality: ['Vegan', 'BBQ', 'Seafood', 'Dessert'],
+    foodType: ['Vietnamese', 'Korean', 'Japanese', 'Western'],
   };
+
+  const filters = [
+    { key: 'budget', icon: '💰', label: 'Budget' },
+    { key: 'origin', icon: '🌐', label: 'Origin' },
+    { key: 'distance', icon: '📍', label: 'Distance' },
+    { key: 'speciality', icon: '⚔️', label: 'Speciality' },
+    { key: 'foodType', icon: '🍽️', label: 'Food type' },
+  ];
 
   function onFilterClick(key) {
     setActiveFilter(prev => (prev === key ? null : key));
@@ -175,6 +181,7 @@ function RandomModeCard({ onBack }) {
             key={result.id}
             name={result.name}
             imageUrl={result.imageUrl}
+            description={result.description}
           />
         ))}
       </div>
@@ -190,50 +197,20 @@ function RandomModeCard({ onBack }) {
       </div>
 
       <div className="filters-row">
-        <div className="filter-item">
-          <div
-            className={`filter-item ${activeFilter === 'budget' ? 'active' : ''}`}
-            role="button"
-            tabIndex={0}
-            onClick={() => onFilterClick('budget')}
-            onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onFilterClick('budget')}
-          >
-            <span role="img" aria-label="Budget icon">💰</span> Budget
-          </div>
-
-          <div
-            className={`filter-item ${activeFilter === 'origin' ? 'active' : ''}`}
-            role="button"
-            tabIndex={0}
-            onClick={() => onFilterClick('origin')}
-            onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onFilterClick('origin')}
-          >
-            <span role="img" aria-label="Origin icon">🌐</span> Origin
-          </div>
-
-          <div
-            className={`filter-item ${activeFilter === 'distance' ? 'active' : ''}`}
-            role="button"
-            tabIndex={0}
-            onClick={() => onFilterClick('distance')}
-            onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onFilterClick('distance')}
-          >
-            <span role="img" aria-label="Distance icon">📍</span> Distance
-          </div>
-
-          <div
-            className={`filter-item ${activeFilter === 'speciality' ? 'active' : ''}`}
-            role="button"
-            tabIndex={0}
-            onClick={() => onFilterClick('speciality')}
-            onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onFilterClick('speciality')}
-          >
-            <span role="img" aria-label="Speciality icon">⚔️</span> Speciality
-          </div>
-        </div>
+          {filters.map(filter => (
+            <div
+              key={filter.key}
+              className={`filter-item ${activeFilter === filter.key ? 'active' : ''}`}
+              role="button"
+              tabIndex={0}
+              onClick={() => onFilterClick(filter.key)}
+              onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onFilterClick(filter.key)}
+            >
+              <span role="img" aria-label={`${filter.label} icon`}>{filter.icon}</span> {filter.label}
+            </div>
+          ))}
       </div>
 
-        {/* Filter options panel */}
         {activeFilter && (
           <div className="filter-options" role="region" aria-label={`${activeFilter} options`}>
             {filterOptions[activeFilter].map(opt => (
