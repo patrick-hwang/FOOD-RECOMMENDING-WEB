@@ -223,7 +223,7 @@ function RandomModeCard({ onBack }) {
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/filter-random', {
+      const response = await fetch('https://food-recommending-web.onrender.com/api/filter-random', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

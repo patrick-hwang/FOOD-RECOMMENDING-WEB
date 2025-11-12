@@ -49,6 +49,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# --- 4.1. ROOT/HEALTH ENDPOINT ---
+@app.get("/")
+def root_health():
+    return {"status": "ok", "service": "food-recommender-backend"}
+
 # --- 5. DATA MODELS (Cho việc Update) ---
 class NewReview(BaseModel):
     comment: str
@@ -285,7 +290,7 @@ async def admin_set_speciality_vn(payload: SpecialityVNUpdate):
 
 # (Hàm main để chạy app)
 if __name__ == "__main__":
-    print("Khởi chạy API server tại http://127.0.0.1:8000")
+    print("Khởi chạy API server tại https://food-recommending-web.onrender.com")
     # Local dev: run with Uvicorn. In production (e.g., Render), use either
     #   uvicorn backend.app:app --host 0.0.0.0 --port $PORT
     # or gunicorn with uvicorn workers:
