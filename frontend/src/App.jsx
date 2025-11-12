@@ -1,4 +1,256 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import './App.css';
+import './RandomModeCard.css';
+import logo from './assets/images/logo.png';
+import example_restaurant from './assets/images/Examples/Yori Korean Restaurant.png'
+import example_restaurant_2 from './assets/images/Examples/Donguri.png'
+import example_restaurant_3 from './assets/images/Examples/Artisan.png'
+import example_restaurant_4 from './assets/images/Examples/The Ech.png'
+
+function AppEntranceEffect({ onDone }) {
+  const [entered, setEntered] = useState(false);
+  const [showText, setShowText] = useState(false);
+  const [hideRects, setHideRects] = useState(false);
+
+  useEffect(() => {
+    const enterTimer = setTimeout(() => setEntered(true), 50);
+    const textTimer = setTimeout(() => setShowText(true), 500);
+    const exitStart = 1500;
+    const exitTimer = setTimeout(() => setEntered(false), exitStart);
+  const hideTimer = setTimeout(() => setHideRects(true), exitStart + 1000);
+
+    return () => {
+      clearTimeout(enterTimer);
+      clearTimeout(textTimer);
+      clearTimeout(exitTimer);
+      clearTimeout(hideTimer);
+    };
+  }, []);
+
+  // notify parent when the entrance effect fully finished and rects are hidden
+  useEffect(() => {
+    if (hideRects && typeof onDone === 'function') onDone();
+  }, [hideRects, onDone]);
+
+  return (
+    <div className="EntranceEffect">
+      {!hideRects && (
+        <>
+          <div className={`entrance-slide-rect top ${entered ? 'in' : ''}`}>
+            <span className={`entrance-text ${showText ? 'in' : ''}`}>NEW DESTINATIONS</span>
+          </div>
+          <div className={`entrance-slide-rect bottom ${entered ? 'in' : ''}`}>
+            <span className={`entrance-text ${showText ? 'in' : ''}`}>NEW CRAVINGS</span>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function AppChooseMode({ onRandom, onTaste }) {
+  return (
+    <div className="choose-mode-container">
+      <header className="header">
+        <div className="logo-container">
+          <img src={logo} className="logo" alt="Logo" />
+          <span className="logo-text">FoodRec</span>
+        </div>
+      </header>
+
+      <main className="choose-mode-content-container">
+        <h1 className="choose-mode-title">How do you want to search for food?</h1>
+        <h2 className="choose-mode-subtitle">Choose your option</h2>
+
+        <div className="options-grid">
+          <div
+            className="option-card random-card"
+            role="button"
+            tabIndex={0}
+            onClick={onRandom}
+            onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onRandom()}
+          >
+            <h2 className="card-title">Quick & Random</h2>
+            <div className="card-icon">
+              <span role="img" aria-label="Dice icon">🎲</span>
+            </div>
+            <p className="card-description">Filters & random 3 spots</p>
+          </div>
+
+          <div
+            className="option-card taste-card"
+            role="button"
+            tabIndex={0}
+            onClick={onTaste}
+            onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onTaste()}
+          >
+            <h2 className="card-title">Test your Taste</h2>
+            <div className="card-icon">
+              <span role="img" aria-label="Question mark icon">❓</span>
+            </div>
+            <p className="card-description">Quizzes for personalized recommendations</p>
+          </div>
+        </div>
+      </main>
+
+      <footer className="footer">
+        <a href="#help" className="help-link">Help?</a>
+      </footer>
+    </div>
+  );
+}
+
+const resultsData = [
+  { id: 1, name: "Yori Korean Restaurant", imageUrl: example_restaurant , description: "A Korean Restaurant"},
+  { id: 2, name: "Donguri Japanese Restaurant", imageUrl: example_restaurant_2, description: "A Japanese Restaurant" },
+  { id: 3, name: "Artisan Bakery SAV3", imageUrl: example_restaurant_3, description: "A Vietnamese Bakery" },
+  { id: 4, name: "The Ech", imageUrl: example_restaurant_4, description: "A Vietnamese Restaurant" }
+];
+
+const ResultCard = ({ name, imageUrl, description }) => (
+  <div className="result-card">
+    <div className="card-image-container">
+      <img src={imageUrl} alt={name} className="card-image" />
+    </div>
+
+    <h3 className="card-name">{name}</h3>
+
+    <p className="card-text-placeholder">
+      {description}
+    </p>
+  </div>
+);
+
+function RandomModeCard({ onBack }) {
+  const [visibleResults, setVisibleResults] = useState([]);
+  const [activeFilter, setActiveFilter] = useState(null);
+
+  const filterOptions = {
+    budget: ['Cheap', 'Moderate', 'Expensive'],
+    origin: ['Local', 'Asian', 'European', 'American'],
+    distance: ['< 1 km', '1 - 3 km', '> 3 km'],
+    speciality: ['Vegan', 'BBQ', 'Seafood', 'Dessert'],
+    foodType: ['Vietnamese', 'Korean', 'Japanese', 'Western'],
+  };
+
+  const filters = [
+    { key: 'budget', icon: '💰', label: 'Budget' },
+    { key: 'origin', icon: '🌐', label: 'Origin' },
+    { key: 'distance', icon: '📍', label: 'Distance' },
+    { key: 'speciality', icon: '⚔️', label: 'Speciality' },
+    { key: 'foodType', icon: '🍽️', label: 'Food type' },
+  ];
+
+  function onFilterClick(key) {
+    setActiveFilter(prev => (prev === key ? null : key));
+  }
+
+  function handleChooseFilter(filterKey, option) {
+    console.log('Filter chosen', filterKey, option);
+    setActiveFilter(null);
+  }
+  
+  function handleShuffle() {
+    const copy = resultsData.slice();
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = copy[i];
+      copy[i] = copy[j];
+      copy[j] = tmp;
+    }
+    const chosen = copy.slice(0, Math.min(3, copy.length));
+    setVisibleResults(chosen);
+  }
+
+  return (
+    <div className="random-results-container">
+
+      <div className="back-row">
+        <button
+          className="back-button"
+          onClick={() => typeof onBack === 'function' ? onBack() : null}
+          aria-label="Return to choosing mode"
+        >
+          Return
+        </button>
+      </div>
+
+      <div className="results-grid">
+        {visibleResults.map(result => (
+          <ResultCard
+            key={result.id}
+            name={result.name}
+            imageUrl={result.imageUrl}
+            description={result.description}
+          />
+        ))}
+      </div>
+
+      <div className="shuffle-row">
+        <button
+          className="shuffle-button"
+          onClick={handleShuffle}
+          aria-label="Show three shuffled results"
+        >
+          Shuffles
+        </button>
+      </div>
+
+      <div className="filters-row">
+          {filters.map(filter => (
+            <div
+              key={filter.key}
+              className={`filter-item ${activeFilter === filter.key ? 'active' : ''}`}
+              role="button"
+              tabIndex={0}
+              onClick={() => onFilterClick(filter.key)}
+              onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onFilterClick(filter.key)}
+            >
+              <span role="img" aria-label={`${filter.label} icon`}>{filter.icon}</span> {filter.label}
+            </div>
+          ))}
+      </div>
+
+        {activeFilter && (
+          <div className="filter-options" role="region" aria-label={`${activeFilter} options`}>
+            {filterOptions[activeFilter].map(opt => (
+              <button
+                key={opt}
+                className="filter-option"
+                onClick={() => handleChooseFilter(activeFilter, opt)}
+              >
+                {opt}
+              </button>
+            ))}
+          </div>
+        )}
+    </div>
+  );
+}
+
+function App() {
+  const [data, setData] = useState({});
+  const [mode, setMode] = useState('entrance'); // 'entrance' | 'choosing' | ...
+
+  function randomMode() {
+    console.log('enter random mode');
+    setMode('random');
+  }
+
+  function taste() {
+    console.log('enter taste mode');
+    setMode('taste');
+  }
+
+  useEffect(() => {
+  fetch('https://food-recommending-web.onrender.com/api/data')
+    .then(res => res.json())
+    .then(data => {
+      setData(data);
+      console.log(data);
+    })
+    .catch(err => console.error('Error fetching data:', err));
+  }, []);
 
 // --- (Các component con TagRow, UserIcon giữ nguyên) ---
 const TagRow = ({ label, data }) => {
@@ -18,285 +270,17 @@ const TagRow = ({ label, data }) => {
     content = <span className="text-gray-900 font-medium capitalize">{data}</span>;
   }
   return (
-    <div className="py-4 border-b last:border-b-0">
-      <div className="grid grid-cols-3 gap-4">
-        <span className="text-gray-500 font-semibold col-span-1">{label}</span>
-        <div className="col-span-2">{content}</div>
-      </div>
-    </div>
-  );
-};
-
-const UserIcon = () => (
-  <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path>
-  </svg>
-);
-// --- (Hết component con) ---
-
-
-// --- Component chính ---
-function RestaurantDetail() {
-  
-  // --- STATE (Trạng thái) ---
-  const [restaurant, setRestaurant] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  
-  const [allIds, setAllIds] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0); 
-  
-  const mapContainerRef = useRef(null);
-  const mapInstanceRef = useRef(null);
-
-  // --- EFFECT 1: Lấy danh sách TẤT CẢ ID (Chạy 1 lần) ---
-  useEffect(() => {
-    const fetchAllIds = async () => {
-      try {
-        const response = await fetch("http://127.0.0.1:8000/api/restaurants/all_ids");
-        if (!response.ok) {
-          throw new Error("Không thể lấy danh sách IDs");
-        }
-        const idList = await response.json();
-        
-        if (idList && idList.length > 0) {
-          setAllIds(idList); 
-          setCurrentIndex(0); 
-        } else {
-          setError("Không tìm thấy nhà hàng nào trong database.");
-        }
-      } catch (e) {
-        console.error("Lỗi khi fetch all IDs:", e);
-        setError("Lỗi kết nối đến API để lấy danh sách ID.");
-      }
-    };
-
-    fetchAllIds();
-  }, []); 
-
-  // --- EFFECT 2: Lấy dữ liệu 1 quán ăn (Chạy mỗi khi `currentIndex` thay đổi) ---
-  useEffect(() => {
-    if (allIds.length === 0) {
-        if (restaurant === null) setLoading(true);
-        return;
-    }
-    
-    const currentId = allIds[currentIndex];
-
-    const fetchRestaurantData = async () => {
-      try {
-        setLoading(true); 
-        setError(null);
-        
-        const response = await fetch(`http://127.0.0.1:8000/api/restaurant/${currentId}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setRestaurant(data); // <-- Dữ liệu mới sẽ được set ở đây
-        
-      } catch (e) {
-        console.error("Lỗi khi fetch dữ liệu:", e);
-        setError(`Lỗi: Không thể tải dữ liệu.\nHãy chắc chắn backend (app.py) đang chạy.\n${e.message}`);
-      } finally {
-        setLoading(false); // <-- Dọn dẹp loading
-      }
-    };
-
-    fetchRestaurantData();
-    
-    // Xóa bản đồ cũ khi chuyển quán
-    if (mapInstanceRef.current) {
-        mapInstanceRef.current.remove();
-        mapInstanceRef.current = null;
-    }
-    
-    // Cuộn lên đầu trang
-    window.scrollTo(0, 0);
-
-  }, [currentIndex, allIds]); 
-
-  // --- EFFECT 3: Khởi tạo bản đồ (Chạy khi `restaurant` thay đổi) ---
-  useEffect(() => {
-    // Chỉ khởi tạo map KHI đã có dữ liệu và map CHƯA được tạo
-    if (!loading && restaurant && mapContainerRef.current && !mapInstanceRef.current) {
-      const [lng, lat] = restaurant.location.coordinates;
-      // Kiểm tra 'L' (Leaflet) có tồn tại không
-      if (typeof L === 'undefined') return; 
-
-      const map = L.map(mapContainerRef.current).setView([lat, lng], 16); 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
-      L.marker([lat, lng]).addTo(map)
-        .bindPopup(`<b>${restaurant.name}</b><br>${restaurant.address}`)
-        .openPopup();
-      mapInstanceRef.current = map;
-    }
-  }, [loading, restaurant]); // Chạy lại khi loading hoặc restaurant thay đổi
-
-  // --- HÀM XỬ LÝ NÚT BẤM (MỚI) ---
-  const handleNext = () => {
-    const nextIndex = (currentIndex + 1) % allIds.length;
-    setCurrentIndex(nextIndex);
-  };
-
-  const handlePrevious = () => {
-    const prevIndex = (currentIndex - 1 + allIds.length) % allIds.length;
-    setCurrentIndex(prevIndex);
-  };
-
-
-  // --- Render (Hiển thị) ---
-  if (error && !restaurant) {
-    // Lỗi nghiêm trọng lúc ban đầu
-    return <div className="p-8 text-center text-red-600 bg-red-100 rounded-lg whitespace-pre-wrap">{error}</div>;
-  }
-
-  if (loading && !restaurant) {
-     // Loading lần đầu tiên
-    return <div className="p-8 text-center text-lg font-semibold">Đang tải danh sách...</div>;
-  }
-  
-  // --- Giao diện chính ---
-  return (
-    <div className="min-h-screen bg-gray-100 font-sans">
-      <div className="p-4 md:p-8">
-
-        {/* --- KHU VỰC ĐIỀU HƯỚNG --- */}
-        <div className="mb-4 p-4 bg-white shadow-lg rounded-lg flex justify-between items-center">
-          <button
-            onClick={handlePrevious}
-            disabled={allIds.length === 0 || loading} // Tắt nút khi đang tải
-            className="px-6 py-2 bg-gray-600 text-white rounded-lg font-semibold hover:bg-gray-700 disabled:opacity-50"
-          >
-            &larr; Quán Trước
-          </button>
-          <div className="text-center">
-            {/* Hiển thị "Đang tải..." ở đây thay vì dọn dẹp UI */}
-            {loading ? (
-              <span className="font-semibold text-lg text-blue-600">Đang tải quán mới...</span>
-            ) : (
-              <span className="font-semibold text-lg">Đang xem Quán</span>
-            )}
-            <br />
-            <span className="text-sm text-gray-600">({currentIndex + 1} / {allIds.length})</span>
-          </div>
-          <button
-            onClick={handleNext}
-            disabled={allIds.length === 0 || loading} // Tắt nút khi đang tải
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50"
-          >
-            Quán Kế Tiếp &rarr;
-          </button>
+    <div className="App">
+      {mode === 'entrance' && <AppEntranceEffect onDone={() => setMode('choosing')} />}
+      {mode === 'choosing' && <AppChooseMode onRandom={randomMode} onTaste={taste} />}
+      {mode === 'random' && <RandomModeCard onBack={() => setMode('choosing')} />}
+      {mode === 'taste' && (
+        <div className="mode-container">
+          <h2>Taste Quiz</h2>
+          <p>Starting taste quiz... (placeholder)</p>
+          <button className="back-button" onClick={() => setMode('choosing')}>Back</button>
         </div>
-        
-        {/* Báo lỗi nếu có, nhưng vẫn giữ UI cũ */}
-        {error && 
-          <div className="p-4 mb-4 text-center text-red-600 bg-red-100 rounded-lg whitespace-pre-wrap">{error}</div>
-        }
-        
-        {/*
-          --- SỬA LỖI QUAN TRỌNG ---
-          Xóa bỏ `!loading` khỏi điều kiện này.
-          Chúng ta muốn render `restaurant` (dù là cũ hay mới)
-          miễn là nó tồn tại, bất kể trạng thái `loading`.
-        */}
-        {restaurant && (
-          // Thêm hiệu ứng "mờ" đi khi đang tải
-          <div className={`transition-opacity duration-300 ${loading ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
-            
-            {/* --- KHU VỰC HEADER (Tên, Rating, Địa chỉ) --- */}
-            <div className="mb-8 p-6 bg-white shadow-lg rounded-lg">
-              <h1 className="text-5xl font-bold text-gray-900 mb-3">{restaurant.name}</h1>
-              <p className="text-xl text-gray-600 mb-4">{restaurant.address}</p>
-              <div className="flex items-center">
-                <span className="text-xl text-yellow-500 font-bold">★ {restaurant.rating}</span>
-                <span className="ml-2 text-lg text-gray-500">({restaurant.Nreview} đánh giá)</span>
-              </div>
-            </div>
-
-            {/* --- KHU VỰC NỘI DUNG (Layout 2 cột) --- */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              
-              {/* CỘT TRÁI (Nội dung chính) */}
-              <div className="lg:col-span-2 space-y-8">
-                 {/* --- KHU VỰC HÌNH ẢNH --- */}
-                {restaurant.image_urls && restaurant.image_urls.length > 0 && (
-                  <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-                    <h2 className="text-2xl font-semibold p-6 border-b">Hình ảnh</h2>
-                    <div className="p-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                      {restaurant.image_urls.map((url, index) => (
-                        <img
-                          key={index}
-                          src={url}
-                          alt={`${restaurant.name} image ${index + 1}`}
-                          className="w-full h-32 md:h-40 object-cover rounded-lg shadow-md cursor-pointer transition-transform duration-200 hover:scale-105"
-                          onError={(e) => { e.target.src = 'https://placehold.co/400x300/eee/ccc?text=Image+Error'; }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* --- KHU VỰC TAGS --- */}
-                {restaurant.tags && (
-                  <div className="bg-white shadow-lg rounded-lg">
-                    <h2 className="text-2xl font-semibold p-6 border-b">Chi tiết</h2>
-                    <div className="divide-y px-6">
-                      <TagRow label="Loại hình" data={restaurant.type} />
-                      <TagRow label="Món chính" data={restaurant.tags.main_dishes} />
-                      <TagRow label="Giá cả" data={restaurant.tags.price_range} />
-                      <TagRow label="Nguồn gốc" data={restaurant.tags.cuisine_origin} />
-                      <TagRow label="Đặc sản" data={restaurant.tags.is_vietnamese_specialty ? "Có" : "Không"} />
-                    </div>
-                  </div>
-                )}
-
-                {/* --- KHU VỰC REVIEWS --- */}
-                {restaurant.review && restaurant.review.length > 0 && (
-                  <div className="bg-white shadow-lg rounded-lg">
-                    <h2 className="text-2xl font-semibold p-6 border-b">Đánh giá nổi bật</h2>
-                    <div className="p-6 space-y-6">
-                      {restaurant.review.map((rev, index) => (
-                        <div key={index} className="flex space-x-4">
-                          <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                            <UserIcon />
-                          </div>
-                          <div className="flex-1">
-                            <p className="text-gray-700 italic whitespace-pre-wrap">
-                              "{rev}"
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-              
-              {/* CỘT PHẢI (Sidebar) */}
-              <div className="lg:col-span-1 space-y-8">
-                <div className="sticky top-8">
-                  <div className="bg-white shadow-lg rounded-lg p-6">
-                    <h3 className="text-xl font-semibold mb-4">Vị trí</h3>
-                    <div 
-                      ref={mapContainerRef} 
-                      className="h-64 md:h-80 w-full rounded-lg shadow-md"
-                    >
-                      {/* Bản đồ sẽ được chèn vào đây */}
-                    </div>
-                    <p className="text-sm text-gray-600 mt-4">
-                      {restaurant.address}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 }

@@ -1,5 +1,280 @@
+@import url('https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+#root {
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0rem;
+  text-align: center;
+}
+
 .App {
-  font-family: system-ui, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-width: 100vw;
+  background: linear-gradient(90deg, #F3F5F4 0%, #9AAE9C 80%);
+  color: #111827;
+  position: relative; /* needed for entrance rectangles */
+  overflow: hidden;
+}
+
+.EntranceEffect {
+  flex-direction: column;
+}
+
+.entrance-slide-rect {
+  position: absolute;
+  left: 50%; /* center horizontally */
+  height: 50vh;
+  width: 100vw;
+  transform: translate(-50%, 0); /* will be overridden by .top/.bottom initial transforms */
+  transition: transform 700ms cubic-bezier(.22,.9,.35,1), opacity 400ms ease;
+  z-index: 40;
+  pointer-events: none;
+  font-family: Old Standard TT;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.entrance-slide-rect.top {
+  top: 0;
+  transform: translate(-50%, -100%);
+  background: #D9D9D933;
+  color: #3c5148;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  text-align: center;
+}
+
+.entrance-slide-rect.bottom {
+  bottom: 0;
+  transform: translate(-50%, 100%);
+  background: #668D4C33;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.entrance-slide-rect.in.top {
+  transform: translate(-50%, 0);
+  background: #D9D9D933;
+}
+
+.entrance-slide-rect.in.bottom {
+  transform: translate(-50%, 0);
+  background: #668D4C82;
+}
+
+.entrance-slide-rect.in {
+  opacity: 1;
+}
+
+/* Entrance text pop-in: appear from nothing (scale + fade) */
+.entrance-text {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(8px) scale(0.6);
+  transition: transform 420ms cubic-bezier(.22,.9,.35,1), opacity 320ms ease;
+  color: inherit;
+}
+
+.entrance-text.in {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Slightly different anchor for top vs bottom (top text pops from bottom) */
+.entrance-slide-rect.top .entrance-text {
+  transform-origin: center bottom;
+}
+
+.entrance-slide-rect.bottom .entrance-text {
+  transform-origin: center top;
+}
+
+/* Thiết lập chung và font */
+.choose-mode-container {
+  font-family: Arial, sans-serif; /* Thay thế bằng font bạn muốn (vd: Roboto, Poppins) */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-y: auto; /* allow inner scrolling when viewport is tall/narrow */
+  background: linear-gradient(180deg, #f8fffb, #f4f4f4, #9aae9c); /* Màu nền nhẹ cho toàn bộ trang */
+  padding-bottom: 3.5rem; /* space for sticky footer */
+}
+
+/* Header (Logo) */
+.header {
+  width: 100%;
+  max-width: 600px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.logo {
+  margin-right: 1rem;
+  margin-left: 1rem;
+  margin-top: 1rem;
+  color: #4CAF50; /* Màu xanh lá cây */
+  height: 3rem;
+}
+
+.logo-text {
+  margin-right: 1rem;
+  margin-top: 1rem;
+  color: #4CAF50; /* Màu xanh lá cây */
+}
+
+/* Khu vực nội dung chính */
+.choose-mode-content-container {
+  text-align: center;
+  width: 100%;
+  min-width: 200px;
+  max-width: 400px;
+  flex-grow: 1; /* Cho phép nó mở rộng và đẩy footer xuống */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Căn giữa nội dung theo chiều dọc */
+}
+
+.choose-mode-title {
+  font-size: 2em;
+  font-weight: 600;
+  font-family: Montserrat;
+  color: #333; /* Màu chữ đậm */
+  color: #4CAF50; /* Màu xanh lá cây giống hình */
+}
+
+.choose-mode-subtitle {
+  font-size: 1.8em;
+  font-weight: 400;
+  font-family: Montserrat;
+  margin-bottom: 3rem;
+  color: #555;
+}
+
+/* Grid Lựa chọn (Cards) */
+.options-grid {
+  display: grid;
+  /* Default to two columns so the two option-cards occupy left and right halves */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 50px;
+  width: 100%;
+}
+
+/* On very small screens stack vertically */
+@media (max-width: 499px) {
+  .options-grid {
+    grid-template-columns: 1fr; /* single column on narrow devices */
+    gap: 16px;
+  }
+}
+
+.option-card {
+  padding: 3rem 2rem;
+  border-radius: 15px;
+  color: #333;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-height: 20px; /* Đảm bảo chiều cao tối thiểu */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+}
+
+.option-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card-icon {
+  font-size: 3em; /* Kích thước lớn cho icon */
+  margin: 15px 0;
+  /* Thay thế bằng hình ảnh thực tế nếu cần */
+}
+
+.card-description {
+  font-size: 0.9em;
+  color: #555;
+  margin-top: 10px;
+}
+
+/* Thẻ 1: Quick & Random (Màu vàng-xanh) */
+.random-card {
+  /* Gradient từ trái sang phải, từ vàng sang xanh lá nhạt */
+  background: radial-gradient(farthest-corner at 0px 0px, #f8ff6f 0%, #a6d577 100%); 
+  border: 1px solid #d9f99d;
+}
+
+/* Thẻ 2: Test your Taste (Màu xanh dương) */
+.taste-card {
+  /* Gradient từ trên xuống, từ xanh nhạt sang xanh đậm hơn */
+  background: radial-gradient(farthest-corner at 0px 0px, #fcffc1 0%, #98b6e7 100%); 
+  color: #3b82f6; /* Màu chữ chính cho card này */
+  border: 1px solid #93c5fd;
+}
+
+.taste-card .card-description, .taste-card .card-title {
+    color: #1e3a8a; /* Màu chữ đậm hơn cho card xanh */
+}
+
+/* Footer (Help?) */
+.footer {
+  width: 100%;
+  max-width: 600px;
   text-align: center;
   margin-top: 40px;
+}
+
+/* Sticky footer so controls (help, buttons) remain visible on tall/narrow screens */
+.choose-mode-footer {
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+  background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 90%);
+  padding: 0.6rem 0 0.9rem 0;
+  z-index: 30;
+}
+
+.choose-mode-footer .help-link {
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.7);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+
+.help-link {
+  color: #777;
+  text-decoration: none;
+  font-size: 0.9em;
+}
+
+.help-link:hover {
+  text-decoration: underline;
 }
