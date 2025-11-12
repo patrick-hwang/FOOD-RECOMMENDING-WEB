@@ -19,6 +19,14 @@ COLLECTION_NAME = "quan_an"
 
 # --- 2. KHỞI TẠO APP & BIẾN TOÀN CỤC ---
 app = FastAPI()
+
+# Optional: provide a WSGI adapter for environments mistakenly using a WSGI server.
+# Prefer running as ASGI with Uvicorn or Gunicorn+UvicornWorker.
+try:
+    from asgiref.wsgi import AsgiToWsgi  # type: ignore
+    wsgi_app = AsgiToWsgi(app)
+except Exception:
+    wsgi_app = None
 db = None
 collection_quan_an = None
 
