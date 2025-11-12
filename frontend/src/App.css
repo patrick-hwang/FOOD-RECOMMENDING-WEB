@@ -34,8 +34,8 @@
   z-index: 40;
   pointer-events: none;
   font-family: Old Standard TT;
-  font-size: 4em;
-  font-weight: 700;
+  font-size: 2rem;
+  font-weight: 500;
 }
 
 .entrance-slide-rect.top {
