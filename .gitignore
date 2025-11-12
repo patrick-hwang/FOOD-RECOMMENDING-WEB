@@ -1,24 +1,96 @@
-# Logs
-logs
+# =========================================
+# General
+# =========================================
+.DS_Store
+Thumbs.db
+.env
+*.env
 *.log
+*.bak
+*.tmp
+
+# =========================================
+# Python (Backend)
+# =========================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+ENV/
+.venv/
+
+# Python build / packaging
+build/
+develop-eggs/
+dist/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Testing
+.coverage
+.tox/
+.nox/
+.pytest_cache/
+
+# =========================================
+# Node / React / Vite (Frontend)
+# =========================================
+# Dependency directories
+frontend/node_modules/
+frontend/.vite/
+frontend/dist/
+frontend/build/
+frontend/.eslintcache
+
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Local environment files
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+
+# =========================================
+# OS Files
+# =========================================
+# macOS
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# =========================================
+# Deployment
+# =========================================
+# Ignore deployment artifacts
+.vercel/
