@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
+import SplashScreen from './Components/SplashScreen';
+
 import './RandomModeCard.css';
+import OnboardingPage from './Pages/Onboarding';
+
 import logo from './assets/images/logo.png';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -688,12 +692,17 @@ function RandomModeCard({ onBack }) {
 }
 
 function App() {
-  const [mode, setMode] = useState('entrance'); // 'entrance' | 'choosing' | ...
+  const [mode, setMode] = useState('splash'); 
 
   function randomMode() {
     console.log('enter random mode');
     setMode('random');
   }
+
+  function handleFinishOnboarding() {
+    // YÊU CẦU: Skip xong vào thẳng Random Mode
+    setMode('choosing');
+  }
 
   function taste() {
     console.log('enter taste mode');
@@ -704,7 +713,18 @@ function App() {
 
   return (
     <div className="App">
-      {mode === 'entrance' && <AppEntranceEffect onDone={() => setMode('choosing')} />}
+      {mode === 'splash' && (
+        <SplashScreen onFinish={() => setMode('entrance')} />
+      )}
+      {mode === 'entrance' && <AppEntranceEffect onDone={() => setMode('onboarding')} />}
+
+      {/* 3. ONBOARDING (Giới thiệu 4 trang) */}
+      {/* Khi xong hoặc Skip -> Chuyển sang Random (xem hàm handleFinishOnboarding) */}
+      {mode === 'onboarding' && (
+        <OnboardingPage onFinish={handleFinishOnboarding} />
+      )}
+
+      
       {mode === 'choosing' && <AppChooseMode onRandom={randomMode} onTaste={taste} />}
       {mode === 'random' && <RandomModeCard onBack={() => setMode('choosing')} />}
       {mode === 'taste' && (
