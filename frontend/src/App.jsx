@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import './App.css';
-import './RandomModeCard.css'; 
+import SplashScreen from './Components/SplashScreen';
+
+import './RandomModeCard.css';
+import OnboardingPage from './Pages/Onboarding';
+
 import logo from './assets/images/logo.png';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -374,8 +378,9 @@ function RandomModeCard({ onBack }) {
 
 // --- 5. APP MAIN ---
 function App() {
-  const [mode, setMode] = useState('entrance'); 
+  const [mode, setMode] = useState('splash'); 
   const GOOGLE_CLIENT_ID = '975848353478-mguhticg531ok092j9krom4mhb25j6at.apps.googleusercontent.com'; 
+  
 
   function handleLoginSuccess() {
     setMode('choosing');
@@ -387,12 +392,27 @@ function App() {
     }
   }
 
+  function handleFinishOnboarding() {
+    setMode('login');
+  }
+
+  function taste() {
+    console.log('enter taste mode');
+    setMode('taste');
+  }
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <div className="App">
-        {mode === 'entrance' && <AppEntranceEffect onDone={() => setMode('login')} />}
+        {mode === 'splash' && (
+          <SplashScreen onFinish={() => setMode('entrance')} />
+        )}
+        {mode === 'entrance' && <AppEntranceEffect onDone={() => setMode('onboarding')} />} 
+        {mode === 'onboarding' && <AppEntranceEffect onDone={() => setMode('login')} />}
+        {mode === 'onboarding' && (
+          <OnboardingPage onFinish={handleFinishOnboarding} />
+        )}
         {mode === 'login' && <LoginPage onLoginSuccess={handleLoginSuccess} />}
-        
+
         {mode === 'choosing' && (
           <AppChooseMode 
             onRandom={() => setMode('random')} 
@@ -413,6 +433,7 @@ function App() {
       </div>
     </GoogleOAuthProvider>
   );
+
 }
 
 export default App;
