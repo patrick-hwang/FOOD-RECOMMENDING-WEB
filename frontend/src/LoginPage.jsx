@@ -81,7 +81,8 @@ function LoginPage({ onLoginSuccess }) {
             userID: response.userID,
             name: response.name,
             email: response.email,
-            picture: response.picture?.data?.url
+            // picture: response.picture?.data?.url
+            picture: response.picture
         });
         console.log("Backend FB Response:", res.data);
 
@@ -225,42 +226,47 @@ function LoginPage({ onLoginSuccess }) {
 
         {/* Nút Facebook đã sửa lỗi Scopes */}
         <FacebookLogin
-            appId="1575289767221956"
-            autoLoad={false}
-            fields="name,email,picture" 
+          appId="1575289767221956"
+          autoLoad={false}
+          
+          // 1. ADD THIS LINE to ask for permission
+          scope="public_profile,email" 
+
+          // 2. Keep this line to request the data fields
+          fields="name,email,picture.type(large)" 
+          
+          onSuccess={(response) => {
+            console.log('Login Success (Token):', response);
+          }}
+
+          onProfileSuccess={(response) => {
+            console.log('Full Profile Data from FB:', response); // Check your Console F12 here!
             
-            // 1. Log the user in
-            onSuccess={(response) => {
-                console.log('Login Success!', response);
-            }}
+            // 3. Robust data handling
+            const userData = {
+              accessToken: "dummy_token", // Or use response.accessToken if available in this scope
+              userID: response.id,
+              name: response.name,
+              // Handle case where email is missing
+              email: response.email ? response.email : null, 
+              // Handle case where picture structure varies
+              picture: response.picture && response.picture.data ? response.picture.data.url : null 
+            };
 
-            // 2. GET DATA HERE (Important!)
-            onProfileSuccess={(response) => {
-                console.log('Profile Data:', response); 
-                
-                // Construct the data object manually to ensure fields match
-                const userData = {
-                    accessToken: "token_placeholder", // Backend doesn't verify this yet, so placeholder is fine
-                    userID: response.id,              // Library uses 'id', your backend wants 'userID'
-                    name: response.name,
-                    email: response.email,
-                    picture: response.picture?.data?.url // Extract the URL safely
-                };
+            console.log("Sending to Backend:", userData);
+            responseFacebook(userData);
+          }}
+          
+          onFail={(error) => {
+            console.error('Login Failed!', error);
+            setErrorMsg("Facebook login failed.");
+          }}
 
-                // 3. Call your existing handler with the correct data
-                responseFacebook(userData);
-            }}
-
-            onFail={(error) => {
-                console.log('Login Failed!', error);
-                setErrorMsg("Facebook login failed.");
-            }}
-
-            render={({ onClick }) => (
-                <button className="social-btn" onClick={onClick}>
-                    <FbIcon /> Continue with Facebook
-                </button>
-            )}
+          render={({ onClick }) => (
+            <button className="social-btn" onClick={onClick}>
+              <FbIcon /> Continue with Facebook
+            </button>
+          )}
         />
 
         <button className="social-btn" onClick={() => googleLogin()}>
