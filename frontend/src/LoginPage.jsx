@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useGoogleLogin } from '@react-oauth/google';
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+// import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+import FacebookLogin from '@greatsumini/react-facebook-login';
 import axios from 'axios';
 import './Login.css';
 
@@ -224,13 +225,39 @@ function LoginPage({ onLoginSuccess }) {
 
         {/* Nút Facebook đã sửa lỗi Scopes */}
         <FacebookLogin
-            appId="3500366290103704" 
+            appId="1575289767221956"
             autoLoad={false}
-            fields="name,picture"        // Chỉ lấy tên và ảnh, không lấy email để tránh lỗi permission
-            scope="public_profile"       // Scope cơ bản
-            callback={responseFacebook}
-            render={renderProps => (
-                <button className="social-btn" onClick={renderProps.onClick}>
+            fields="name,email,picture" 
+            
+            // 1. Log the user in
+            onSuccess={(response) => {
+                console.log('Login Success!', response);
+            }}
+
+            // 2. GET DATA HERE (Important!)
+            onProfileSuccess={(response) => {
+                console.log('Profile Data:', response); 
+                
+                // Construct the data object manually to ensure fields match
+                const userData = {
+                    accessToken: "token_placeholder", // Backend doesn't verify this yet, so placeholder is fine
+                    userID: response.id,              // Library uses 'id', your backend wants 'userID'
+                    name: response.name,
+                    email: response.email,
+                    picture: response.picture?.data?.url // Extract the URL safely
+                };
+
+                // 3. Call your existing handler with the correct data
+                responseFacebook(userData);
+            }}
+
+            onFail={(error) => {
+                console.log('Login Failed!', error);
+                setErrorMsg("Facebook login failed.");
+            }}
+
+            render={({ onClick }) => (
+                <button className="social-btn" onClick={onClick}>
                     <FbIcon /> Continue with Facebook
                 </button>
             )}
