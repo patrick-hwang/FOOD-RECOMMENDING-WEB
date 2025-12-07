@@ -407,10 +407,10 @@ function App() {
           <SplashScreen onFinish={() => setMode('entrance')} />
         )}
         {mode === 'entrance' && <AppEntranceEffect onDone={() => setMode('onboarding')} />} 
-        {mode === 'onboarding' && <AppEntranceEffect onDone={() => setMode('login')} />}
         {mode === 'onboarding' && (
           <OnboardingPage onFinish={handleFinishOnboarding} />
         )}
+        {/* {mode === 'onboarding' && <AppEntranceEffect onDone={() => setMode('login')} />} */}
         {mode === 'login' && <LoginPage onLoginSuccess={handleLoginSuccess} />}
 
         {mode === 'choosing' && (
