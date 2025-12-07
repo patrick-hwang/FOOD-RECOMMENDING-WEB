@@ -9,7 +9,8 @@ from pymongo.server_api import ServerApi
 from bson import ObjectId
 from pydantic import BaseModel
 from typing import Any, Dict, List, Optional
-from passlib.context import CryptContext
+# from passlib.context import CryptContext
+import bcrypt
 
 # ==============================================================================
 # 1. CẤU HÌNH (CONFIGURATION)
@@ -21,13 +22,25 @@ DATABASE_NAME = "du_lich_am_thuc"
 COLLECTION_NAME = "quan_an"
 
 # Cấu hình mã hóa mật khẩu
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+# def verify_password(plain_password, hashed_password):
+#     return pwd_context.verify(plain_password, hashed_password)
+
+# def get_password_hash(password):
+#     return pwd_context.hash(password)
 
 def get_password_hash(password):
-    return pwd_context.hash(password)
+    # Convert string to bytes, generate salt, and hash
+    pwd_bytes = password.encode('utf-8')
+    salt = bcrypt.gensalt()
+    return bcrypt.hashpw(pwd_bytes, salt).decode('utf-8')
+
+def verify_password(plain_password, hashed_password):
+    # Convert both to bytes and check
+    plain_bytes = plain_password.encode('utf-8')
+    hashed_bytes = hashed_password.encode('utf-8')
+    return bcrypt.checkpw(plain_bytes, hashed_bytes)
 
 def convert_document(document):
     """Chuyển đổi ObjectId thành string để trả về JSON"""
