@@ -19,7 +19,7 @@ import bcrypt
 # Connection String MongoDB của bạn
 CONNECTION_STRING = "mongodb+srv://lequocvi2412_db_user:123456789#@cluster0.ujbl7hs.mongodb.net/?appName=Cluster0"
 DATABASE_NAME = "du_lich_am_thuc"
-COLLECTION_NAME = "quan_an"
+COLLECTION_NAME = "restaurants"
 
 # Cấu hình mã hóa mật khẩu
 # pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -286,12 +286,9 @@ async def delete_restaurant(restaurant_id: str):
             raise HTTPException(status_code=404, detail="Restaurant not found")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Server error: {e}")
-
+    
 @app.post("/api/filter-random")
 async def filter_random(payload: FilterRandomRequest):
-    """
-    Lọc nhà hàng theo TẤT CẢ tag được chọn (AND), sau đó trả về ngẫu nhiên `count` bản ghi.
-    """
     if collection_quan_an is None:
         raise HTTPException(status_code=503, detail="Lỗi server DB")
 
@@ -299,67 +296,71 @@ async def filter_random(payload: FilterRandomRequest):
         tags = payload.tags or {}
         size = max(1, min(int(payload.count or 3), 50))
 
+        # --- MAPPING FRONTEND KEYS TO DATABASE KEYS ---
+        # Maps the UI category to the list of possible fields in result.json
         key_map = {
-            "price_range": "tags.price_range",
-            "price": "tags.price_range",
-            "budget": "tags.price_range",
-            "cuisine_origin": "tags.cuisine_origin",
-            "origin": "tags.cuisine_origin",
-            "country": "tags.cuisine_origin",
-            "main_dishes": "tags.main_dishes",
-            "foodType": "tags.main_dishes",
-            "specialities": "tags.specialities",
-            "speciality": "tags.specialities",
-            "features": "tags.specialities",
-            "speciality_vn": "tags.speciality_vn",
+            "price_range": ["tags.giá tiền"],
+            "cuisine_origin": ["tags.miền Bắc", "tags.miền Trung", "tags.miền Tây", "tags.miền Nam", "tags.Tây Nguyên", "tags.nước ngoài"],
+            "main_dishes": ["tags.món ăn nước", "tags.món khô", "tags.sợi", "tags.món rời", "tags.bánh bột gạo", "tags.bánh bột mì", "tags.hải sản", "tags.thịt gia súc", "tags.thịt gia cầm", "tags.món chay"],
+            "place": ["tags.không gian", "tags.vật chất", "tags.âm thanh"], # New "Place" Category
+            "speciality_vn": ["tags.speciality_vn"]
         }
 
         and_clauses: List[Dict[str, Any]] = []
 
-        # Chỉ lấy các quán có image_urls tồn tại và không rỗng
-        and_clauses.append({"image_urls": {"$exists": True}})
-        and_clauses.append({"image_urls": {"$ne": []}})
+        # 1. Ensure restaurant has images
+        and_clauses.append({
+            "$or": [
+                {"places_images": {"$ne": []}}, 
+                {"menu_images": {"$ne": []}}
+            ]
+        })
 
+        # 2. Build Query based on tags
         for k, v in tags.items():
-            path = key_map.get(k, f"tags.{k}")
+            # Get list of possible DB paths for this UI key
+            db_paths = key_map.get(k, [f"tags.{k}"]) 
+            
             if isinstance(v, list):
                 values = [x for x in v if isinstance(x, str) and x.strip()]
                 if values:
-                    and_clauses.append({path: {"$all": values}})
+                    # Logic: For each selected tag value (e.g. "Hà Nội"), 
+                    # check if it exists in ANY of the mapped DB paths.
+                    # This creates a complex $and of $ors
+                    for val in values:
+                        or_conditions = [{path: val} for path in db_paths]
+                        and_clauses.append({"$or": or_conditions})
+
             elif isinstance(v, str):
                 vv = v.strip()
                 if vv:
-                    and_clauses.append({path: vv})
+                    or_conditions = [{path: vv} for path in db_paths]
+                    and_clauses.append({"$or": or_conditions})
+                    
             elif isinstance(v, bool):
-                and_clauses.append({path: v})
+                # For boolean flags like speciality_vn
+                or_conditions = [{path: v} for path in db_paths]
+                and_clauses.append({"$or": or_conditions})
 
-        # Build pipeline with optional geo filter
+        # 3. Geo & Pipeline Logic (Keep existing)
         pipeline = []
-
         geo = payload.geo or {}
-        center = (geo.get("center") if isinstance(geo, dict) else None) or {}
-        lat = center.get("lat")
-        lng = center.get("lng")
-        max_km = geo.get("maxKm") if isinstance(geo, dict) else None
+        
+        if geo and "center" in geo and "maxKm" in geo:
+            center = geo["center"]
+            max_km = float(geo["maxKm"])
+            # MongoDB expects [long, lat]
+            pipeline.append({
+                "$geoNear": {
+                    "near": { "type": "Point", "coordinates": [center["lng"], center["lat"]] },
+                    "distanceField": "dist.calculated",
+                    "maxDistance": max_km * 1000, 
+                    "spherical": True
+                }
+            })
 
-        if isinstance(lat, (int, float)) and isinstance(lng, (int, float)) and isinstance(max_km, (int, float)):
-            query_obj = {"$and": and_clauses} if and_clauses else {}
-            try:
-                pipeline.append({
-                    "$geoNear": {
-                        "near": {"type": "Point", "coordinates": [float(lng), float(lat)]},
-                        "distanceField": "dist",
-                        "maxDistance": float(max_km) * 1000.0,
-                        "spherical": True,
-                        "query": query_obj
-                    }
-                })
-            except Exception:
-                if query_obj:
-                    pipeline.append({"$match": query_obj})
-        else:
-            if and_clauses:
-                pipeline.append({"$match": {"$and": and_clauses}})
+        if and_clauses:
+            pipeline.append({"$match": {"$and": and_clauses}})
 
         pipeline.append({"$sample": {"size": size}})
 
@@ -367,6 +368,7 @@ async def filter_random(payload: FilterRandomRequest):
         return [convert_document(d) for d in docs]
 
     except Exception as e:
+        print(f"Error: {e}")
         raise HTTPException(status_code=500, detail=f"Lỗi server: {e}")
 
 @app.get("/api/restaurants/all_ids")
