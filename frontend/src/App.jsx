@@ -107,6 +107,40 @@ const ResultCard = ({ name, imageUrl, description, onClick }) => (
   </div>
 );
 
+const TAG_DEFINITIONS = {
+    "nhiệt độ" : ["lạnh như băng", "lạnh", "mát", "nguội", "ấm", "nóng", "sôi/rất nóng"],
+    "nước cốt dừa" : ["nước cốt dừa"],
+    "sữa" : ["sữa"],
+    "trứng" : ["trứng gà", "trứng cút"],
+    "đậu - hạt" : ["cà phê", "đậu phộng", "đậu đen", "đậu đỏ", "đậu ván", "ca cao", "hạt sen"],
+    "thảo mộc" : ["sả", "hồi", "quế", "gừng", "lá dứa", "vani"],
+    "thời điểm" : ["bữa sáng", "ăn vặt", "tráng miệng", "buổi đêm", "buổi trưa"],
+    "miền Bắc" : ["Hà Nội", "Hải Phòng", "Tây Bắc"],
+    "miền Trung" : ["Phú Yên", "Huế", "Quảng Ngãi", "Đà Nẵng", "Quảng Nam", "Khánh Hòa", "Phan Rang", "Bình Định", "Nghệ An", "Hà Tĩnh"],
+    "miền Tây" : ["Tiền Giang", "Đồng Tháp", "Cà Mau", "Sóc Trăng", "An Giang"],
+    "miền Nam" : ["Sài Gòn", "Bà Rịa - Vũng Tàu"],
+    "Tây Nguyên" : ["Đắk Lắk", "Kon Tum", "Lâm Đồng", "Pleiku", "Đắk Nông", "Gia Lai"],
+    "nước ngoài" : ["Anh", "Pháp", "Mỹ", "Ý", "Đức", "Hy Lạp", "Nhật Bản", "Hàn Quốc", "Trung Quốc"],
+    "sợi" : ["bún", "phở", "hủ tiếu", "mì sợi", "bánh canh bột gạo", "bánh đa", "miến dong", "miến/bún tàu"],
+    "món ăn nước" : ["súp", "lẩu", "cháo", "cà ri", "hầm"],
+    "món khô" : ["xào", "chiên", "nướng", "trộn", "hấp", "kho", "rang", "quay", "luộc"],
+    "món rời" : ["cơm", "bắp"],
+    "món nếp" : ["xôi", "bánh nếp", "cốm", "chè nếp", "nếp hấp"],
+    "bánh bột gạo" : ["bánh xèo", "bánh bèo", "bánh căn", "bánh cuốn", "bánh ướt", "bánh hỏi", "bánh bò", "bánh đúc"],
+    "bánh bột mì" : ["bánh mì", "bánh bao", "bánh quẩy", "bánh tiêu", "bánh su kem", "bánh bông lan", "donut"],
+    "thịt gia súc" : ["thịt bò", "thịt heo", "thịt trâu", "thịt dê", "thịt cừu"],
+    "thịt gia cầm" : ["thịt gà", "thịt vịt", "thịt ngan", "thịt ngỗng", "thịt chim cút"],
+    "hải sản" : ["tôm", "mực", "cá", "nghêu", "sò", "ốc", "cua"],
+    "món chay" : ["rau củ", "đậu hũ", "nấm", "chả chay", "mì chay", "cơm chay"],
+    "độ ngọt" : ["không ngọt", "ít ngọt", "vừa ngọt", "ngọt đậm", "rất ngọt"],
+    "độ cay" : ["không cay", "cay nhẹ", "cay vừa", "cay nhiều", "rất cay"],
+    "thức uống" : ["cà phê", "trà sữa", "nước ép/ sinh tố", "có cồn", "nước có ga"],
+    "vật chất" : ["đèn vàng", "cửa sổ", "ghế êm", "chậu hoa", "bàn hai người", "nến", "tiểu cảnh", "rèm"],
+    "không gian" : ["thoáng đãng", "ấm áp", "riêng tư", "hương tinh dầu", "lãng mạn", "kết nối"],
+    "âm thanh" : ["nhạc", "yên tĩnh", "âm thanh nền"],
+    "giá tiền" : ["siêu rẻ", "rẻ", "bình dân", "sang", "nhà hàng", "cao cấp"]
+};
+
 // --- 4. MÀN HÌNH RANDOM (Logic chính lấy ảnh và hiển thị) ---
 function RandomModeCard({ onBack }) {
   const [visibleResults, setVisibleResults] = useState([]);
@@ -115,20 +149,23 @@ function RandomModeCard({ onBack }) {
   const [error, setError] = useState(null);
   const [selectedFilters, setSelectedFilters] = useState({});
   const [detailItem, setDetailItem] = useState(null);
-  const [showAllTags, setShowAllTags] = useState(false);
   const [imageGroup, setImageGroup] = useState('menu'); 
   const [enlargedImg, setEnlargedImg] = useState(null);
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const [userLoc, setUserLoc] = useState(null);
   const [distanceKm, setDistanceKm] = useState(null);
+  const [reviewLimit, setReviewLimit] = useState(3);
+  const [showAllTags, setShowAllTags] = useState(false);
 
+  // --- CONFIG ---
   const filters = [
-    { key: 'price_range', icon: '💰', label: 'Giá cả' },
-    { key: 'cuisine_origin', icon: '🌐', label: 'Nguồn gốc' },
-    { key: 'main_dishes', icon: '🍽️', label: 'Món chính' },
-    { key: 'distance', icon: '📍', label: 'Khoảng cách' },
-    { key: 'speciality_vn', icon: '⭐', label: 'Đặc sản VN' },
+    { key: 'price_range', icon: '💰', label: 'Price' },
+    { key: 'cuisine_origin', icon: '🌐', label: 'Origin' },
+    { key: 'main_dishes', icon: '🍽️', label: 'Dish' },
+    { key: 'place', icon: '✨', label: 'Place' }, // NEW
+    { key: 'distance', icon: '📍', label: 'Distance' },
+    { key: 'speciality_vn', icon: '⭐', label: 'Speciality' },
   ];
 
   const filterOptions = {
@@ -139,7 +176,38 @@ function RandomModeCard({ onBack }) {
     speciality_vn: ['yes', 'no'],
   };
 
-  // Hàm phân loại Tag
+  const getFilterOptions = (key) => {
+      switch(key) {
+          case 'price_range': 
+              return TAG_DEFINITIONS["giá tiền"];
+          case 'cuisine_origin':
+              return [
+                  ...TAG_DEFINITIONS["miền Bắc"], ...TAG_DEFINITIONS["miền Trung"], 
+                  ...TAG_DEFINITIONS["miền Nam"], ...TAG_DEFINITIONS["miền Tây"],
+                  ...TAG_DEFINITIONS["Tây Nguyên"], ...TAG_DEFINITIONS["nước ngoài"]
+              ];
+          case 'main_dishes':
+              return [
+                  ...TAG_DEFINITIONS["món ăn nước"], ...TAG_DEFINITIONS["món khô"], 
+                  ...TAG_DEFINITIONS["sợi"], ...TAG_DEFINITIONS["món rời"],
+                  ...TAG_DEFINITIONS["hải sản"], ...TAG_DEFINITIONS["thịt gia súc"], 
+                  ...TAG_DEFINITIONS["thịt gia cầm"], ...TAG_DEFINITIONS["bánh bột gạo"],
+                  ...TAG_DEFINITIONS["bánh bột mì"]
+              ];
+          case 'place': // NEW CATEGORY MAPPING
+              return [
+                  ...TAG_DEFINITIONS["không gian"], ...TAG_DEFINITIONS["vật chất"], 
+                  ...TAG_DEFINITIONS["âm thanh"]
+              ];
+          case 'distance': 
+              return ['1 km', '3 km', '5 km'];
+          case 'speciality_vn': 
+              return ['yes', 'no'];
+          default: 
+              return [];
+      }
+  };
+
   function categorizeTags(tagsObj) {
     const getValues = (keys) => keys.flatMap(k => Array.isArray(tagsObj[k]) ? tagsObj[k] : (tagsObj[k] ? [tagsObj[k]] : [])).filter(Boolean);
     return {
@@ -150,16 +218,7 @@ function RandomModeCard({ onBack }) {
     };
   }
 
-  // Hàm phân loại Ảnh (Menu vs Views)
-  function splitImages(imgs = []) {
-    const menuHints = ['menu', 'thuc-don', 'thucdon', 'thực đơn'];
-    const isMenu = (url) => url && menuHints.some(h => url.toLowerCase().includes(h));
-    const menuImages = imgs.filter(u => isMenu(u));
-    const viewImages = imgs.filter(u => !isMenu(u));
-    return { menuImages, viewImages };
-  }
-
-  // --- LOGIC GỌI API & XỬ LÝ ẢNH ---
+  // --- API LOGIC ---
   async function handleShuffle() {
     setLoading(true);
     setError(null);
@@ -178,38 +237,34 @@ function RandomModeCard({ onBack }) {
         body: JSON.stringify(payload)
       });
 
-      if (!response.ok) throw new Error("Lỗi kết nối Server");
+      if (!response.ok) throw new Error("Connection Error");
       const results = await response.json();
 
       if (!results || results.length === 0) {
-        setError("Không tìm thấy quán nào phù hợp!");
+        setError("No restaurants found!");
         return;
       }
-      
-      console.log("Dữ liệu nhận được từ Server:", results); // Debug kiểm tra dữ liệu
 
       const normalized = results.map((item) => {
-        // Đảm bảo images luôn là mảng
-        const images = Array.isArray(item.image_urls) ? item.image_urls : [];
-        
-        // 1. Tìm ảnh đại diện
+        const menuImages = Array.isArray(item.menu_images) ? item.menu_images : [];
+        const viewImages = Array.isArray(item.places_images) ? item.places_images : [];
+        const allImages = [...viewImages, ...menuImages];
+
         let imageUrl = 'https://placehold.co/300x200/eee/ccc?text=No+Image';
-        if (images.length > 0) {
-            // Ưu tiên ảnh kết thúc bằng 1.png, nếu không lấy ảnh đầu tiên
-            const cover = images.find(url => url && url.includes('/1.png'));
-            imageUrl = cover || images[0];
+        if (viewImages.length > 0) imageUrl = viewImages[0];
+        else if (menuImages.length > 0) imageUrl = menuImages[0];
+        else if (item.thumbnail) imageUrl = item.thumbnail;
+
+        let coords = null;
+        if (item.coordinates && item.coordinates.lat && item.coordinates.long) {
+             coords = { 
+                 lat: parseFloat(item.coordinates.lat), 
+                 lng: parseFloat(item.coordinates.long)
+             };
         }
 
-        // 2. Tách ảnh cho modal
-        const { menuImages, viewImages } = splitImages(images);
-
-        // 3. Xử lý Tag & Tọa độ
         const groupedTags = categorizeTags(item.tags || {});
         const allTags = Object.values(item.tags || {}).flat();
-        let coords = null;
-        if (item.location?.coordinates) {
-             coords = { lat: item.location.coordinates[1], lng: item.location.coordinates[0] };
-        }
 
         return {
           id: item.id, 
@@ -217,11 +272,16 @@ function RandomModeCard({ onBack }) {
           imageUrl: imageUrl, 
           description: item.description || (allTags.slice(0, 3).join(', ')),
           tags: allTags,
-          images, // Toàn bộ ảnh
-          imagesMenu: menuImages,
-          imagesViews: viewImages,
+          images: allImages,
+          imagesMenu: menuImages,   
+          imagesViews: viewImages,  
           groupedTags,
-          coords
+          coords: coords,
+          // --- NEW: FULL INFO ---
+          address: item.address || "Unknown Address",
+          rating: item.rating_info || { score: "?", count: 0 },
+          hours: item.opening_hours || [],
+          reviews: item.reviews || []
         };
       });
 
@@ -229,14 +289,19 @@ function RandomModeCard({ onBack }) {
 
     } catch (err) {
       console.error(err);
-      setError("Có lỗi xảy ra khi tải dữ liệu.");
+      setError("Error loading data.");
     } finally {
       setLoading(false);
     }
   }
 
+  // --- HANDLERS ---
   function onFilterClick(key) {
+    if (activeFilter !== key) {
+        setShowAllTags(false); // Reset to collapsed view
+    }
     setActiveFilter(prev => (prev === key ? null : key));
+    
     if (key === 'distance' && !userLoc) {
       navigator.geolocation.getCurrentPosition(pos => {
           setUserLoc({ lat: pos.coords.latitude, lng: pos.coords.longitude });
@@ -256,53 +321,55 @@ function RandomModeCard({ onBack }) {
 
   useEffect(() => { handleShuffle(); }, [selectedFilters]);
 
-  // Logic hiển thị Map
+  // --- MAP LOGIC ---
   useEffect(() => {
     if (imageGroup === 'map' && detailItem?.coords && mapContainerRef.current) {
-        if (mapInstanceRef.current) mapInstanceRef.current.remove();
+        if (mapInstanceRef.current) {
+            mapInstanceRef.current.remove();
+            mapInstanceRef.current = null;
+        }
         const { lat, lng } = detailItem.coords;
         const map = L.map(mapContainerRef.current).setView([lat, lng], 16);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-        L.marker([lat, lng]).addTo(map).bindPopup(detailItem.name);
+        L.marker([lat, lng]).addTo(map).bindPopup(detailItem.name).openPopup();
         mapInstanceRef.current = map;
+        setTimeout(() => { map.invalidateSize(); }, 100);
     }
   }, [imageGroup, detailItem]);
 
   function openDetail(item) {
       setDetailItem(item);
-      // Mở tab Menu nếu có ảnh menu, ngược lại mở Views
-      setImageGroup(item.imagesMenu?.length ? 'menu' : 'views');
+      setReviewLimit(3);
+
+      if (item.imagesMenu && item.imagesMenu.length > 0) setImageGroup('menu');
+      else if (item.imagesViews && item.imagesViews.length > 0) setImageGroup('views');
+      else setImageGroup('map');
   }
 
   return (
     <div className="random-results-container">
-      <div className="back-row">
-        <button className="back-button" onClick={onBack}>Return</button>
-      </div>
-
-      {loading && <div className="loading-text">Đang tìm kiếm...</div>}
+      {/* ... (Keep Back button, Results Grid, Shuffle Button) ... */}
+      <div className="back-row"><button className="back-button" onClick={onBack}>Return</button></div>
+      {loading && <div className="loading-text">Finding restaurants...</div>}
       {error && !loading && <div className="error-text">{error}</div>}
-
-      {/* DANH SÁCH KẾT QUẢ */}
+      
       <div className="results-grid">
         {visibleResults.map(result => (
-          <ResultCard
-            key={result.id}
-            name={result.name}
-            imageUrl={result.imageUrl}
-            description={result.description}
-            onClick={() => openDetail(result)}
-          />
+          <div key={result.id} className="result-card" onClick={() => openDetail(result)}>
+            <div className="card-image-container">
+              <img src={result.imageUrl} alt={result.name} className="card-image" referrerPolicy="no-referrer" onError={(e) => { e.target.src = 'https://placehold.co/300x200/eee/ccc?text=No+Image'; }} />
+            </div>
+            <h3 className="card-name">{result.name}</h3>
+            <p className="card-text-placeholder">⭐ {result.rating.score} ({result.rating.count}) • {result.tags.slice(0,2).join(', ')}</p>
+          </div>
         ))}
       </div>
 
       <div className="shuffle-row">
-        <button className="shuffle-button" onClick={handleShuffle} disabled={loading}>
-          {loading ? "Đang xáo trộn..." : "Shuffles"}
-        </button>
+        <button className="shuffle-button" onClick={handleShuffle} disabled={loading}>{loading ? "Shuffling..." : "Shuffles"}</button>
       </div>
       
-      {/* FILTER */}
+      {/* 4. UPDATE FILTER BAR */}
       <div className="filters-row">
           {filters.map(f => (
             <div key={f.key} className={`filter-item ${activeFilter === f.key ? 'active' : ''}`} onClick={() => onFilterClick(f.key)}>
@@ -310,65 +377,117 @@ function RandomModeCard({ onBack }) {
             </div>
           ))}
       </div>
+
+      {/* 5. UPDATE FILTER OPTIONS (With Limit & Show More Button) */}
       {activeFilter && (
           <div className="filter-options">
-              {filterOptions[activeFilter].map(opt => (
-                  <button key={opt} className="filter-option" onClick={() => handleChooseFilter(activeFilter, opt)}>{opt}</button>
-              ))}
+              {(() => {
+                  const allOptions = getFilterOptions(activeFilter);
+                  // Limit to 10 items if not expanded
+                  const visibleOptions = showAllTags ? allOptions : allOptions.slice(0, 10);
+                  const selectedForThisKey = selectedFilters[activeFilter] || [];
+
+                  return (
+                      <>
+                        {visibleOptions.map(opt => (
+                            <button 
+                                key={opt} 
+                                className={`filter-option ${selectedForThisKey.includes(opt) ? 'selected' : ''}`} 
+                                onClick={() => handleChooseFilter(activeFilter, opt)}
+                            >
+                                {opt}
+                            </button>
+                        ))}
+                        
+                        {/* THE SMALL SHOW MORE BUTTON */}
+                        {!showAllTags && allOptions.length > 10 && (
+                            <button 
+                                className="filter-option show-more-btn" 
+                                onClick={() => setShowAllTags(true)}
+                                style={{background: '#eee', fontStyle: 'italic'}}
+                            >
+                                + {allOptions.length - 10} more...
+                            </button>
+                        )}
+                      </>
+                  );
+              })()}
           </div>
       )}
 
-      {/* MODAL CHI TIẾT */}
+      {/* ... (Keep Modal and Lightbox code exactly the same) ... */}
       {detailItem && (
-        <div className="modal-overlay" onClick={() => setDetailItem(null)}>
-          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3 className="modal-title">{detailItem.name}</h3>
-              <button className="modal-close" onClick={() => setDetailItem(null)}>×</button>
-            </div>
-            <div className="modal-body">
-              <div className="image-group-toggle">
-                <button className={`toggle-btn ${imageGroup === 'menu' ? 'active' : ''}`} onClick={() => setImageGroup('menu')}>Menu ({detailItem.imagesMenu?.length})</button>
-                <button className={`toggle-btn ${imageGroup === 'views' ? 'active' : ''}`} onClick={() => setImageGroup('views')}>Views ({detailItem.imagesViews?.length})</button>
-                <button className={`toggle-btn ${imageGroup === 'map' ? 'active' : ''}`} onClick={() => setImageGroup('map')}>Map</button>
-              </div>
-
-              {imageGroup !== 'map' ? (
-                <div className="modal-image-strip">
-                  {/* Hiển thị ảnh Menu hoặc View dựa trên Tab đang chọn */}
-                  {(imageGroup === 'menu' ? detailItem.imagesMenu : detailItem.imagesViews).length > 0 ? (
-                      (imageGroup === 'menu' ? detailItem.imagesMenu : detailItem.imagesViews).map((url, i) => (
-                        <img key={i} src={url} onClick={() => setEnlargedImg(url)} onError={(e) => e.target.style.display='none'} />
-                      ))
-                  ) : (
-                      // Nếu Tab đó rỗng nhưng quán vẫn có ảnh khác thì hiển thị tất cả ảnh (fallback)
-                      detailItem.images.length > 0 ? (
-                        detailItem.images.map((url, i) => <img key={i} src={url} onClick={() => setEnlargedImg(url)} onError={(e) => e.target.style.display='none'} />)
-                      ) : (
-                        <p style={{textAlign:'center', width:'100%', color:'#888'}}>Chưa có ảnh</p>
-                      )
-                  )}
+         <div className="modal-overlay" onClick={() => setDetailItem(null)}>
+             {/* ... Modal Content ... */}
+             <div className="modal-card full-info-card" onClick={(e) => e.stopPropagation()}>
+                {/* ... Paste your existing modal code here ... */}
+                <div className="modal-header">
+                  <h3 className="modal-title">{detailItem.name}</h3>
+                  <button className="modal-close" onClick={() => setDetailItem(null)}>×</button>
                 </div>
-              ) : (
-                <div className="modal-map-container">
-                    <div ref={mapContainerRef} className="leaflet-container" style={{height:'100%'}} />
+                <div className="modal-body scrollable-body">
+                    {/* ... Address, Tabs, Images, Reviews ... */}
+                    <div className="info-header">
+                        <div className="info-row"><span className="info-icon">📍</span><span className="info-text">{detailItem.address}</span></div>
+                        <div className="info-row"><span className="info-icon">⭐</span><span className="info-text"><strong>{detailItem.rating.score}</strong> ({detailItem.rating.count} reviews)</span></div>
+                    </div>
+                    {/* ... (Rest of modal) ... */}
+                    <div className="image-group-toggle">
+                        <button className={`toggle-btn ${imageGroup === 'menu' ? 'active' : ''}`} onClick={() => setImageGroup('menu')}>Menu</button>
+                        <button className={`toggle-btn ${imageGroup === 'views' ? 'active' : ''}`} onClick={() => setImageGroup('views')}>Views</button>
+                        <button className={`toggle-btn ${imageGroup === 'map' ? 'active' : ''}`} onClick={() => setImageGroup('map')}>Map</button>
+                    </div>
+                     <div className="modal-content-area">
+                        {imageGroup !== 'map' ? (
+                            <div className="modal-image-strip">
+                            {(() => {
+                                const currentImages = imageGroup === 'menu' ? detailItem.imagesMenu : detailItem.imagesViews;
+                                if (currentImages && currentImages.length > 0) {
+                                    return currentImages.map((url, i) => (
+                                        <img key={i} src={url} referrerPolicy="no-referrer" onClick={() => setEnlargedImg(url)} onError={(e) => { e.target.src = 'https://placehold.co/100x100?text=Error'; }} alt="img" />
+                                    ));
+                                } else {
+                                    return <p className="empty-msg">No images available</p>;
+                                }
+                            })()}
+                            </div>
+                        ) : (
+                            <div className="modal-map-container" style={{height: '250px', width: '100%'}}>
+                            {detailItem.coords ? (
+                                <div ref={mapContainerRef} style={{height:'100%', width:'100%'}} />
+                            ) : (
+                                <div style={{textAlign:'center', padding:'50px'}}>No coordinates found</div>
+                            )}
+                            </div>
+                        )}
+                    </div>
+                    {detailItem.hours && detailItem.hours.length > 0 && (
+                        <details className="details-section"><summary>🕒 Opening Hours</summary><ul className="hours-list">{detailItem.hours.map((h, i) => (<li key={i}><strong>{h.day}:</strong> {h.hours}</li>))}</ul></details>
+                    )}
+                    <div className="modal-tags">
+                        {detailItem.tags.map((t, i) => <span key={i} className="tag-chip">#{t}</span>)}
+                    </div>
+                    {detailItem.reviews && detailItem.reviews.length > 0 && (
+                        <div className="reviews-section">
+                            <h4>💬 Recent Reviews ({detailItem.reviews.length})</h4>
+                            {detailItem.reviews.slice(0, reviewLimit).map((rev, i) => (
+                                <div key={i} className="review-card">
+                                    <div className="review-header"><strong>{rev.author}</strong><span className="review-star">{rev.rating_text}</span></div>
+                                    <p className="review-content">{rev.content}</p>
+                                </div>
+                            ))}
+                            {detailItem.reviews.length > reviewLimit && (
+                                <button className="load-more-btn" onClick={() => setReviewLimit(prev => prev + 5)}>Show more reviews ▼</button>
+                            )}
+                        </div>
+                    )}
                 </div>
-              )}
-              
-              <div className="modal-tags" style={{marginTop:'15px'}}>
-                  {detailItem.tags.slice(0, 10).map((t, i) => (
-                      <span key={i} className="tag-chip">#{t}</span>
-                  ))}
-              </div>
-            </div>
-          </div>
-        </div>
+             </div>
+         </div>
       )}
-      
-      {/* ẢNH PHÓNG TO */}
-      {enlargedImg && (
+       {enlargedImg && (
         <div className="image-lightbox" onClick={() => setEnlargedImg(null)}>
-          <img src={enlargedImg} onClick={(e) => e.stopPropagation()} />
+          <img src={enlargedImg} referrerPolicy="no-referrer" onClick={(e) => e.stopPropagation()} alt="Enlarged" />
           <button className="lightbox-close" onClick={() => setEnlargedImg(null)}>×</button>
         </div>
       )}
