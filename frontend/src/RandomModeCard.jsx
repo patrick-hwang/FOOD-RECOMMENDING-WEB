@@ -176,7 +176,6 @@ export default function RandomModeCard({ onBack }) {
   useEffect(() => { handleShuffle(); }, []);
 
   function onFilterClick(key) {
-    if (activeFilter !== key) setShowAllTags(false);
     setActiveFilter(prev => (prev === key ? null : key));
     
     // Auto get location if distance is clicked

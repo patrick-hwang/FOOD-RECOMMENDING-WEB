@@ -69,7 +69,13 @@ export default function RestaurantDetail({ item, onBack, onShuffleAgain, onGetDi
 
             {/* Image Slider */}
             <div className="rd-slider-container">
-                <img src={currentImages[sliderIndex]} alt="Slide" className="rd-slider-img" onError={(e) => e.target.src='https://placehold.co/400x250'} />
+                <img 
+                    src={currentImages[sliderIndex]} 
+                    alt="Slide" 
+                    className="rd-slider-img" 
+                    referrerPolicy="no-referrer" 
+                    onError={(e) => e.target.src='https://placehold.co/400x250'} 
+                />
                 <div className="rd-dots">
                     {currentImages.map((_, idx) => (
                         <span key={idx} className={`rd-dot ${idx === sliderIndex ? 'active' : ''}`} onClick={() => setSliderIndex(idx)}></span>
