@@ -294,7 +294,7 @@ async def filter_random(payload: FilterRandomRequest):
 
     try:
         tags = payload.tags or {}
-        size = max(1, min(int(payload.count or 3), 50))
+        size = max(1, min(int(payload.count or 6), 50))
 
         # --- MAPPING FRONTEND KEYS TO DATABASE KEYS ---
         # Maps the UI category to the list of possible fields in result.json
@@ -312,7 +312,8 @@ async def filter_random(payload: FilterRandomRequest):
         and_clauses.append({
             "$or": [
                 {"places_images": {"$ne": []}}, 
-                {"menu_images": {"$ne": []}}
+                {"menu_images": {"$ne": []}},
+                {"thumbnail": {"$exists": True}}
             ]
         })
 
@@ -368,7 +369,7 @@ async def filter_random(payload: FilterRandomRequest):
         return [convert_document(d) for d in docs]
 
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Error in filter_random: {e}")
         raise HTTPException(status_code=500, detail=f"Lỗi server: {e}")
 
 @app.get("/api/restaurants/all_ids")

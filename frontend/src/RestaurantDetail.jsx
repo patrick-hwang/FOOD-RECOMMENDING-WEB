@@ -19,19 +19,13 @@ export default function RestaurantDetail({ item, onBack, onShuffleAgain, onGetDi
     const [selectedTags, setSelectedTags] = useState([]);
 
     // Dữ liệu giả lập hình ảnh nếu thiếu
-    const imagesMenu = item.imagesMenu && item.imagesMenu.length > 0 ? item.imagesMenu : [item.imageUrl, item.imageUrl];
+    const imagesMenu = item.imagesMenu && item.imagesMenu.length > 0 ? item.imagesMenu : [item.imageUrl];
     const imagesView = item.imagesViews && item.imagesViews.length > 0 ? item.imagesViews : [item.imageUrl];
     const currentImages = activeTab === 'menu' ? imagesMenu : imagesView;
+    const ratingScore = item.rating_info?.score ? parseFloat(item.rating_info.score.replace(',','.')) : 4.5;
 
-    // Danh sách tag demo (kết hợp tag của món và tag tĩnh như mockup)
-    const displayTags = [
-        ...(item.tags || []).map(t => ({label: t, val: t})),
-        {label: '<1km', val: 'dist'}, 
-        {label: 'SaiGon', val: 'loc'}, 
-        {label: 'Open24/7', val: 'open'}, 
-        {label: '<100.000VND', val: 'cheap'},
-        {label: 'Take away', val: 'takeaway'}
-    ];
+    // Use REAL tags from item
+    const displayTags = (item.tags || []).map(t => ({label: t, val: t}));
 
     // Logic chọn tag (Đổi màu nền)
     const toggleTag = (tagVal) => {
