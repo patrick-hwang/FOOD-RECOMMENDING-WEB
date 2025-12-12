@@ -1,0 +1,244 @@
+/* src/pages/Onboarding.css */
+
+/* --- CẤU TRÚC CHUNG --- */
+.onboarding-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 50; /* Nằm dưới Splash nhưng trên các trang khác */
+  overflow: hidden;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* =========================================
+   STYLE CHO TRANG 0 (WELCOME - NỀN TỐI)
+   ========================================= */
+
+.step-0 {
+  /* Scale ảnh background:
+     - cover: Phủ kín màn hình.
+     - center bottom: Căn vào giữa phía dưới (nơi thường có đĩa thức ăn) để lấy được nhiều chi tiết đẹp nhất.
+  */
+  background-size: cover;
+  background-position: 80% 40%; 
+  background-repeat: no-repeat;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  
+  /* QUAN TRỌNG: Đặt padding = 0 để thanh đen bên dưới tràn ra mép màn hình */
+  padding: 0; 
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Lớp phủ tối màu: Giảm độ đậm xuống 0.3 để ảnh nền sáng và rõ hơn */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3); 
+  z-index: 1;
+}
+
+.content-step-0 {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* --- PHẦN TIÊU ĐỀ (Ở TRÊN) --- */
+.title-step-0 {
+  /* 1. SỬA QUAN TRỌNG: Padding trái phải bằng nhau (20px) thì chữ mới vào giữa được */
+  padding: 130px 20px 20px 50px; 
+  
+  /* 2. Đảm bảo khung rộng 100% */
+  width: 100%;
+  box-sizing: border-box; 
+
+  /* 3. Bật căn giữa lên */
+  text-align: center; 
+
+  /* Các style chữ giữ nguyên */
+  font-family: 'Montserrat', sans-serif;
+  font-size: 3rem; 
+  font-weight: 800; 
+  color: #4CAF50; 
+  text-shadow: 0 4px 15px rgba(0,0,0,0.8); 
+  line-height: 1.2;
+  text-transform: uppercase; 
+}
+
+/* Chữ "WELCOME TO" */
+.title-step-0 span:first-child {
+  /* Màu xanh #4CAF50 (hoặc đổi thành #FFF nếu thích màu trắng) */
+  color: #4CAF50; 
+  
+  font-family: 'Montserrat', sans-serif;
+  font-size: 3rem; /* Nhỏ hơn dòng dưới một xíu cho đẹp */
+  font-weight: 800;
+  
+  display: block; /* Ngắt dòng */
+  margin-bottom: 5px;
+  letter-spacing: 2px; 
+}
+
+/* --- PHẦN THANH ĐEN (Ở DƯỚI) --- */
+.desc-step-0 {
+  /* Kích thước và vị trí */
+  width: 100%; /* Tràn hết chiều ngang */
+  margin: 0;   /* Bỏ margin thừa */
+  
+  /* Màu sắc và độ mờ */
+  background: rgba(0, 0, 0, 0.35); /* Đen mờ 60% (xuyên thấu hơn cũ) */
+  backdrop-filter: blur(8px);     /* Hiệu ứng kính mờ (blur background sau lưng) */
+  
+  /* Styling */
+  color: #eee;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  padding: 20px 25px 20px 25px; /* Padding rộng rãi, đáy dày hơn xíu */
+  
+  /* Bỏ viền xanh, bo tròn 2 góc trên */
+  border: none;
+  /* border-top: 1px solid rgba(255, 255, 255, 0.1); Viền trắng mờ cực nhẹ ở trên cùng cho tinh tế */
+  /* border-radius: 24px 24px 0 0; Bo tròn góc trên trái/phải; */
+  
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+/* =========================================
+   STYLE CHO TRANG 1, 2, 3 (COMMON - NỀN SÁNG)
+   ========================================= */
+.step-common {
+  /* Gradient xanh nhạt sang trắng */
+  background: linear-gradient(180deg, #F9FFFA 0%, #D4E5D8 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+
+/* KHU VỰC ẢNH (Chiếm 50% màn hình phía trên) */
+.image-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-height: 55%; 
+  z-index: 2;
+  position: relative;
+}
+
+.main-image {
+  width: 100%;
+  max-width: 340px; /* Giới hạn độ to của ảnh */
+  height: auto;
+  object-fit: contain;
+  /* Đổ bóng nhẹ cho ảnh nổi lên */
+  filter: drop-shadow(0 15px 25px rgba(0,0,0,0.15));
+  transition: transform 0.3s ease;
+}
+
+/* KHU VỰC CHỮ VÀ NÚT (Chiếm phần còn lại phía dưới) */
+.text-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* Đẩy nội dung xuống đáy */
+  width: 100%;
+  max-width: 400px;
+  padding-bottom: 30px;
+  z-index: 2;
+}
+
+.title-common {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #2E7D32; /* Xanh lá đậm */
+  margin-bottom: 15px;
+}
+
+.desc-common {
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 30px;
+  line-height: 1.5;
+  padding: 0 10px;
+}
+
+/* NÚT SKIP (Dạng chữ link) */
+.btn-skip {
+  background: transparent;
+  border: none;
+  color: #666;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 10px;
+  margin-top: 5px;
+  transition: color 0.2s;
+}
+
+.btn-skip:hover {
+  color: #2E7D32; /* Rê chuột vào đổi màu xanh */
+  text-decoration: underline;
+}
+
+/* =========================================
+   TRANG TRÍ (BONG BÓNG NỀN)
+   ========================================= */
+.bubble {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(76, 175, 80, 0.15); /* Xanh trong suốt */
+  z-index: 1;
+  pointer-events: none; /* Để không che mất nút bấm */
+}
+
+/* Bong bóng 1: Góc trên phải */
+.b1 { 
+  width: 120px; 
+  height: 120px; 
+  top: 8%; 
+  right: -30px; 
+}
+
+/* Bong bóng 2: Góc giữa phải (nhạt hơn) */
+.b2 { 
+  width: 180px; 
+  height: 180px; 
+  top: 25%; 
+  right: 15%; 
+  background: rgba(76, 175, 80, 0.08); 
+}
+
+/* Bong bóng 3: Góc dưới trái */
+.b3 { 
+  width: 100px; 
+  height: 100px; 
+  bottom: 35%; 
+  left: -20px; 
+}
+
+/* Bong bóng 4: Nhỏ nhỏ trang trí thêm */
+.bubble::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: rgba(76, 175, 80, 0.2);
+  border-radius: 50%;
+  top: -30px;
+  left: 40px;
+}

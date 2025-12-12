@@ -1,0 +1,91 @@
+/* src/components/SplashScreen.css */
+
+.splash-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  /* Thời gian mờ dần khi kết thúc (0.8 giây) */
+  transition: opacity 0.8s ease-out;
+}
+
+/* Class này được thêm vào khi hết giờ để ẩn màn hình */
+.splash-container.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.splash-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* --- 1. LOGO LÀ ẢNH --- */
+.splash-logo {
+  width: 140px; /* Chỉnh độ to của logo tại đây */
+  height: auto;
+  margin-bottom: 0.5rem; /* Khoảng cách với dòng chữ bên dưới */
+  
+  opacity: 0;
+  transform: scale(0);
+  
+  /* Giúp ảnh nét hơn khi animation */
+  backface-visibility: hidden;
+  will-change: transform;
+
+  /* Hiệu ứng nảy mạnh (Super Bounce) trong 1 giây */
+  animation: super-bounce 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* --- 2. CHỮ LÀ CODE --- */
+.splash-title {
+  font-family: 'Montserrat', sans-serif; /* Font chữ */
+  font-size: 3rem;   /* Chỉnh độ to của chữ */
+  font-weight: 700;  /* In đậm */
+  color: #4CAF50;    /* Màu xanh lá */
+  margin: 0;
+  letter-spacing: 1px;
+
+  opacity: 0;
+  transform: translateY(20px);
+
+  /* Hiện lên sau logo 0.5 giây */
+  animation: fade-up 0.8s ease-out 0.5s forwards;
+}
+
+/* --- KỊCH BẢN CHUYỂN ĐỘNG (KEYFRAMES) --- */
+
+@keyframes super-bounce {
+  0% { 
+    opacity: 0; 
+    transform: scale(0); 
+  }
+  40% { 
+    opacity: 1; 
+    transform: scale(1.5); /* Nảy to đùng lên 1.5 lần */
+  }
+  60% { 
+    transform: scale(0.8); /* Co rúm lại còn 0.8 */
+  }
+  80% { 
+    transform: scale(1.1); /* Nảy nhẹ lên 1.1 */
+  }
+  100% { 
+    opacity: 1; 
+    transform: scale(1);   /* Về bình thường */
+  }
+}
+
+@keyframes fade-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
