@@ -9,7 +9,7 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
-    width: 100vw;
+    width: 100%;
     font-family: 'Montserrat', sans-serif;
     position: relative;
     overflow: hidden;
@@ -22,6 +22,9 @@
         radial-gradient(circle at 85% 40%, rgba(76, 175, 80, 0.05) 0%, transparent 15%),
         radial-gradient(circle at 0% 50%, rgba(76, 175, 80, 0.06) 0%, transparent 15%);
     background-attachment: fixed;
+    max-width: 480px;
+    margin: 0 auto;
+    box-shadow: 0 0 30px rgba(0,0,0,0.15);
 }
 
 /* --- 1. LOGO BAR (Góc trái trên) --- */
@@ -222,6 +225,10 @@
     border-top-right-radius: 24px;
     box-shadow: 0 -5px 20px rgba(0,0,0,0.08);
     z-index: 50;
+    width: 100%;
+    max-width: 480px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .rm-filters-bar { 
