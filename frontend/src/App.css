@@ -278,3 +278,27 @@
 .help-link:hover {
   text-decoration: underline;
 }
+
+.logout-btn-absolute {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: white;
+  border: 1px solid #fee2e2;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+  z-index: 50; 
+  color: #ef4444;
+}
+
+.logout-btn-absolute:hover {
+  transform: scale(1.05);
+  background-color: #fef2f2;
+}
