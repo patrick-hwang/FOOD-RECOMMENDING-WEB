@@ -5,11 +5,12 @@ import SplashScreen from './Components/SplashScreen';
 import OnboardingPage from './Pages/Onboarding';
 import logo from './assets/images/logo.png';
 import LoginPage from './LoginPage';
-
-// --- IMPORT FILE MỚI TẠI ĐÂY ---
 import RandomModeCard from './RandomModeCard'; 
+import BottomNavigation from './Components/BottomNavigation'; 
+import ProfilePage from './ProfilePage'; 
+import axios from 'axios';
 
-// --- 1. HIỆU ỨNG MỞ MÀN (Giữ nguyên) ---
+// --- 1. HIỆU ỨNG MỞ MÀN ---
 function AppEntranceEffect({ onDone }) {
   const [entered, setEntered] = useState(false);
   const [showText, setShowText] = useState(false);
@@ -38,21 +39,11 @@ function AppEntranceEffect({ onDone }) {
   );
 }
 
-const LogoutIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-    <polyline points="16 17 21 12 16 7"></polyline>
-    <line x1="21" y1="12" x2="9" y2="12"></line>
-  </svg>
-);
-
-// --- 2. MÀN HÌNH CHỌN CHẾ ĐỘ (Giữ nguyên) ---
-function AppChooseMode({ onRandom, onTaste, onLogout }) {
+// --- 2. MÀN HÌNH CHỌN CHẾ ĐỘ (ĐÃ XÓA LOGOUT) ---
+function AppChooseMode({ onRandom, onTaste }) {
   return (
     <div className="choose-mode-container" style={{position: 'relative'}}>
-      <button className="logout-btn-absolute" onClick={onLogout} title="Logout">
-        <LogoutIcon />
-      </button>
+      {/* Đã xóa nút logout ở đây */}
 
       <header className="header">
         <div className="logo-container">
@@ -88,47 +79,73 @@ function AppChooseMode({ onRandom, onTaste, onLogout }) {
   );
 }
 
-// --- 3. APP MAIN (Đã xóa RandomModeCard cũ) ---
+// --- 3. APP MAIN ---
 function App() {
   const [mode, setMode] = useState('splash'); 
+  const [mainTab, setMainTab] = useState('home');
+  const [currentUser, setCurrentUser] = useState(null);
+
   const GOOGLE_CLIENT_ID = '975848353478-mguhticg531ok092j9krom4mhb25j6at.apps.googleusercontent.com'; 
   
-  function handleLoginSuccess() { setMode('choosing'); }
-  function handleLogout() {
-    if (window.confirm("Bạn có chắc muốn đăng xuất?")) { setMode('login'); }
+  function handleLoginSuccess(user) {
+      const userObj = user || { phone: "0123456789", username: "Demo User" }; 
+      setCurrentUser(userObj);
+      setMode('main_app'); 
   }
-  function handleFinishOnboarding() { setMode('login'); }
-  function taste() { console.log('enter taste mode'); setMode('taste'); }
 
+  function handleLogout() {
+    if (window.confirm("Log out?")) { 
+        setMode('login'); 
+        setCurrentUser(null);
+        setMainTab('home'); // Reset tab về home
+    }
+  }
+  
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <div className="App">
         {mode === 'splash' && <SplashScreen onFinish={() => setMode('entrance')} />}
         {mode === 'entrance' && <AppEntranceEffect onDone={() => setMode('onboarding')} />} 
-        {mode === 'onboarding' && <OnboardingPage onFinish={handleFinishOnboarding} />}
+        {mode === 'onboarding' && <OnboardingPage onFinish={() => setMode('login')} />}
+        
         {mode === 'login' && <LoginPage onLoginSuccess={handleLoginSuccess} />}
 
-        {mode === 'choosing' && (
-          <AppChooseMode 
-            onRandom={() => setMode('random')} 
-            onTaste={() => setMode('taste')} 
-            onLogout={handleLogout} 
-          />
-        )}
-        
-        {/* Render RandomModeCard mới từ file đã tách */}
-        {mode === 'random' && <RandomModeCard onBack={() => setMode('choosing')} />}
-        
-        {mode === 'taste' && (
-          <div className="mode-container">
-            <h2>Taste Quiz</h2>
-            <p>Starting taste quiz...</p>
-            <button className="back-button" onClick={() => setMode('choosing')}>Back</button>
-          </div>
+        {mode === 'main_app' && (
+            <>
+                <div style={{width: '100%', height: '100%'}}>
+                    {mainTab === 'home' && (
+                        <RandomModeWrapper 
+                             currentUser={currentUser} 
+                        />
+                    )}
+                    
+                    {mainTab === 'profile' && (
+                        <ProfilePage currentUser={currentUser} onLogout={handleLogout} />
+                    )}
+                </div>
+
+                <BottomNavigation activeTab={mainTab} onTabChange={setMainTab} />
+            </>
         )}
       </div>
     </GoogleOAuthProvider>
   );
+}
+
+// Wrapper cho trang Random
+function RandomModeWrapper({ currentUser }) {
+    const [subMode, setSubMode] = useState('choosing'); 
+
+    if (subMode === 'choosing') {
+        return <AppChooseMode onRandom={() => setSubMode('random')} onTaste={() => setSubMode('taste')} />;
+    }
+    if (subMode === 'random') {
+        return <RandomModeCard onBack={() => setSubMode('choosing')} currentUser={currentUser} />;
+    }
+    if (subMode === 'taste') {
+        return <div>Taste Quiz (Coming soon) <button onClick={()=>setSubMode('choosing')}>Back</button></div>;
+    }
+    return null;
 }
 
 export default App;

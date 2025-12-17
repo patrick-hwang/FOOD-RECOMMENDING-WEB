@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { useGoogleLogin } from '@react-oauth/google';
-// import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import FacebookLogin from '@greatsumini/react-facebook-login';
 import axios from 'axios';
 import './Login.css';
 
-// --- BỘ ICON SVG (Giữ nguyên để không bị lỗi thiếu ảnh) ---
+// --- BỘ ICON SVG (Giữ nguyên đầy đủ) ---
 const UserIcon = () => <span>👤</span>;
 const PhoneIcon = () => <span>📞</span>;
 const LockIcon = () => <span>🔒</span>;
@@ -31,34 +30,32 @@ function LoginPage({ onLoginSuccess }) {
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Đường dẫn API (Đảm bảo backend python app.py đang chạy)
+  // Đường dẫn API Backend
   const API_URL = "http://127.0.0.1:8000/api/auth";
 
   // --- HÀM XỬ LÝ NHẬP LIỆU ---
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrorMsg(''); // Xóa thông báo lỗi khi người dùng gõ lại
+    setErrorMsg(''); 
   };
 
   // =========================================================
-  // 1. XỬ LÝ ĐĂNG NHẬP GOOGLE
+  // 1. XỬ LÝ ĐĂNG NHẬP GOOGLE (CẬP NHẬT TRUYỀN USER)
   // =========================================================
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      console.log('Google Token:', tokenResponse);
       setLoading(true);
       setErrorMsg('');
       try {
-        // Gửi token về backend để xác thực
         const res = await axios.post(`${API_URL}/google`, { token: tokenResponse.access_token });
-        console.log("Backend Google Response:", res.data);
+        console.log("Google Login Success:", res.data);
         
-        // QUAN TRỌNG: Gọi hàm này để App.jsx chuyển sang trang chính
-        onLoginSuccess();
+        // QUAN TRỌNG: Truyền FULL User Object (có avatar, email...) về App
+        onLoginSuccess(res.data.user);
         
       } catch (err) {
         console.error("Google Login Error:", err);
-        setErrorMsg("Lỗi kết nối Backend khi đăng nhập Google. Kiểm tra lại server Python!");
+        setErrorMsg("Lỗi kết nối Backend khi đăng nhập Google.");
       } finally {
         setLoading(false);
       }
@@ -67,27 +64,24 @@ function LoginPage({ onLoginSuccess }) {
   });
 
   // =========================================================
-  // 2. XỬ LÝ ĐĂNG NHẬP FACEBOOK
+  // 2. XỬ LÝ ĐĂNG NHẬP FACEBOOK (CẬP NHẬT TRUYỀN USER)
   // =========================================================
   const responseFacebook = async (response) => {
-    console.log('Facebook Response:', response);
     if (response.accessToken) {
       setLoading(true);
       setErrorMsg('');
       try {
-        // Gửi thông tin về backend
         const res = await axios.post(`${API_URL}/facebook`, {
             accessToken: response.accessToken,
             userID: response.userID,
             name: response.name,
             email: response.email,
-            // picture: response.picture?.data?.url
-            picture: response.picture
+            picture: response.picture?.data?.url // Lấy URL ảnh avatar
         });
-        console.log("Backend FB Response:", res.data);
+        console.log("FB Login Success:", res.data);
 
-        // QUAN TRỌNG: Gọi hàm này để chuyển trang
-        onLoginSuccess();
+        // QUAN TRỌNG: Truyền FULL User Object về App
+        onLoginSuccess(res.data.user);
 
       } catch (err) {
         console.error("Facebook Login Error:", err);
@@ -99,7 +93,7 @@ function LoginPage({ onLoginSuccess }) {
   };
 
   // =========================================================
-  // 3. XỬ LÝ ĐĂNG NHẬP (PHONE + PASS)
+  // 3. XỬ LÝ ĐĂNG NHẬP THƯỜNG (PHONE + PASS)
   // =========================================================
   const handleLoginSubmit = async () => {
     if (!formData.phone || !formData.password) {
@@ -114,11 +108,12 @@ function LoginPage({ onLoginSuccess }) {
         });
         if(res.status === 200) {
             console.log("Login Success:", res.data);
-            onLoginSuccess();
+            // QUAN TRỌNG: Truyền FULL User Object về App
+            onLoginSuccess(res.data.user);
         }
     } catch (err) {
         console.error(err);
-        const msg = err.response?.data?.detail || "Không thể kết nối tới Server.";
+        const msg = err.response?.data?.detail || "Sai thông tin đăng nhập hoặc lỗi server.";
         setErrorMsg(msg);
     } finally {
         setLoading(false);
@@ -126,7 +121,7 @@ function LoginPage({ onLoginSuccess }) {
   };
 
   // =========================================================
-  // 4. XỬ LÝ ĐĂNG KÝ (PHONE + PASS)
+  // 4. XỬ LÝ ĐĂNG KÝ
   // =========================================================
   const handleSignupSubmit = async () => {
     if (!formData.username || !formData.phone || !formData.password) {
@@ -153,7 +148,7 @@ function LoginPage({ onLoginSuccess }) {
   };
 
   // =========================================================
-  // 5. XỬ LÝ QUÊN MẬT KHẨU (RESET PASSWORD)
+  // 5. XỬ LÝ QUÊN MẬT KHẨU
   // =========================================================
   const handleResetSubmit = async () => {
       if (!formData.phone || !formData.password || !formData.confirmPassword) {
@@ -185,7 +180,7 @@ function LoginPage({ onLoginSuccess }) {
       }
   };
 
-  // --- Helper để render ô nhập mật khẩu có mắt ---
+  // --- Helper Render Input Password ---
   const renderPasswordInput = (placeholder = "Password", name = "password") => (
     <div className="input-group">
       <div className="input-icon"><LockIcon /></div>
@@ -211,7 +206,7 @@ function LoginPage({ onLoginSuccess }) {
   );
 
   // =========================================================
-  // GIAO DIỆN (UI)
+  // GIAO DIỆN (UI) - ĐẦY ĐỦ CÁC MÀN HÌNH
   // =========================================================
 
   // --- VIEW 1: WELCOME SCREEN ---
@@ -224,44 +219,12 @@ function LoginPage({ onLoginSuccess }) {
         </div>
         <h1 className="login-title">Let’s you in</h1>
 
-        {/* Nút Facebook đã sửa lỗi Scopes */}
+        {/* Nút Facebook */}
         <FacebookLogin
           appId="1575289767221956"
           autoLoad={false}
-          
-          // 1. ADD THIS LINE to ask for permission
-          scope="public_profile,email" 
-
-          // 2. Keep this line to request the data fields
           fields="name,email,picture.type(large)" 
-          
-          onSuccess={(response) => {
-            console.log('Login Success (Token):', response);
-          }}
-
-          onProfileSuccess={(response) => {
-            console.log('Full Profile Data from FB:', response); // Check your Console F12 here!
-            
-            // 3. Robust data handling
-            const userData = {
-              accessToken: "dummy_token", // Or use response.accessToken if available in this scope
-              userID: response.id,
-              name: response.name,
-              // Handle case where email is missing
-              email: response.email ? response.email : null, 
-              // Handle case where picture structure varies
-              picture: response.picture && response.picture.data ? response.picture.data.url : null 
-            };
-
-            console.log("Sending to Backend:", userData);
-            responseFacebook(userData);
-          }}
-          
-          onFail={(error) => {
-            console.error('Login Failed!', error);
-            setErrorMsg("Facebook login failed.");
-          }}
-
+          callback={responseFacebook}
           render={({ onClick }) => (
             <button className="social-btn" onClick={onClick}>
               <FbIcon /> Continue with Facebook
@@ -269,10 +232,12 @@ function LoginPage({ onLoginSuccess }) {
           )}
         />
 
+        {/* Nút Google */}
         <button className="social-btn" onClick={() => googleLogin()}>
           <GoogleIcon /> Continue with Google
         </button>
 
+        {/* Nút Gmail (Placeholder) */}
         <button className="social-btn" onClick={() => googleLogin()}>
           <GmailIcon /> Continue with Gmail
         </button>
