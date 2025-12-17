@@ -1,0 +1,339 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+  --primary-green: #00AA00;
+  --light-green-bg: #f0fdf4;
+  --dark-text: #1a1a1a;
+  --gray-text: #666666;
+  --orange-btn: linear-gradient(90deg, #ff5e62 0%, #ff9966 100%);
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* --- MAIN CONTAINER & BACKGROUND --- */
+.tm-container {
+  min-height: 100vh;
+  width: 100%;
+  max-width: 480px; /* Force mobile width on desktop */
+  background-color: #fff; /* White background for the "App" area */
+  position: relative;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto; /* Center it */
+  box-shadow: 0 0 50px rgba(0,0,0,0.1); /* Shadow to separate from gradient */
+}
+
+/* Decorative Background Bubbles */
+.tm-bg-bubble {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(0, 170, 0, 0.05);
+  z-index: 0;
+}
+.bubble-1 { width: 300px; height: 300px; top: -100px; right: -50px; }
+.bubble-2 { width: 200px; height: 200px; bottom: 10%; left: -50px; }
+.bubble-3 { width: 150px; height: 150px; top: 20%; left: 10%; }
+
+/* --- HEADER SECTION --- */
+.tm-header-section {
+  text-align: center;
+  padding: 40px 20px 10px;
+  z-index: 1;
+}
+
+.tm-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+}
+
+.tm-subtitle {
+  color: var(--gray-text);
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+/* --- QUESTION CARD LAYOUT --- */
+.tm-question-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 1;
+}
+
+.tm-card {
+  background: white;
+  width: 100%;
+  border-radius: 25px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+  padding: 30px;
+  text-align: center;
+  position: relative;
+}
+
+.tm-progress-text {
+  color: var(--primary-green);
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 20px;
+  display: block;
+  text-align: left;
+}
+
+.tm-question-text {
+  font-size: 22px;
+  color: #222;
+  font-weight: 500;
+  margin-bottom: 40px;
+  line-height: 1.4;
+}
+
+/* Answer Buttons */
+.tm-btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.tm-btn-option {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1.5px solid #666;
+  background: white;
+  color: #333;
+}
+.tm-btn-option:hover {
+  border-color: var(--primary-green);
+  color: var(--primary-green);
+  background: #f9fff9;
+}
+
+.btn-filled {
+  background: var(--primary-green);
+  border: none;
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 170, 0, 0.3);
+}
+.btn-filled:hover {
+  background: #008f00;
+}
+
+/* Selected States */
+.tm-btn-option.selected {
+    background-color: #e6f9e6;
+    border-color: var(--primary-green);
+    color: var(--primary-green);
+    font-weight: 700;
+    box-shadow: 0 0 0 2px var(--primary-green);
+}
+
+.tm-btn-option.btn-filled.selected-fill {
+    background-color: #007700;
+    font-weight: 700;
+    box-shadow: 0 0 0 3px #b3ffb3;
+}
+
+/* Navigation Buttons (Bottom) */
+.tm-nav-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.tm-nav-btn {
+  background: var(--primary-green);
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.nav-prev {
+    background: #ccc;
+    color: #333;
+}
+
+/* --- RESULT PAGE LAYOUT --- */
+.tm-result-area {
+  padding: 20px;
+  width: 100%;
+  z-index: 1;
+}
+
+.tm-result-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 15px;
+  margin-bottom: 80px; 
+}
+
+.tm-result-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  position: relative;
+  border: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+}
+
+.tm-match-badge {
+  background-color: #d4f5d4;
+  color: #006400;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  padding: 5px;
+  text-transform: uppercase;
+}
+
+.tm-card-img-container {
+  position: relative;
+  width: 100%;
+  padding-top: 75%; 
+}
+
+.tm-card-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tm-seal-badge {
+  position: absolute;
+  bottom: -15px;
+  right: 10px;
+  width: 45px;
+  height: 45px;
+  background: red;
+  border-radius: 50%;
+  border: 2px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.tm-card-content {
+  padding: 20px 10px 15px;
+  text-align: center;
+}
+
+.tm-res-name {
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #333;
+}
+
+.tm-stars {
+  color: #FFC107;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.tm-view-btn {
+  background: #7ccb5e;
+  color: white;
+  border: none;
+  padding: 6px 15px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  width: 100%;
+  cursor: pointer;
+}
+
+/* Floating Action Button */
+.tm-floating-action {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 400px;
+  z-index: 10;
+}
+
+.tm-continue-btn {
+  width: 100%;
+  background: var(--orange-btn);
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 700;
+  box-shadow: 0 10px 20px rgba(255, 94, 98, 0.3);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.tm-continue-btn:active {
+  transform: scale(0.98);
+}
+
+/* --- POPUP OVERLAY --- */
+.tm-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.tm-popup-content {
+    background: white;
+    width: 100%;
+    max-width: 500px;
+    height: 90vh; 
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+}
+
+.tm-popup-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255,255,255,0.8);
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    z-index: 101;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

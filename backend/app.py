@@ -11,6 +11,10 @@ from pydantic import BaseModel
 from typing import Any, Dict, List, Optional
 # from passlib.context import CryptContext
 import bcrypt
+import json
+import random
+from criteria import DETERMINING_CRITERIA
+import os
 
 # ==============================================================================
 # 1. CẤU HÌNH (CONFIGURATION)
@@ -420,6 +424,253 @@ async def admin_set_speciality_vn(payload: SpecialityVNUpdate):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Lỗi server: {e}")
+    
+# ==============================================================================
+# 6. QUESTIONS DATA (Câu hỏi trắc nghiệm)
+# ==============================================================================
+
+try:
+    # FIX: Use os.path to find the file relative to app.py
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    json_path = os.path.join(base_dir, 'questions.json')
+    
+    with open(json_path, 'r', encoding='utf-8') as f: 
+        QUESTIONS_DB = json.load(f)
+    print(f"✅ Loaded {len(QUESTIONS_DB)} questions.")
+except FileNotFoundError:
+    print(f"❌ ERROR: questions.json not found at {json_path}")
+    QUESTIONS_DB = []
+except Exception as e:
+    print(f"❌ Error loading questions: {e}")
+    QUESTIONS_DB = []
+
+def has_tag(restaurant, tag):
+    """Check if restaurant object has a specific tag in any of its tag categories"""
+    tags_obj = restaurant.get("tags", {})
+    if not tags_obj: return False
+    
+    # Flatten values
+    all_tags = []
+    for v in tags_obj.values():
+        if isinstance(v, list): all_tags.extend(v)
+        elif isinstance(v, str): all_tags.append(v)
+    
+    return tag in all_tags
+
+# --- NEW API MODELS ---
+class QuestionModeRequest(BaseModel):
+    yes_tags: List[str] = []
+    no_tags: List[str] = []
+    asked_ids: List[int] = []
+
+# ... (Keep imports and configurations at the top)
+
+# --- 1. ADD THIS HELPER FUNCTION (Algorithm Logic) ---
+def get_restaurant_tags(restaurant):
+    """Helper: Flatten tags into a single set for fast lookup"""
+    tags_obj = restaurant.get("tags", {})
+    all_tags = set()
+    if not tags_obj: return all_tags
+    for v in tags_obj.values():
+        if isinstance(v, list): all_tags.update(v)
+        elif isinstance(v, str): all_tags.add(v)
+    return all_tags
+
+# --- NEW ALGORITHM IMPLEMENTATION ---
+def filter_restaurants_algo(all_places, yes_tags, no_tags):
+    """
+    Implementation of the specific filtering logic requested.
+    """
+    yes_set = set(yes_tags)
+    no_set = set(no_tags)
+    result_quan = []
+
+    for quan_an in all_places:
+        place_tags = get_restaurant_tags(quan_an)
+        select_this = True
+        
+        for criterion in DETERMINING_CRITERIA:
+            criterion_set = set(criterion)
+            selected_tags = []
+
+            # Check if there are any YES tags relevant to this specific criterion
+            # This corresponds to "if yes_tags.size() > 0" in the context of the criterion
+            relevant_yes_tags = [t for t in criterion if t in yes_set]
+
+            # --- YES LOGIC ---
+            if len(relevant_yes_tags) > 0:
+                # User has preferences in this category, enforce them strict
+                for tag in criterion:
+                    if tag in yes_set:
+                        if tag in place_tags:
+                            selected_tags.append(tag)
+                        else:
+                            # User wanted this tag, but place doesn't have it -> Fail
+                            select_this = False
+            else:
+                # User has no preference in this category, keep all valid tags
+                for tag in criterion:
+                    if tag in place_tags:
+                        selected_tags.append(tag)
+            
+            # --- NO LOGIC ---
+            # Remove tags that are in the NO set
+            # "for tag in selected_tags: if tag in no_tags: erase"
+            selected_tags = [t for t in selected_tags if t not in no_set]
+            
+            # --- EMPTY CHECK ---
+            # "if selected_tags.empty(): select_this = False"
+            if not selected_tags:
+                select_this = False
+                
+            # Optimization: Break early if failed
+            if not select_this:
+                break
+        
+        if select_this:
+            result_quan.append(quan_an)
+            
+    return result_quan
+
+# --- 2. REPLACE THE OLD "/api/question-mode/next" ENDPOINT ---
+# app.py (Add this helper function and update the endpoint)
+
+# --- HELPER: CATEGORY WEIGHTING ---
+def get_category_weight(question_tags):
+    """
+    Returns a weight score based on user preference order:
+    1. Món ăn/uống (Index 1) - Highest
+    2. Nguyên liệu (Index 2)
+    3. Đặc điểm (Index 0)
+    4. Origin (Index 3)
+    5. Giá tiền (Index 5)
+    6. Others (Place, Occasion) - Lowest
+    """
+    # Mapping Index in DETERMINING_CRITERIA to Weight
+    # Higher number = Higher priority
+    weights = {
+        1: 60, # Món ăn/uống
+        2: 50, # Nguyên liệu
+        0: 40, # Đặc điểm
+        3: 30, # Origin
+        5: 20, # Giá tiền
+        4: 10, # Place
+        6: 10  # Occasion
+    }
+    
+    # Find which category the tag belongs to
+    for tag in question_tags:
+        for idx, criterion_list in enumerate(DETERMINING_CRITERIA):
+            if tag in criterion_list:
+                return weights.get(idx, 0)
+    return 0
+
+# --- UPDATED ENDPOINT ---
+@app.post("/api/question-mode/next")
+async def get_next_question(payload: QuestionModeRequest):
+    if collection_quan_an is None:
+        raise HTTPException(status_code=503, detail="DB not connected")
+
+    # 1. Fetch simplified data
+    cursor = collection_quan_an.find({}, {"tags": 1, "_id": 1})
+    all_places = list(cursor)
+
+    # 2. Run Filter Algorithm
+    filtered_places = filter_restaurants_algo(all_places, payload.yes_tags, payload.no_tags)
+    remaining_count = len(filtered_places)
+
+    if remaining_count == 0:
+        return {"next_question": None, "remaining_count": 0}
+
+    # 3. Priority Logic: Math Score (Primary) + Category Weight (Secondary)
+    best_question = None
+    max_priority = -float('inf')      # Primary: Splitting power (Math)
+    max_cat_weight = -float('inf')    # Secondary: User preference
+    
+    available_questions = [q for q in QUESTIONS_DB if q['id'] not in payload.asked_ids]
+
+    if not available_questions:
+        return {"next_question": None, "remaining_count": remaining_count}
+
+    n = remaining_count
+    
+    for q in available_questions:
+        q_yes_tags = q.get('yes', {}).get('yes_tag', [])
+        
+        # A. Calculate Math Priority (How evenly it splits the data)
+        cnt = 0
+        if q_yes_tags:
+            q_tags_set = set(q_yes_tags)
+            for place in filtered_places:
+                place_tags = get_restaurant_tags(place)
+                if not place_tags.isdisjoint(q_tags_set):
+                    cnt += 1
+        
+        # Priority formula: closer to n/2 is better
+        if cnt < n:
+            priority = cnt
+        else:
+            priority = n - cnt
+            
+        # B. Calculate Category Weight
+        cat_weight = get_category_weight(q_yes_tags)
+
+        # C. Comparison Logic
+        # Case 1: Better Math Score -> Take it
+        if priority > max_priority:
+            max_priority = priority
+            max_cat_weight = cat_weight
+            best_question = q
+        # Case 2: Equal Math Score -> Check Category Weight
+        elif priority == max_priority:
+            if cat_weight > max_cat_weight:
+                max_cat_weight = cat_weight
+                best_question = q
+    
+    return {
+        "remaining_count": remaining_count,
+        "next_question": best_question
+    }
+
+# --- 3. ADD THIS NEW ENDPOINT FOR FETCHING RESULTS ---
+@app.post("/api/question-mode/results")
+async def get_results_batch(payload: QuestionModeRequest):
+    """
+    Called only when showing results (after 5 questions).
+    Fetches FULL details (images, address) for 4 random filtered places.
+    """
+    if collection_quan_an is None:
+        raise HTTPException(status_code=503, detail="DB not connected")
+
+    # 1. Filter using simplified data first
+    all_places_simple = list(collection_quan_an.find({}, {"tags": 1, "_id": 1}))
+    filtered_simple = filter_restaurants_algo(all_places_simple, payload.yes_tags, payload.no_tags)
+    
+    if not filtered_simple:
+        return {"results": [], "remaining_count": 0}
+
+    # 2. Pick 4 random IDs
+    sample_size = min(4, len(filtered_simple))
+    selected_docs = random.sample(filtered_simple, sample_size)
+    selected_ids = [d["_id"] for d in selected_docs]
+
+    # 3. Fetch FULL details for just these 4 IDs
+    full_docs = list(collection_quan_an.find({"_id": {"$in": selected_ids}}))
+    
+    results = []
+    for d in full_docs:
+        d = convert_document(d)
+        # Normalize thumbnail for frontend
+        if "thumbnail" not in d and "places_images" in d and d["places_images"]:
+            d["thumbnail"] = d["places_images"][0]
+        elif "thumbnail" not in d:
+            d["thumbnail"] = "https://placehold.co/150x150"
+        results.append(d)
+
+    return {
+        "results": results, 
+        "remaining_count": len(filtered_simple)
+    }
 
 if __name__ == "__main__":
     print("Khởi chạy API server tại http://127.0.0.1:8000")

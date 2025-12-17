@@ -1,0 +1,3140 @@
+[
+  {
+    "id": 1,
+    "question": "Bạn đang muốn dùng một món lạnh như băng phải không?",
+    "yes": {
+      "yes_tag": [
+        "lạnh như băng"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "lạnh như băng"
+      ]
+    },
+    "priority": 0
+  },
+  {
+    "id": 2,
+    "question": "Bạn đang muốn dùng một món lạnh phải không?",
+    "yes": {
+      "yes_tag": [
+        "lạnh"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "lạnh"
+      ]
+    },
+    "priority": 0
+  },
+  {
+    "question": "Bạn đang muốn dùng một món mát phải không?",
+    "yes": {
+      "yes_tag": [
+        "mát"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "mát"
+      ]
+    },
+    "priority": 0,
+    "id": 3
+  },
+  {
+    "question": "Bạn đang muốn dùng một món nguội phải không?",
+    "yes": {
+      "yes_tag": [
+        "nguội"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "nguội"
+      ]
+    },
+    "priority": 0,
+    "id": 4
+  },
+  {
+    "question": "Bạn đang muốn dùng một món ấm phải không?",
+    "yes": {
+      "yes_tag": [
+        "ấm"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "ấm"
+      ]
+    },
+    "priority": 0,
+    "id": 5
+  },
+  {
+    "question": "Bạn đang muốn dùng một món nóng phải không?",
+    "yes": {
+      "yes_tag": [
+        "nóng"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "nóng"
+      ]
+    },
+    "priority": 0,
+    "id": 6
+  },
+  {
+    "question": "Bạn đang muốn dùng một món sôi/rất nóng phải không?",
+    "yes": {
+      "yes_tag": [
+        "sôi/rất nóng"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "sôi/rất nóng"
+      ]
+    },
+    "priority": 0,
+    "id": 7
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có nước cốt dừa không?",
+    "yes": {
+      "yes_tag": [
+        "nước cốt dừa"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "nước cốt dừa"
+      ]
+    },
+    "priority": 0,
+    "id": 8
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có sữa không?",
+    "yes": {
+      "yes_tag": [
+        "sữa"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "sữa"
+      ]
+    },
+    "priority": 0,
+    "id": 9
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có trứng gà không?",
+    "yes": {
+      "yes_tag": [
+        "trứng gà"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "trứng gà"
+      ]
+    },
+    "priority": 0,
+    "id": 10
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có trứng cút không?",
+    "yes": {
+      "yes_tag": [
+        "trứng cút"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "trứng cút"
+      ]
+    },
+    "priority": 0,
+    "id": 11
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có xoài không?",
+    "yes": {
+      "yes_tag": [
+        "xoài"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "xoài"
+      ]
+    },
+    "priority": 0,
+    "id": 12
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có cóc không?",
+    "yes": {
+      "yes_tag": [
+        "cóc"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "cóc"
+      ]
+    },
+    "priority": 0,
+    "id": 13
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có bơ không?",
+    "yes": {
+      "yes_tag": [
+        "bơ"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bơ"
+      ]
+    },
+    "priority": 0,
+    "id": 14
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có dâu không?",
+    "yes": {
+      "yes_tag": [
+        "dâu"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "dâu"
+      ]
+    },
+    "priority": 0,
+    "id": 15
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có táo không?",
+    "yes": {
+      "yes_tag": [
+        "táo"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "táo"
+      ]
+    },
+    "priority": 0,
+    "id": 16
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có mít không?",
+    "yes": {
+      "yes_tag": [
+        "mít"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "mít"
+      ]
+    },
+    "priority": 0,
+    "id": 17
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có sầu riêng không?",
+    "yes": {
+      "yes_tag": [
+        "sầu riêng"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "sầu riêng"
+      ]
+    },
+    "priority": 0,
+    "id": 18
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có đậu phộng không?",
+    "yes": {
+      "yes_tag": [
+        "đậu phộng"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "đậu phộng"
+      ]
+    },
+    "priority": 0,
+    "id": 19
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có đậu đen không?",
+    "yes": {
+      "yes_tag": [
+        "đậu đen"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "đậu đen"
+      ]
+    },
+    "priority": 0,
+    "id": 20
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có đậu đỏ không?",
+    "yes": {
+      "yes_tag": [
+        "đậu đỏ"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "đậu đỏ"
+      ]
+    },
+    "priority": 0,
+    "id": 21
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có đậu ván không?",
+    "yes": {
+      "yes_tag": [
+        "đậu ván"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "đậu ván"
+      ]
+    },
+    "priority": 0,
+    "id": 22
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có ca cao không?",
+    "yes": {
+      "yes_tag": [
+        "ca cao"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "ca cao"
+      ]
+    },
+    "priority": 0,
+    "id": 23
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có hạt sen không?",
+    "yes": {
+      "yes_tag": [
+        "hạt sen"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "hạt sen"
+      ]
+    },
+    "priority": 0,
+    "id": 24
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có sả không?",
+    "yes": {
+      "yes_tag": [
+        "sả"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "sả"
+      ]
+    },
+    "priority": 0,
+    "id": 25
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có hồi không?",
+    "yes": {
+      "yes_tag": [
+        "hồi"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "hồi"
+      ]
+    },
+    "priority": 0,
+    "id": 26
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có quế không?",
+    "yes": {
+      "yes_tag": [
+        "quế"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "quế"
+      ]
+    },
+    "priority": 0,
+    "id": 27
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có gừng không?",
+    "yes": {
+      "yes_tag": [
+        "gừng"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "gừng"
+      ]
+    },
+    "priority": 0,
+    "id": 28
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có lá dứa không?",
+    "yes": {
+      "yes_tag": [
+        "lá dứa"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "lá dứa"
+      ]
+    },
+    "priority": 0,
+    "id": 29
+  },
+  {
+    "question": "Bạn có muốn dùng đồ có vani không?",
+    "yes": {
+      "yes_tag": [
+        "vani"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "vani"
+      ]
+    },
+    "priority": 0,
+    "id": 30
+  },
+  {
+    "question": "Bạn đang muốn tìm món để nạp năng lượng cho bữa sáng phải không?",
+    "yes": {
+      "yes_tag": [
+        "bữa sáng"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bữa sáng"
+      ]
+    },
+    "priority": 0,
+    "id": 31
+  },
+  {
+    "question": "Bạn đang muốn tìm món để ăn vặt / lai rai phải không?",
+    "yes": {
+      "yes_tag": [
+        "ăn vặt"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "ăn vặt"
+      ]
+    },
+    "priority": 0,
+    "id": 32
+  },
+  {
+    "question": "Bạn đang muốn tìm món tráng miệng ngọt ngào phải không?",
+    "yes": {
+      "yes_tag": [
+        "tráng miệng"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "tráng miệng"
+      ]
+    },
+    "priority": 0,
+    "id": 33
+  },
+  {
+    "question": "Bạn đang muốn tìm món cho buổi đêm (ăn khuya) phải không?",
+    "yes": {
+      "yes_tag": [
+        "buổi đêm"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "buổi đêm"
+      ]
+    },
+    "priority": 0,
+    "id": 34
+  },
+  {
+    "question": "Bạn đang muốn tìm món cho buổi trưa phải không?",
+    "yes": {
+      "yes_tag": [
+        "buổi trưa"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "buổi trưa"
+      ]
+    },
+    "priority": 0,
+    "id": 35
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Hà Nội không?",
+    "yes": {
+      "yes_tag": [
+        "Hà Nội"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Hà Nội"
+      ]
+    },
+    "priority": 0,
+    "id": 36
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Hải Phòng không?",
+    "yes": {
+      "yes_tag": [
+        "Hải Phòng"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Hải Phòng"
+      ]
+    },
+    "priority": 0,
+    "id": 37
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của vùng Tây Bắc không?",
+    "yes": {
+      "yes_tag": [
+        "Tây Bắc"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Tây Bắc"
+      ]
+    },
+    "priority": 0,
+    "id": 38
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Phú Yên không?",
+    "yes": {
+      "yes_tag": [
+        "Phú Yên"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Phú Yên"
+      ]
+    },
+    "priority": 0,
+    "id": 39
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Huế không?",
+    "yes": {
+      "yes_tag": [
+        "Huế"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Huế"
+      ]
+    },
+    "priority": 0,
+    "id": 40
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Quảng Ngãi không?",
+    "yes": {
+      "yes_tag": [
+        "Quảng Ngãi"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Quảng Ngãi"
+      ]
+    },
+    "priority": 0,
+    "id": 41
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Đà Nẵng không?",
+    "yes": {
+      "yes_tag": [
+        "Đà Nẵng"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Đà Nẵng"
+      ]
+    },
+    "priority": 0,
+    "id": 42
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Quảng Nam không?",
+    "yes": {
+      "yes_tag": [
+        "Quảng Nam"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Quảng Nam"
+      ]
+    },
+    "priority": 0,
+    "id": 43
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Khánh Hòa không?",
+    "yes": {
+      "yes_tag": [
+        "Khánh Hòa"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Khánh Hòa"
+      ]
+    },
+    "priority": 0,
+    "id": 44
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Phan Rang không?",
+    "yes": {
+      "yes_tag": [
+        "Phan Rang"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Phan Rang"
+      ]
+    },
+    "priority": 0,
+    "id": 45
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Bình Định không?",
+    "yes": {
+      "yes_tag": [
+        "Bình Định"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Bình Định"
+      ]
+    },
+    "priority": 0,
+    "id": 46
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Nghệ An không?",
+    "yes": {
+      "yes_tag": [
+        "Nghệ An"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Nghệ An"
+      ]
+    },
+    "priority": 0,
+    "id": 47
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Hà Tĩnh không?",
+    "yes": {
+      "yes_tag": [
+        "Hà Tĩnh"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Hà Tĩnh"
+      ]
+    },
+    "priority": 0,
+    "id": 48
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Tiền Giang không?",
+    "yes": {
+      "yes_tag": [
+        "Tiền Giang"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Tiền Giang"
+      ]
+    },
+    "priority": 0,
+    "id": 49
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Đồng Tháp không?",
+    "yes": {
+      "yes_tag": [
+        "Đồng Tháp"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Đồng Tháp"
+      ]
+    },
+    "priority": 0,
+    "id": 50
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Cà Mau không?",
+    "yes": {
+      "yes_tag": [
+        "Cà Mau"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Cà Mau"
+      ]
+    },
+    "priority": 0,
+    "id": 51
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Sóc Trăng không?",
+    "yes": {
+      "yes_tag": [
+        "Sóc Trăng"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Sóc Trăng"
+      ]
+    },
+    "priority": 0,
+    "id": 52
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của An Giang không?",
+    "yes": {
+      "yes_tag": [
+        "An Giang"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "An Giang"
+      ]
+    },
+    "priority": 0,
+    "id": 53
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Sài Gòn không?",
+    "yes": {
+      "yes_tag": [
+        "Sài Gòn"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Sài Gòn"
+      ]
+    },
+    "priority": 0,
+    "id": 54
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Bà Rịa – Vũng Tàu không?",
+    "yes": {
+      "yes_tag": [
+        "Bà Rịa - Vũng Tàu"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Bà Rịa - Vũng Tàu"
+      ]
+    },
+    "priority": 0,
+    "id": 55
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Đắk Lắk không?",
+    "yes": {
+      "yes_tag": [
+        "Đắk Lắk"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Đắk Lắk"
+      ]
+    },
+    "priority": 0,
+    "id": 56
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Kon Tum không?",
+    "yes": {
+      "yes_tag": [
+        "Kon Tum"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Kon Tum"
+      ]
+    },
+    "priority": 0,
+    "id": 57
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Lâm Đồng không?",
+    "yes": {
+      "yes_tag": [
+        "Lâm Đồng"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Lâm Đồng"
+      ]
+    },
+    "priority": 0,
+    "id": 58
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Pleiku không?",
+    "yes": {
+      "yes_tag": [
+        "Pleiku"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Pleiku"
+      ]
+    },
+    "priority": 0,
+    "id": 59
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Đắk Nông không?",
+    "yes": {
+      "yes_tag": [
+        "Đắk Nông"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Đắk Nông"
+      ]
+    },
+    "priority": 0,
+    "id": 60
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món đặc trưng của Gia Lai không?",
+    "yes": {
+      "yes_tag": [
+        "Gia Lai"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Gia Lai"
+      ]
+    },
+    "priority": 0,
+    "id": 61
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món ăn của Anh không?",
+    "yes": {
+      "yes_tag": [
+        "Anh"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Anh"
+      ]
+    },
+    "priority": 0,
+    "id": 62
+  },
+  {
+    "question": "Bạn có muốn thưởng thức ẩm thực Pháp không?",
+    "yes": {
+      "yes_tag": [
+        "Pháp"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Pháp"
+      ]
+    },
+    "priority": 0,
+    "id": 63
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món kiểu Mỹ không?",
+    "yes": {
+      "yes_tag": [
+        "Mỹ"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Mỹ"
+      ]
+    },
+    "priority": 0,
+    "id": 64
+  },
+  {
+    "question": "Bạn có muốn thưởng thức ẩm thực Ý không?",
+    "yes": {
+      "yes_tag": [
+        "Ý"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Ý"
+      ]
+    },
+    "priority": 0,
+    "id": 65
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món ăn của Đức không?",
+    "yes": {
+      "yes_tag": [
+        "Đức"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Đức"
+      ]
+    },
+    "priority": 0,
+    "id": 66
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món thuộc ẩm thực Hy Lạp không?",
+    "yes": {
+      "yes_tag": [
+        "Hy Lạp"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Hy Lạp"
+      ]
+    },
+    "priority": 0,
+    "id": 67
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món Nhật Bản không?",
+    "yes": {
+      "yes_tag": [
+        "Nhật Bản"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Nhật Bản"
+      ]
+    },
+    "priority": 0,
+    "id": 68
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món Hàn Quốc không?",
+    "yes": {
+      "yes_tag": [
+        "Hàn Quốc"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Hàn Quốc"
+      ]
+    },
+    "priority": 0,
+    "id": 69
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món Trung Quốc không?",
+    "yes": {
+      "yes_tag": [
+        "Trung Quốc"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "Trung Quốc"
+      ]
+    },
+    "priority": 0,
+    "id": 70
+  },
+  {
+    "question": "Bạn có muốn ăn sợi bún không?",
+    "yes": {
+      "yes_tag": [
+        "bún"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bún"
+      ]
+    },
+    "priority": 0,
+    "id": 71
+  },
+  {
+    "question": "Bạn có muốn ăn sợi phở không?",
+    "yes": {
+      "yes_tag": [
+        "phở"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "phở"
+      ]
+    },
+    "priority": 0,
+    "id": 72
+  },
+  {
+    "question": "Bạn có muốn ăn sợi hủ tiếu không?",
+    "yes": {
+      "yes_tag": [
+        "hủ tiếu"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "hủ tiếu"
+      ]
+    },
+    "priority": 0,
+    "id": 73
+  },
+  {
+    "question": "Bạn có muốn ăn sợi mì sợi không?",
+    "yes": {
+      "yes_tag": [
+        "mì sợi"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "mì sợi"
+      ]
+    },
+    "priority": 0,
+    "id": 74
+  },
+  {
+    "question": "Bạn có muốn ăn sợi bánh canh bột gạo không?",
+    "yes": {
+      "yes_tag": [
+        "bánh canh bột gạo"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bánh canh bột gạo"
+      ]
+    },
+    "priority": 0,
+    "id": 75
+  },
+  {
+    "question": "Bạn có muốn ăn sợi bánh đa không?",
+    "yes": {
+      "yes_tag": [
+        "bánh đa"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bánh đa"
+      ]
+    },
+    "priority": 0,
+    "id": 76
+  },
+  {
+    "question": "Bạn có muốn ăn sợi miến dong không?",
+    "yes": {
+      "yes_tag": [
+        "miến dong"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "miến dong"
+      ]
+    },
+    "priority": 0,
+    "id": 77
+  },
+  {
+    "question": "Bạn có muốn ăn sợi miến/bún tàu không?",
+    "yes": {
+      "yes_tag": [
+        "miến/bún tàu"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "miến/bún tàu"
+      ]
+    },
+    "priority": 0,
+    "id": 78
+  },
+  {
+    "question": "Bạn có muốn dùng món ăn dạng súp không?",
+    "yes": {
+      "yes_tag": [
+        "súp"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "súp"
+      ]
+    },
+    "priority": 0,
+    "id": 79
+  },
+  {
+    "question": "Bạn có muốn dùng món ăn dạng lẩu không?",
+    "yes": {
+      "yes_tag": [
+        "lẩu"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "lẩu"
+      ]
+    },
+    "priority": 0,
+    "id": 80
+  },
+  {
+    "question": "Bạn có muốn dùng món ăn dạng cháo không?",
+    "yes": {
+      "yes_tag": [
+        "cháo"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "cháo"
+      ]
+    },
+    "priority": 0,
+    "id": 81
+  },
+  {
+    "question": "Bạn có muốn dùng món ăn dạng cà ri không?",
+    "yes": {
+      "yes_tag": [
+        "cà ri"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "cà ri"
+      ]
+    },
+    "priority": 0,
+    "id": 82
+  },
+  {
+    "question": "Bạn có muốn dùng món ăn dạng hầm không?",
+    "yes": {
+      "yes_tag": [
+        "hầm"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "hầm"
+      ]
+    },
+    "priority": 0,
+    "id": 83
+  },
+  {
+    "question": "Bạn có muốn dùng món ăn dạng xào không?",
+    "yes": {
+      "yes_tag": [
+        "xào"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "xào"
+      ]
+    },
+    "priority": 0,
+    "id": 84
+  },
+  {
+    "question": "Bạn có muốn dùng món ăn dạng chiên không?",
+    "yes": {
+      "yes_tag": [
+        "chiên"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "chiên"
+      ]
+    },
+    "priority": 0,
+    "id": 85
+  },
+  {
+    "question": "Bạn có muốn dùng món ăn dạng nướng không?",
+    "yes": {
+      "yes_tag": [
+        "nướng"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "nướng"
+      ]
+    },
+    "priority": 0,
+    "id": 86
+  },
+  {
+    "question": "Bạn có muốn dùng món ăn dạng trộn không?",
+    "yes": {
+      "yes_tag": [
+        "trộn"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "trộn"
+      ]
+    },
+    "priority": 0,
+    "id": 87
+  },
+  {
+    "question": "Bạn có muốn dùng món ăn dạng hấp không?",
+    "yes": {
+      "yes_tag": [
+        "hấp"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "hấp"
+      ]
+    },
+    "priority": 0,
+    "id": 88
+  },
+  {
+    "question": "Bạn có muốn dùng món ăn dạng kho không?",
+    "yes": {
+      "yes_tag": [
+        "kho"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "kho"
+      ]
+    },
+    "priority": 0,
+    "id": 89
+  },
+  {
+    "question": "Bạn có muốn dùng món ăn dạng rang không?",
+    "yes": {
+      "yes_tag": [
+        "rang"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "rang"
+      ]
+    },
+    "priority": 0,
+    "id": 90
+  },
+  {
+    "question": "Bạn có muốn dùng món ăn dạng quay không?",
+    "yes": {
+      "yes_tag": [
+        "quay"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "quay"
+      ]
+    },
+    "priority": 0,
+    "id": 91
+  },
+  {
+    "question": "Bạn có muốn dùng món ăn dạng luộc không?",
+    "yes": {
+      "yes_tag": [
+        "luộc"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "luộc"
+      ]
+    },
+    "priority": 0,
+    "id": 92
+  },
+  {
+    "question": "Bạn có muốn dùng cơm không?",
+    "yes": {
+      "yes_tag": [
+        "cơm"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "cơm"
+      ]
+    },
+    "priority": 0,
+    "id": 93
+  },
+  {
+    "question": "Bạn có muốn dùng bắp không?",
+    "yes": {
+      "yes_tag": [
+        "bắp"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bắp"
+      ]
+    },
+    "priority": 0,
+    "id": 94
+  },
+  {
+    "question": "Bạn có muốn dùng xôi không?",
+    "yes": {
+      "yes_tag": [
+        "xôi"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "xôi"
+      ]
+    },
+    "priority": 0,
+    "id": 95
+  },
+  {
+    "question": "Bạn có muốn dùng bánh nếp không?",
+    "yes": {
+      "yes_tag": [
+        "bánh nếp"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bánh nếp"
+      ]
+    },
+    "priority": 0,
+    "id": 96
+  },
+  {
+    "question": "Bạn có muốn dùng cốm không?",
+    "yes": {
+      "yes_tag": [
+        "cốm"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "cốm"
+      ]
+    },
+    "priority": 0,
+    "id": 97
+  },
+  {
+    "question": "Bạn có muốn dùng chè nếp không?",
+    "yes": {
+      "yes_tag": [
+        "chè nếp"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "chè nếp"
+      ]
+    },
+    "priority": 0,
+    "id": 98
+  },
+  {
+    "question": "Bạn có muốn dùng nếp hấp không?",
+    "yes": {
+      "yes_tag": [
+        "nếp hấp"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "nếp hấp"
+      ]
+    },
+    "priority": 0,
+    "id": 99
+  },
+  {
+    "question": "Bạn có muốn ăn bánh xèo không?",
+    "yes": {
+      "yes_tag": [
+        "bánh xèo"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bánh xèo"
+      ]
+    },
+    "priority": 0,
+    "id": 100
+  },
+  {
+    "question": "Bạn có muốn ăn bánh bèo không?",
+    "yes": {
+      "yes_tag": [
+        "bánh bèo"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bánh bèo"
+      ]
+    },
+    "priority": 0,
+    "id": 101
+  },
+  {
+    "question": "Bạn có muốn ăn bánh căn không?",
+    "yes": {
+      "yes_tag": [
+        "bánh căn"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bánh căn"
+      ]
+    },
+    "priority": 0,
+    "id": 102
+  },
+  {
+    "question": "Bạn có muốn ăn bánh cuốn không?",
+    "yes": {
+      "yes_tag": [
+        "bánh cuốn"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bánh cuốn"
+      ]
+    },
+    "priority": 0,
+    "id": 103
+  },
+  {
+    "question": "Bạn có muốn ăn bánh ướt không?",
+    "yes": {
+      "yes_tag": [
+        "bánh ướt"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bánh ướt"
+      ]
+    },
+    "priority": 0,
+    "id": 104
+  },
+  {
+    "question": "Bạn có muốn ăn bánh hỏi không?",
+    "yes": {
+      "yes_tag": [
+        "bánh hỏi"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bánh hỏi"
+      ]
+    },
+    "priority": 0,
+    "id": 105
+  },
+  {
+    "question": "Bạn có muốn ăn bánh bò không?",
+    "yes": {
+      "yes_tag": [
+        "bánh bò"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bánh bò"
+      ]
+    },
+    "priority": 0,
+    "id": 106
+  },
+  {
+    "question": "Bạn có muốn ăn bánh đúc không?",
+    "yes": {
+      "yes_tag": [
+        "bánh đúc"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bánh đúc"
+      ]
+    },
+    "priority": 0,
+    "id": 107
+  },
+  {
+    "question": "Bạn có muốn ăn bánh mì không?",
+    "yes": {
+      "yes_tag": [
+        "bánh mì"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bánh mì"
+      ]
+    },
+    "priority": 0,
+    "id": 108
+  },
+  {
+    "question": "Bạn có muốn ăn bánh bao không?",
+    "yes": {
+      "yes_tag": [
+        "bánh bao"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bánh bao"
+      ]
+    },
+    "priority": 0,
+    "id": 109
+  },
+  {
+    "question": "Bạn có muốn ăn bánh quẩy không?",
+    "yes": {
+      "yes_tag": [
+        "bánh quẩy"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bánh quẩy"
+      ]
+    },
+    "priority": 0,
+    "id": 110
+  },
+  {
+    "question": "Bạn có muốn ăn bánh tiêu không?",
+    "yes": {
+      "yes_tag": [
+        "bánh tiêu"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bánh tiêu"
+      ]
+    },
+    "priority": 0,
+    "id": 111
+  },
+  {
+    "question": "Bạn có muốn ăn bánh su kem không?",
+    "yes": {
+      "yes_tag": [
+        "bánh su kem"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bánh su kem"
+      ]
+    },
+    "priority": 0,
+    "id": 112
+  },
+  {
+    "question": "Bạn có muốn ăn bánh bông lan không?",
+    "yes": {
+      "yes_tag": [
+        "bánh bông lan"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bánh bông lan"
+      ]
+    },
+    "priority": 0,
+    "id": 113
+  },
+  {
+    "question": "Bạn có muốn ăn donut không?",
+    "yes": {
+      "yes_tag": [
+        "donut"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "donut"
+      ]
+    },
+    "priority": 0,
+    "id": 114
+  },
+  {
+    "question": "Bạn có muốn ăn thịt bò không?",
+    "yes": {
+      "yes_tag": [
+        "thịt bò"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "thịt bò"
+      ]
+    },
+    "priority": 0,
+    "id": 115
+  },
+  {
+    "question": "Bạn có muốn ăn thịt heo không?",
+    "yes": {
+      "yes_tag": [
+        "thịt heo"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "thịt heo"
+      ]
+    },
+    "priority": 0,
+    "id": 116
+  },
+  {
+    "question": "Bạn có muốn ăn thịt trâu không?",
+    "yes": {
+      "yes_tag": [
+        "thịt trâu"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "thịt trâu"
+      ]
+    },
+    "priority": 0,
+    "id": 117
+  },
+  {
+    "question": "Bạn có muốn ăn thịt dê không?",
+    "yes": {
+      "yes_tag": [
+        "thịt dê"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "thịt dê"
+      ]
+    },
+    "priority": 0,
+    "id": 118
+  },
+  {
+    "question": "Bạn có muốn ăn thịt cừu không?",
+    "yes": {
+      "yes_tag": [
+        "thịt cừu"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "thịt cừu"
+      ]
+    },
+    "priority": 0,
+    "id": 119
+  },
+  {
+    "question": "Bạn có muốn ăn thịt gà không?",
+    "yes": {
+      "yes_tag": [
+        "thịt gà"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "thịt gà"
+      ]
+    },
+    "priority": 0,
+    "id": 120
+  },
+  {
+    "question": "Bạn có muốn ăn thịt vịt không?",
+    "yes": {
+      "yes_tag": [
+        "thịt vịt"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "thịt vịt"
+      ]
+    },
+    "priority": 0,
+    "id": 121
+  },
+  {
+    "question": "Bạn có muốn ăn thịt ngan không?",
+    "yes": {
+      "yes_tag": [
+        "thịt ngan"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "thịt ngan"
+      ]
+    },
+    "priority": 0,
+    "id": 122
+  },
+  {
+    "question": "Bạn có muốn ăn thịt ngỗng không?",
+    "yes": {
+      "yes_tag": [
+        "thịt ngỗng"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "thịt ngỗng"
+      ]
+    },
+    "priority": 0,
+    "id": 123
+  },
+  {
+    "question": "Bạn có muốn ăn thịt chim cút không?",
+    "yes": {
+      "yes_tag": [
+        "thịt chim cút"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "thịt chim cút"
+      ]
+    },
+    "priority": 0,
+    "id": 124
+  },
+  {
+    "question": "Bạn có muốn ăn tôm không?",
+    "yes": {
+      "yes_tag": [
+        "tôm"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "tôm"
+      ]
+    },
+    "priority": 0,
+    "id": 125
+  },
+  {
+    "question": "Bạn có muốn ăn mực không?",
+    "yes": {
+      "yes_tag": [
+        "mực"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "mực"
+      ]
+    },
+    "priority": 0,
+    "id": 126
+  },
+  {
+    "question": "Bạn có muốn ăn cá không?",
+    "yes": {
+      "yes_tag": [
+        "cá"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "cá"
+      ]
+    },
+    "priority": 0,
+    "id": 127
+  },
+  {
+    "question": "Bạn có muốn ăn nghêu không?",
+    "yes": {
+      "yes_tag": [
+        "nghêu"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "nghêu"
+      ]
+    },
+    "priority": 0,
+    "id": 128
+  },
+  {
+    "question": "Bạn có muốn ăn sò không?",
+    "yes": {
+      "yes_tag": [
+        "sò"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "sò"
+      ]
+    },
+    "priority": 0,
+    "id": 129
+  },
+  {
+    "question": "Bạn có muốn ăn ốc không?",
+    "yes": {
+      "yes_tag": [
+        "ốc"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "ốc"
+      ]
+    },
+    "priority": 0,
+    "id": 130
+  },
+  {
+    "question": "Bạn có muốn ăn cua không?",
+    "yes": {
+      "yes_tag": [
+        "cua"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "cua"
+      ]
+    },
+    "priority": 0,
+    "id": 131
+  },
+  {
+    "question": "Bạn có muốn ăn trứng cá không?",
+    "yes": {
+      "yes_tag": [
+        "trứng cá"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "trứng cá"
+      ]
+    },
+    "priority": 0,
+    "id": 132
+  },
+  {
+    "question": "Bạn có muốn ăn rau củ không?",
+    "yes": {
+      "yes_tag": [
+        "rau củ"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "rau củ"
+      ]
+    },
+    "priority": 0,
+    "id": 133
+  },
+  {
+    "question": "Bạn có muốn ăn đậu hũ không?",
+    "yes": {
+      "yes_tag": [
+        "đậu hũ"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "đậu hũ"
+      ]
+    },
+    "priority": 0,
+    "id": 134
+  },
+  {
+    "question": "Bạn có muốn ăn nấm không?",
+    "yes": {
+      "yes_tag": [
+        "nấm"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "nấm"
+      ]
+    },
+    "priority": 0,
+    "id": 135
+  },
+  {
+    "question": "Bạn có muốn ăn chả chay không?",
+    "yes": {
+      "yes_tag": [
+        "chả chay"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "chả chay"
+      ]
+    },
+    "priority": 0,
+    "id": 136
+  },
+  {
+    "question": "Bạn có muốn ăn mì chay không?",
+    "yes": {
+      "yes_tag": [
+        "mì chay"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "mì chay"
+      ]
+    },
+    "priority": 0,
+    "id": 137
+  },
+  {
+    "question": "Bạn có muốn ăn cơm chay không?",
+    "yes": {
+      "yes_tag": [
+        "cơm chay"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "cơm chay"
+      ]
+    },
+    "priority": 0,
+    "id": 138
+  },
+  {
+    "question": "Bạn có muốn món ăn không ngọt không?",
+    "yes": {
+      "yes_tag": [
+        "không ngọt"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "không ngọt"
+      ]
+    },
+    "priority": 0,
+    "id": 139
+  },
+  {
+    "question": "Bạn có muốn món ăn ít ngọt không?",
+    "yes": {
+      "yes_tag": [
+        "ít ngọt"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "ít ngọt"
+      ]
+    },
+    "priority": 0,
+    "id": 140
+  },
+  {
+    "question": "Bạn có muốn món ăn vừa ngọt không?",
+    "yes": {
+      "yes_tag": [
+        "vừa ngọt"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "vừa ngọt"
+      ]
+    },
+    "priority": 0,
+    "id": 141
+  },
+  {
+    "question": "Bạn có muốn món ăn ngọt đậm không?",
+    "yes": {
+      "yes_tag": [
+        "ngọt đậm"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "ngọt đậm"
+      ]
+    },
+    "priority": 0,
+    "id": 142
+  },
+  {
+    "question": "Bạn có muốn món ăn rất ngọt không?",
+    "yes": {
+      "yes_tag": [
+        "rất ngọt"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "rất ngọt"
+      ]
+    },
+    "priority": 0,
+    "id": 143
+  },
+  {
+    "question": "Bạn có muốn món ăn không cay không?",
+    "yes": {
+      "yes_tag": [
+        "không cay"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "không cay"
+      ]
+    },
+    "priority": 0,
+    "id": 144
+  },
+  {
+    "question": "Bạn có muốn món ăn cay nhẹ không?",
+    "yes": {
+      "yes_tag": [
+        "cay nhẹ"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "cay nhẹ"
+      ]
+    },
+    "priority": 0,
+    "id": 145
+  },
+  {
+    "question": "Bạn có muốn món ăn cay vừa không?",
+    "yes": {
+      "yes_tag": [
+        "cay vừa"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "cay vừa"
+      ]
+    },
+    "priority": 0,
+    "id": 146
+  },
+  {
+    "question": "Bạn có muốn món ăn cay nhiều không?",
+    "yes": {
+      "yes_tag": [
+        "cay nhiều"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "cay nhiều"
+      ]
+    },
+    "priority": 0,
+    "id": 147
+  },
+  {
+    "question": "Bạn có muốn món ăn rất cay không?",
+    "yes": {
+      "yes_tag": [
+        "rất cay"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "rất cay"
+      ]
+    },
+    "priority": 0,
+    "id": 148
+  },
+  {
+    "question": "Bạn có muốn món ăn không béo không?",
+    "yes": {
+      "yes_tag": [
+        "không béo"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "không béo"
+      ]
+    },
+    "priority": 0,
+    "id": 149
+  },
+  {
+    "question": "Bạn có muốn món ăn béo nhẹ không?",
+    "yes": {
+      "yes_tag": [
+        "béo nhẹ"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "béo nhẹ"
+      ]
+    },
+    "priority": 0,
+    "id": 150
+  },
+  {
+    "question": "Bạn có muốn món ăn béo vừa không?",
+    "yes": {
+      "yes_tag": [
+        "béo vừa"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "béo vừa"
+      ]
+    },
+    "priority": 0,
+    "id": 151
+  },
+  {
+    "question": "Bạn có muốn món ăn béo đậm không?",
+    "yes": {
+      "yes_tag": [
+        "béo đậm"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "béo đậm"
+      ]
+    },
+    "priority": 0,
+    "id": 152
+  },
+  {
+    "question": "Bạn có muốn món ăn nhạt không?",
+    "yes": {
+      "yes_tag": [
+        "nhạt"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "nhạt"
+      ]
+    },
+    "priority": 0,
+    "id": 153
+  },
+  {
+    "question": "Bạn có muốn món ăn hơi mặn không?",
+    "yes": {
+      "yes_tag": [
+        "hơi mặn"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "hơi mặn"
+      ]
+    },
+    "priority": 0,
+    "id": 154
+  },
+  {
+    "question": "Bạn có muốn món ăn mặn vừa không?",
+    "yes": {
+      "yes_tag": [
+        "mặn vừa"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "mặn vừa"
+      ]
+    },
+    "priority": 0,
+    "id": 155
+  },
+  {
+    "question": "Bạn có muốn món ăn mặn đậm không?",
+    "yes": {
+      "yes_tag": [
+        "mặn đậm"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "mặn đậm"
+      ]
+    },
+    "priority": 0,
+    "id": 156
+  },
+  {
+    "question": "Bạn có muốn món ăn không chua không?",
+    "yes": {
+      "yes_tag": [
+        "không chua"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "không chua"
+      ]
+    },
+    "priority": 0,
+    "id": 157
+  },
+  {
+    "question": "Bạn có muốn món ăn chua nhẹ không?",
+    "yes": {
+      "yes_tag": [
+        "chua nhẹ"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "chua nhẹ"
+      ]
+    },
+    "priority": 0,
+    "id": 158
+  },
+  {
+    "question": "Bạn có muốn món ăn chua vừa không?",
+    "yes": {
+      "yes_tag": [
+        "chua vừa"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "chua vừa"
+      ]
+    },
+    "priority": 0,
+    "id": 159
+  },
+  {
+    "question": "Bạn có muốn món ăn chua đậm không?",
+    "yes": {
+      "yes_tag": [
+        "chua đậm"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "chua đậm"
+      ]
+    },
+    "priority": 0,
+    "id": 160
+  },
+  {
+    "question": "Bạn có muốn uống một ly cà phê tỉnh táo không?",
+    "yes": {
+      "yes_tag": [
+        "cà phê"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "cà phê"
+      ]
+    },
+    "priority": 0,
+    "id": 161
+  },
+  {
+    "question": "Bạn có muốn uống trà sữa không?",
+    "yes": {
+      "yes_tag": [
+        "trà sữa"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "trà sữa"
+      ]
+    },
+    "priority": 0,
+    "id": 162
+  },
+  {
+    "question": "Bạn có muốn uống nước ép hoặc sinh tố trái cây không?",
+    "yes": {
+      "yes_tag": [
+        "nước ép/ sinh tố"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "nước ép/ sinh tố"
+      ]
+    },
+    "priority": 0,
+    "id": 163
+  },
+  {
+    "question": "Bạn có muốn làm vài ly có cồn (bia/rượu) không?",
+    "yes": {
+      "yes_tag": [
+        "có cồn"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "có cồn"
+      ]
+    },
+    "priority": 0,
+    "id": 164
+  },
+  {
+    "question": "Bạn có muốn uống nước giải khát có gas không?",
+    "yes": {
+      "yes_tag": [
+        "nước có ga"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "nước có ga"
+      ]
+    },
+    "priority": 0,
+    "id": 165
+  },
+  {
+    "question": "Bạn có muốn ăn một ly chè ngọt ngào không?",
+    "yes": {
+      "yes_tag": [
+        "chè"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "chè"
+      ]
+    },
+    "priority": 0,
+    "id": 166
+  },
+  {
+    "question": "Bạn có muốn ăn kem tươi mát lạnh không?",
+    "yes": {
+      "yes_tag": [
+        "kem tươi"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "kem tươi"
+      ]
+    },
+    "priority": 0,
+    "id": 167
+  },
+  {
+    "question": "Bạn có muốn ăn sữa chua tốt cho tiêu hóa không?",
+    "yes": {
+      "yes_tag": [
+        "sữa chua"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "sữa chua"
+      ]
+    },
+    "priority": 0,
+    "id": 168
+  },
+  {
+    "question": "Bạn có muốn loại nước có trân châu dai dai để nhai không?",
+    "yes": {
+      "yes_tag": [
+        "trân châu"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "trân châu"
+      ]
+    },
+    "priority": 0,
+    "id": 169
+  },
+  {
+    "question": "Bạn có muốn loại nước có các loại thạch (jelly) giòn giòn không?",
+    "yes": {
+      "yes_tag": [
+        "thạch"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "thạch"
+      ]
+    },
+    "priority": 0,
+    "id": 170
+  },
+  {
+    "question": "Bạn có muốn lớp kem cheese / bọt kem béo ngậy bên trên không?",
+    "yes": {
+      "yes_tag": [
+        "kem cheese"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "kem cheese"
+      ]
+    },
+    "priority": 0,
+    "id": 171
+  },
+  {
+    "question": "Bạn có muốn gọi thêm bánh flan ăn kèm không?",
+    "yes": {
+      "yes_tag": [
+        "flan"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "flan"
+      ]
+    },
+    "priority": 0,
+    "id": 172
+  },
+  {
+    "question": "Bạn có muốn thử món có trứng đánh bông (kem trứng) béo ngậy không?",
+    "yes": {
+      "yes_tag": [
+        "kem trứng"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "kem trứng"
+      ]
+    },
+    "priority": 0,
+    "id": 173
+  },
+  {
+    "question": "Bạn có muốn uống nước rau má tươi mát không?",
+    "yes": {
+      "yes_tag": [
+        "rau má"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "rau má"
+      ]
+    },
+    "priority": 0,
+    "id": 174
+  },
+  {
+    "question": "Bạn có muốn hương vị trà xanh / matcha Nhật Bản không?",
+    "yes": {
+      "yes_tag": [
+        "matcha"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "matcha"
+      ]
+    },
+    "priority": 0,
+    "id": 175
+  },
+  {
+    "question": "Bạn có muốn hương vị đậm đà của cacao hoặc socola không?",
+    "yes": {
+      "yes_tag": [
+        "cacao"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "cacao"
+      ]
+    },
+    "priority": 0,
+    "id": 176
+  },
+  {
+    "question": "Bạn có muốn thưởng thức món được đựng trong trái dừa không?",
+    "yes": {
+      "yes_tag": [
+        "dừa"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "dừa"
+      ]
+    },
+    "priority": 0,
+    "id": 177
+  },
+  {
+    "question": "Bạn có muốn vị ngọt thanh của vải hoặc nhãn không?",
+    "yes": {
+      "yes_tag": [
+        "vải/nhãn"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "vải/nhãn"
+      ]
+    },
+    "priority": 0,
+    "id": 178
+  },
+  {
+    "question": "Bạn có muốn vị chua thơm của cam, chanh hoặc tắc không?",
+    "yes": {
+      "yes_tag": [
+        "họ cam"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "họ cam"
+      ]
+    },
+    "priority": 0,
+    "id": 179
+  },
+  {
+    "question": "Bạn có muốn vị chua ngọt của dâu hoặc phúc bồn tử không?",
+    "yes": {
+      "yes_tag": [
+        "dâu/phúc bồn tử"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "dâu/phúc bồn tử"
+      ]
+    },
+    "priority": 0,
+    "id": 180
+  },
+  {
+    "question": "Bạn có muốn hương thơm của đào không?",
+    "yes": {
+      "yes_tag": [
+        "đào"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "đào"
+      ]
+    },
+    "priority": 0,
+    "id": 181
+  },
+  {
+    "question": "Bạn có thích ánh đèn vàng dịu để tạo cảm giác thân mật không?",
+    "yes": {
+      "yes_tag": [
+        "đèn vàng"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "đèn vàng"
+      ]
+    },
+    "priority": 0,
+    "id": 182
+  },
+  {
+    "question": "Bạn có muốn chọn bàn gần cửa sổ để ngắm dòng người trôi không?",
+    "yes": {
+      "yes_tag": [
+        "cửa sổ"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "cửa sổ"
+      ]
+    },
+    "priority": 0,
+    "id": 183
+  },
+  {
+    "question": "Bạn có thích một chiếc ghế êm ái để ngồi thật lâu mà không mệt không?",
+    "yes": {
+      "yes_tag": [
+        "ghế êm"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "ghế êm"
+      ]
+    },
+    "priority": 0,
+    "id": 184
+  },
+  {
+    "question": "Bạn có thích không gian được điểm xuyết vài chậu hoa tươi không?",
+    "yes": {
+      "yes_tag": [
+        "chậu hoa"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "chậu hoa"
+      ]
+    },
+    "priority": 0,
+    "id": 185
+  },
+  {
+    "question": "Bạn có muốn ngồi đối diện nhau ở chiếc bàn hai người xinh xắn không?",
+    "yes": {
+      "yes_tag": [
+        "bàn hai người"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "bàn hai người"
+      ]
+    },
+    "priority": 0,
+    "id": 186
+  },
+  {
+    "question": "Bạn có thích ngồi ở nơi trang trí bằng nến hoặc ánh sáng hắt mềm không?",
+    "yes": {
+      "yes_tag": [
+        "nến"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "nến"
+      ]
+    },
+    "priority": 0,
+    "id": 187
+  },
+  {
+    "question": "Bạn có muốn chọn bàn gần hồ nước hoặc tiểu cảnh mềm mại không?",
+    "yes": {
+      "yes_tag": [
+        "tiểu cảnh"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "tiểu cảnh"
+      ]
+    },
+    "priority": 0,
+    "id": 188
+  },
+  {
+    "question": "Bạn có muốn ngồi ở góc có bức rèm nhẹ nhàng đung đưa không?",
+    "yes": {
+      "yes_tag": [
+        "rèm"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "rèm"
+      ]
+    },
+    "priority": 0,
+    "id": 189
+  },
+  {
+    "question": "Bạn có muốn ngồi ở nơi có gió nhẹ và không khí thoáng đãng không?",
+    "yes": {
+      "yes_tag": [
+        "thoáng đãng"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "thoáng đãng"
+      ]
+    },
+    "priority": 0,
+    "id": 190
+  },
+  {
+    "question": "Bạn có muốn ngồi trong một không gian ấm áp và nhẹ nhàng không?",
+    "yes": {
+      "yes_tag": [
+        "ấm áp"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "ấm áp"
+      ]
+    },
+    "priority": 0,
+    "id": 191
+  },
+  {
+    "question": "Bạn có muốn một góc nhỏ thật riêng tư cho cuộc trò chuyện hôm nay không?",
+    "yes": {
+      "yes_tag": [
+        "riêng tư"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "riêng tư"
+      ]
+    },
+    "priority": 0,
+    "id": 192
+  },
+  {
+    "question": "Bạn có thích một góc quán mang phong cách lãng mạn châu Âu không?",
+    "yes": {
+      "yes_tag": [
+        "lãng mạn"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "lãng mạn"
+      ]
+    },
+    "priority": 0,
+    "id": 193
+  },
+  {
+    "question": "Bạn có muốn không gian có chút hương tinh dầu thơm thoang thoảng không?",
+    "yes": {
+      "yes_tag": [
+        "hương tinh dầu"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "hương tinh dầu"
+      ]
+    },
+    "priority": 0,
+    "id": 194
+  },
+  {
+    "question": "Bạn có muốn một không gian tạo cảm giác gần gũi và kết nối hơn không?",
+    "yes": {
+      "yes_tag": [
+        "kết nối"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "kết nối"
+      ]
+    },
+    "priority": 0,
+    "id": 195
+  },
+  {
+    "question": "Bạn có muốn chọn chỗ có nhạc để tăng thêm cảm xúc không?",
+    "yes": {
+      "yes_tag": [
+        "nhạc"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "nhạc"
+      ]
+    },
+    "priority": 0,
+    "id": 196
+  },
+  {
+    "question": "Bạn muốn một không gian yên tĩnh đủ để nghe từng hơi thở phải không?",
+    "yes": {
+      "yes_tag": [
+        "yên tĩnh"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "yên tĩnh"
+      ]
+    },
+    "priority": 0,
+    "id": 197
+  },
+  {
+    "question": "Bạn có thích không gian với tiếng gió hoặc nước chảy rất khẽ không?",
+    "yes": {
+      "yes_tag": [
+        "âm thanh nền"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "âm thanh nền"
+      ]
+    },
+    "priority": 0,
+    "id": 198
+  },
+  {
+    "question": "Bạn có muốn ăn giá siêu rẻ (0 - 20,000 VNĐ) hoặc rẻ hơn?",
+    "yes": {
+      "no_tag": [
+        "rẻ",
+        "bình dân",
+        "sang",
+        "nhà hàng",
+        "cao cấp",
+        "thượng lưu",
+        "đại gia"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "siêu rẻ"
+      ]
+    },
+    "priority": 0,
+    "id": 199
+  },
+  {
+    "question": "Bạn có muốn ăn giá rẻ (20,000 - 40,000 VNĐ) hoặc rẻ hơn?",
+    "yes": {
+      "no_tag": [
+        "bình dân",
+        "sang",
+        "nhà hàng",
+        "cao cấp",
+        "thượng lưu",
+        "đại gia"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "siêu rẻ",
+        "rẻ"
+      ]
+    },
+    "priority": 0,
+    "id": 200
+  },
+  {
+    "question": "Bạn có muốn ăn giá bình dân (40,000 - 80,000 VNĐ) hoặc rẻ hơn?",
+    "yes": {
+      "no_tag": [
+        "sang",
+        "nhà hàng",
+        "cao cấp",
+        "thượng lưu",
+        "đại gia"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "siêu rẻ",
+        "rẻ",
+        "bình dân"
+      ]
+    },
+    "priority": 0,
+    "id": 201
+  },
+  {
+    "question": "Bạn có muốn ăn giá sang (80,000 - 150,000 VNĐ) hoặc rẻ hơn?",
+    "yes": {
+      "no_tag": [
+        "nhà hàng",
+        "cao cấp",
+        "thượng lưu",
+        "đại gia"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "siêu rẻ",
+        "rẻ",
+        "bình dân",
+        "sang"
+      ]
+    },
+    "priority": 0,
+    "id": 202
+  },
+  {
+    "question": "Bạn có muốn ăn giá nhà hàng (150,000 - 300,000 VNĐ) hoặc mắc hơn?",
+    "yes": {
+      "no_tag": [
+        "siêu rẻ",
+        "rẻ",
+        "bình dân",
+        "sang"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "nhà hàng",
+        "cao cấp",
+        "thượng lưu",
+        "đại gia"
+      ]
+    },
+    "priority": 0,
+    "id": 203
+  },
+  {
+    "question": "Bạn có muốn ăn giá cao cấp (300,000 - 500,000 VNĐ) hoặc mắc hơn?",
+    "yes": {
+      "no_tag": [
+        "siêu rẻ",
+        "rẻ",
+        "bình dân",
+        "sang",
+        "nhà hàng"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "cao cấp",
+        "thượng lưu",
+        "đại gia"
+      ]
+    },
+    "priority": 0,
+    "id": 204
+  },
+  {
+    "question": "Bạn có muốn ăn giá thượng lưu (500,000 - 1,000,000 VNĐ) hoặc mắc hơn?",
+    "yes": {
+      "no_tag": [
+        "siêu rẻ",
+        "rẻ",
+        "bình dân",
+        "sang",
+        "nhà hàng",
+        "cao cấp"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "thượng lưu",
+        "đại gia"
+      ]
+    },
+    "priority": 0,
+    "id": 205
+  },
+  {
+    "question": "Bạn có muốn ăn giá đại gia (> 1,000,000 VNĐ)?",
+    "yes": {
+      "no_tag": [
+        "siêu rẻ",
+        "rẻ",
+        "bình dân",
+        "sang",
+        "nhà hàng",
+        "cao cấp",
+        "thượng lưu"
+      ]
+    },
+    "no": {
+      "no_tag": [
+        "đại gia"
+      ]
+    },
+    "priority": 0,
+    "id": 206
+  }
+]

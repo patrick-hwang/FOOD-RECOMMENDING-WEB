@@ -247,9 +247,9 @@ export default function RandomModeCard({ onBack }) {
                 <h1 className="rm-title">Quick Pick</h1>
                 <p className="rm-subtitle">Randomized for you</p>
             </div>
-            <button className="rm-shuffle-btn" onClick={handleShuffle} disabled={loading}>
-               <Icons.Shuffle />
-               <span style={{fontSize: '0.6em', marginTop:'2px'}}>Shuffle</span>
+            <button className="rm-shuffle-btn" onClick={onBack}>
+               <Icons.Back />
+               <span style={{fontSize: '0.6em', marginTop:'2px'}}>Back</span>
             </button>
         </div>
 
@@ -290,9 +290,9 @@ export default function RandomModeCard({ onBack }) {
                       <span className="rm-icon-label">{label}</span>
                   </div>
               ))}
-              <div className="rm-filter-icon" onClick={onBack}>
+              {/* <div className="rm-filter-icon" onClick={onBack}>
                    <div className="rm-icon-circle" style={{border:'none'}}><Icons.Back /></div>
-              </div>
+              </div> */}
           </div>
           <button className="rm-find-match-btn" onClick={handleShuffle}>Find my match</button>
       </div>

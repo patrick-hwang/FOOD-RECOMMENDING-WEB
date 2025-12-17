@@ -5,6 +5,8 @@ import SplashScreen from './Components/SplashScreen';
 import OnboardingPage from './Pages/Onboarding';
 import logo from './assets/images/logo.png';
 import LoginPage from './LoginPage';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import TasteMode from './TasteMode';
 
 // --- IMPORT FILE MỚI TẠI ĐÂY ---
 import RandomModeCard from './RandomModeCard'; 
@@ -88,44 +90,57 @@ function AppChooseMode({ onRandom, onTaste, onLogout }) {
   );
 }
 
+function IntroSequence() {
+  const [introStep, setIntroStep] = useState('splash');
+  const navigate = useNavigate();
+
+  return (
+    <>
+      {introStep === 'splash' && <SplashScreen onFinish={() => setIntroStep('entrance')} />}
+      {introStep === 'entrance' && <AppEntranceEffect onDone={() => setIntroStep('onboarding')} />}
+      {introStep === 'onboarding' && <OnboardingPage onFinish={() => navigate('/login')} />}
+    </>
+  );
+}
+
 // --- 3. APP MAIN (Đã xóa RandomModeCard cũ) ---
 function App() {
-  const [mode, setMode] = useState('splash'); 
+  // const [mode, setMode] = useState('splash'); 
   const GOOGLE_CLIENT_ID = '975848353478-mguhticg531ok092j9krom4mhb25j6at.apps.googleusercontent.com'; 
-  
-  function handleLoginSuccess() { setMode('choosing'); }
-  function handleLogout() {
-    if (window.confirm("Bạn có chắc muốn đăng xuất?")) { setMode('login'); }
-  }
-  function handleFinishOnboarding() { setMode('login'); }
-  function taste() { console.log('enter taste mode'); setMode('taste'); }
+  const navigate = useNavigate(); // Hook to change URL
 
+  // Helper function to handle Logout
+  const handleLogout = () => {
+    if (window.confirm("Bạn có chắc muốn đăng xuất?")) { 
+        navigate('/login'); 
+    }
+  };
+  
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <div className="App">
-        {mode === 'splash' && <SplashScreen onFinish={() => setMode('entrance')} />}
-        {mode === 'entrance' && <AppEntranceEffect onDone={() => setMode('onboarding')} />} 
-        {mode === 'onboarding' && <OnboardingPage onFinish={handleFinishOnboarding} />}
-        {mode === 'login' && <LoginPage onLoginSuccess={handleLoginSuccess} />}
+        <Routes>
+          {/* URL: / (Intro Flow) */}
+          <Route path="/" element={<IntroSequence />} />
 
-        {mode === 'choosing' && (
-          <AppChooseMode 
-            onRandom={() => setMode('random')} 
-            onTaste={() => setMode('taste')} 
-            onLogout={handleLogout} 
-          />
-        )}
-        
-        {/* Render RandomModeCard mới từ file đã tách */}
-        {mode === 'random' && <RandomModeCard onBack={() => setMode('choosing')} />}
-        
-        {mode === 'taste' && (
-          <div className="mode-container">
-            <h2>Taste Quiz</h2>
-            <p>Starting taste quiz...</p>
-            <button className="back-button" onClick={() => setMode('choosing')}>Back</button>
-          </div>
-        )}
+          {/* URL: /login */}
+          <Route path="/login" element={<LoginPage onLoginSuccess={() => navigate('/home')} />} />
+
+          {/* URL: /home */}
+          <Route path="/home" element={
+             <AppChooseMode 
+                onRandom={() => navigate('/random')} 
+                onTaste={() => navigate('/taste')} 
+                onLogout={handleLogout} 
+             />
+          } />
+
+          {/* URL: /random */}
+          <Route path="/random" element={<RandomModeCard onBack={() => navigate('/home')} />} />
+
+          {/* URL: /taste */}
+          <Route path="/taste" element={<TasteMode onBack={() => navigate('/home')} />} />
+        </Routes>
       </div>
     </GoogleOAuthProvider>
   );
