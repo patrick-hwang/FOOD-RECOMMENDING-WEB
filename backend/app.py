@@ -15,6 +15,7 @@ import json
 import random
 from criteria import DETERMINING_CRITERIA
 import os
+import unicodedata
 
 # ==============================================================================
 # 1. CẤU HÌNH (CONFIGURATION)
@@ -444,126 +445,110 @@ except Exception as e:
     print(f"❌ Error loading questions: {e}")
     QUESTIONS_DB = []
 
-def has_tag(restaurant, tag):
-    """Check if restaurant object has a specific tag in any of its tag categories"""
-    tags_obj = restaurant.get("tags", {})
-    if not tags_obj: return False
-    
-    # Flatten values
-    all_tags = []
-    for v in tags_obj.values():
-        if isinstance(v, list): all_tags.extend(v)
-        elif isinstance(v, str): all_tags.append(v)
-    
-    return tag in all_tags
+CATEGORY_SCORES = {
+    1: 41.4, # Món ăn/uống
+    5: 25.3, # Giá tiền
+    0: 11.0, # Đặc điểm
+    3: 9.1,  # Nguồn gốc
+    4: 6.6,  # Không gian
+    2: 4.5,  # Nguyên liệu
+    6: 2.2   # Thời điểm
+}
 
-# --- NEW API MODELS ---
-class QuestionModeRequest(BaseModel):
-    yes_tags: List[str] = []
-    no_tags: List[str] = []
-    asked_ids: List[int] = []
+# --- ADD THESE HELPER FUNCTIONS ---
+def normalize_text(text):
+    if isinstance(text, str):
+        return unicodedata.normalize('NFC', text).strip()
+    return text
 
-# ... (Keep imports and configurations at the top)
+def get_tag_score(tag):
+    tag = normalize_text(tag) # Normalize input
+    for idx, criterion_list in enumerate(DETERMINING_CRITERIA):
+        # Normalize list items for comparison
+        normalized_list = [normalize_text(t) for t in criterion_list]
+        if tag in normalized_list:
+            return CATEGORY_SCORES.get(idx, 0)
+    return 0
 
-# --- 1. ADD THIS HELPER FUNCTION (Algorithm Logic) ---
 def get_restaurant_tags(restaurant):
-    """Helper: Flatten tags into a single set for fast lookup"""
     tags_obj = restaurant.get("tags", {})
     all_tags = set()
     if not tags_obj: return all_tags
     for v in tags_obj.values():
-        if isinstance(v, list): all_tags.update(v)
-        elif isinstance(v, str): all_tags.add(v)
+        if isinstance(v, list): 
+            all_tags.update([normalize_text(t) for t in v]) # Normalize
+        elif isinstance(v, str): 
+            all_tags.add(normalize_text(v)) # Normalize
     return all_tags
 
-# --- NEW ALGORITHM IMPLEMENTATION ---
-def filter_restaurants_algo(all_places, yes_tags, no_tags):
-    """
-    Implementation of the specific filtering logic requested.
-    """
-    yes_set = set(yes_tags)
-    no_set = set(no_tags)
-    result_quan = []
-
-    for quan_an in all_places:
-        place_tags = get_restaurant_tags(quan_an)
-        select_this = True
-        
-        for criterion in DETERMINING_CRITERIA:
-            criterion_set = set(criterion)
-            selected_tags = []
-
-            # Check if there are any YES tags relevant to this specific criterion
-            # This corresponds to "if yes_tags.size() > 0" in the context of the criterion
-            relevant_yes_tags = [t for t in criterion if t in yes_set]
-
-            # --- YES LOGIC ---
-            if len(relevant_yes_tags) > 0:
-                # User has preferences in this category, enforce them strict
-                for tag in criterion:
-                    if tag in yes_set:
-                        if tag in place_tags:
-                            selected_tags.append(tag)
-                        else:
-                            # User wanted this tag, but place doesn't have it -> Fail
-                            select_this = False
-            else:
-                # User has no preference in this category, keep all valid tags
-                for tag in criterion:
-                    if tag in place_tags:
-                        selected_tags.append(tag)
-            
-            # --- NO LOGIC ---
-            # Remove tags that are in the NO set
-            # "for tag in selected_tags: if tag in no_tags: erase"
-            selected_tags = [t for t in selected_tags if t not in no_set]
-            
-            # --- EMPTY CHECK ---
-            # "if selected_tags.empty(): select_this = False"
-            if not selected_tags:
-                select_this = False
-                
-            # Optimization: Break early if failed
-            if not select_this:
-                break
-        
-        if select_this:
-            result_quan.append(quan_an)
-            
-    return result_quan
-
-# --- 2. REPLACE THE OLD "/api/question-mode/next" ENDPOINT ---
-# app.py (Add this helper function and update the endpoint)
-
-# --- HELPER: CATEGORY WEIGHTING ---
-def get_category_weight(question_tags):
-    """
-    Returns a weight score based on user preference order:
-    1. Món ăn/uống (Index 1) - Highest
-    2. Nguyên liệu (Index 2)
-    3. Đặc điểm (Index 0)
-    4. Origin (Index 3)
-    5. Giá tiền (Index 5)
-    6. Others (Place, Occasion) - Lowest
-    """
-    # Mapping Index in DETERMINING_CRITERIA to Weight
-    # Higher number = Higher priority
-    weights = {
-        1: 60, # Món ăn/uống
-        2: 50, # Nguyên liệu
-        0: 40, # Đặc điểm
-        3: 30, # Origin
-        5: 20, # Giá tiền
-        4: 10, # Place
-        6: 10  # Occasion
-    }
+def get_question_category_index(q_obj):
+    all_tags = []
+    yes_obj = q_obj.get('yes', {})
+    no_obj = q_obj.get('no', {})
     
-    # Find which category the tag belongs to
-    for tag in question_tags:
+    if 'yes_tag' in yes_obj: all_tags.extend(yes_obj['yes_tag'])
+    if 'no_tag' in yes_obj: all_tags.extend(yes_obj['no_tag'])
+    if 'yes_tag' in no_obj: all_tags.extend(no_obj['yes_tag'])
+    if 'no_tag' in no_obj: all_tags.extend(no_obj['no_tag'])
+    
+    for tag in all_tags:
+        norm_tag = normalize_text(tag) # Normalize tag from question
         for idx, criterion_list in enumerate(DETERMINING_CRITERIA):
-            if tag in criterion_list:
-                return weights.get(idx, 0)
-    return 0
+            # Normalize tags in criteria
+            normalized_criteria = [normalize_text(t) for t in criterion_list]
+            if norm_tag in normalized_criteria:
+                return idx
+    return -1
+
+def calculate_place_score(place, request):
+    """Calculates total score for a place based on the 4 tag lists."""
+    place_tags = get_restaurant_tags(place)
+    score = 0.0
+    
+    # 1. Exact Match (Yes) -> Full Score
+    for tag in request.yes_tags:
+        if tag in place_tags:
+            score += get_tag_score(tag)
+            
+    # 2. Partial Match (Maybe Yes) -> Half Score
+    for tag in request.maybe_yes_tags:
+        if tag in place_tags:
+            score += (get_tag_score(tag) / 2.0)
+            
+    # 3. Negative Match (No) -> Minus Score
+    for tag in request.no_tags:
+        if tag in place_tags:
+            score -= get_tag_score(tag)
+            
+    # 4. Partial Negative (Maybe No) -> Minus Half Score
+    for tag in request.maybe_no_tags:
+        if tag in place_tags:
+            score -= (get_tag_score(tag) / 2.0)
+            
+    return score
+
+def get_question_tags(q_obj):
+    """Collects all tags involved in a question to calculate impact."""
+    tags = set()
+    # Collect tags from 'yes' branch
+    yes_obj = q_obj.get('yes', {})
+    if 'yes_tag' in yes_obj: tags.update(yes_obj['yes_tag'])
+    if 'no_tag' in yes_obj: tags.update(yes_obj['no_tag'])
+    
+    # Collect tags from 'no' branch
+    no_obj = q_obj.get('no', {})
+    if 'yes_tag' in no_obj: tags.update(no_obj['yes_tag'])
+    if 'no_tag' in no_obj: tags.update(no_obj['no_tag'])
+    
+    return list(tags)
+
+# --- NEW API MODELS ---
+class QuestionModeRequest(BaseModel):
+    yes_tags: List[str] = []
+    maybe_yes_tags: List[str] = [] # NEW
+    no_tags: List[str] = []
+    maybe_no_tags: List[str] = []  # NEW
+    asked_ids: List[int] = []
 
 # --- UPDATED ENDPOINT ---
 @app.post("/api/question-mode/next")
@@ -571,105 +556,116 @@ async def get_next_question(payload: QuestionModeRequest):
     if collection_quan_an is None:
         raise HTTPException(status_code=503, detail="DB not connected")
 
-    # 1. Fetch simplified data
+    # 1. Fetch simplified data for ALL places
     cursor = collection_quan_an.find({}, {"tags": 1, "_id": 1})
     all_places = list(cursor)
 
-    # 2. Run Filter Algorithm
-    filtered_places = filter_restaurants_algo(all_places, payload.yes_tags, payload.no_tags)
-    remaining_count = len(filtered_places)
-
-    if remaining_count == 0:
+    if not all_places:
         return {"next_question": None, "remaining_count": 0}
 
-    # 3. Priority Logic: Math Score (Primary) + Category Weight (Secondary)
-    best_question = None
-    max_priority = -float('inf')      # Primary: Splitting power (Math)
-    max_cat_weight = -float('inf')    # Secondary: User preference
+    # 2. Calculate Score for ALL places
+    scored_places = []
+    for place in all_places:
+        s = calculate_place_score(place, payload)
+        scored_places.append((place, s))
     
+    # 3. Sort by score descending and take TOP 100
+    scored_places.sort(key=lambda x: x[1], reverse=True)
+    top_100_places = [x[0] for x in scored_places[:100]]
+    
+    # 4. Filter Available Questions
     available_questions = [q for q in QUESTIONS_DB if q['id'] not in payload.asked_ids]
-
+    
     if not available_questions:
-        return {"next_question": None, "remaining_count": remaining_count}
+        return {"next_question": None, "remaining_count": len(all_places)}
 
-    n = remaining_count
+    # --- LOGIC: FIXED SEQUENCE FOR Q1 & Q2 ---
+    turn = len(payload.asked_ids)
+    
+    # Mapping: Turn Index -> Criteria Index
+    # Turn 0 (Question 1) -> Index 1 (Món ăn/uống)
+    # Turn 1 (Question 2) -> Index 5 (Giá tiền)
+    fixed_order_map = {0: 1, 1: 5}
+
+    if turn in fixed_order_map:
+        target_idx = fixed_order_map[turn]
+        candidates = [q for q in available_questions if get_question_category_index(q) == target_idx]
+        
+        if candidates:
+            return {
+                "remaining_count": len(all_places),
+                "next_question": random.choice(candidates)
+            }
+
+    # --- LOGIC: MAX IMPACT ALGORITHM ---
+    best_question = None
+    max_affect = -1.0
     
     for q in available_questions:
-        q_yes_tags = q.get('yes', {}).get('yes_tag', [])
+        q_tags = get_question_tags(q)
+        total_affect = 0.0
         
-        # A. Calculate Math Priority (How evenly it splits the data)
-        cnt = 0
-        if q_yes_tags:
-            q_tags_set = set(q_yes_tags)
-            for place in filtered_places:
-                place_tags = get_restaurant_tags(place)
-                if not place_tags.isdisjoint(q_tags_set):
-                    cnt += 1
+        # Calculate affect: Sum(|score|) for each place in top 100 that has the tag
+        for place in top_100_places:
+            place_tags = get_restaurant_tags(place)
+            for tag in q_tags:
+                if tag in place_tags:
+                    total_affect += get_tag_score(tag)
         
-        # Priority formula: closer to n/2 is better
-        if cnt < n:
-            priority = cnt
-        else:
-            priority = n - cnt
-            
-        # B. Calculate Category Weight
-        cat_weight = get_category_weight(q_yes_tags)
+        if get_question_category_index(q) == 5:  # Price
+            total_affect *= 0.3  # Reduce impact for price questions
 
-        # C. Comparison Logic
-        # Case 1: Better Math Score -> Take it
-        if priority > max_priority:
-            max_priority = priority
-            max_cat_weight = cat_weight
+        if total_affect > max_affect:
+            max_affect = total_affect
             best_question = q
-        # Case 2: Equal Math Score -> Check Category Weight
-        elif priority == max_priority:
-            if cat_weight > max_cat_weight:
-                max_cat_weight = cat_weight
-                best_question = q
     
+    # FALLBACK: If algorithm fails to pick (e.g. all 0 impact), pick random
+    if best_question is None:
+        best_question = random.choice(available_questions)
+            
     return {
-        "remaining_count": remaining_count,
+        "remaining_count": len(all_places),
         "next_question": best_question
     }
 
-# --- 3. ADD THIS NEW ENDPOINT FOR FETCHING RESULTS ---
 @app.post("/api/question-mode/results")
 async def get_results_batch(payload: QuestionModeRequest):
-    """
-    Called only when showing results (after 5 questions).
-    Fetches FULL details (images, address) for 4 random filtered places.
-    """
     if collection_quan_an is None:
         raise HTTPException(status_code=503, detail="DB not connected")
 
-    # 1. Filter using simplified data first
     all_places_simple = list(collection_quan_an.find({}, {"tags": 1, "_id": 1}))
-    filtered_simple = filter_restaurants_algo(all_places_simple, payload.yes_tags, payload.no_tags)
     
-    if not filtered_simple:
+    if not all_places_simple:
         return {"results": [], "remaining_count": 0}
 
-    # 2. Pick 4 random IDs
-    sample_size = min(4, len(filtered_simple))
-    selected_docs = random.sample(filtered_simple, sample_size)
-    selected_ids = [d["_id"] for d in selected_docs]
+    # Calculate Score
+    scored_places = []
+    for place in all_places_simple:
+        s = calculate_place_score(place, payload)
+        scored_places.append((place, s))
+        
+    # Sort Descending
+    scored_places.sort(key=lambda x: x[1], reverse=True)
+    
+    # Take Top 4
+    top_4_simple = [x[0] for x in scored_places[:4]]
+    top_ids = [d["_id"] for d in top_4_simple]
 
-    # 3. Fetch FULL details for just these 4 IDs
-    full_docs = list(collection_quan_an.find({"_id": {"$in": selected_ids}}))
+    full_docs_map = {d["_id"]: d for d in collection_quan_an.find({"_id": {"$in": top_ids}})}
     
     results = []
-    for d in full_docs:
-        d = convert_document(d)
-        # Normalize thumbnail for frontend
-        if "thumbnail" not in d and "places_images" in d and d["places_images"]:
-            d["thumbnail"] = d["places_images"][0]
-        elif "thumbnail" not in d:
-            d["thumbnail"] = "https://placehold.co/150x150"
-        results.append(d)
+    for simple_doc in top_4_simple:
+        if simple_doc["_id"] in full_docs_map:
+            d = convert_document(full_docs_map[simple_doc["_id"]])
+            if "thumbnail" not in d and "places_images" in d and d["places_images"]:
+                d["thumbnail"] = d["places_images"][0]
+            elif "thumbnail" not in d:
+                d["thumbnail"] = "https://placehold.co/150x150"
+            results.append(d)
 
     return {
         "results": results, 
-        "remaining_count": len(filtered_simple)
+        "remaining_count": len(all_places_simple)
     }
 
 if __name__ == "__main__":

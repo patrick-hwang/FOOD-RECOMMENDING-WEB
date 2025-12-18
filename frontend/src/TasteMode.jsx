@@ -13,7 +13,9 @@ const Icons = {
 export default function TasteMode({ onBack }) {
     // --- STATE ---
     const [yesTags, setYesTags] = useState([]);
+    const [maybeYesTags, setMaybeYesTags] = useState([]);
     const [noTags, setNoTags] = useState([]);
+    const [maybeNoTags, setMaybeNoTags] = useState([]);
     const [askedIds, setAskedIds] = useState([]);
     const [questionCount, setQuestionCount] = useState(0);
     const [history, setHistory] = useState([]);
@@ -35,34 +37,51 @@ export default function TasteMode({ onBack }) {
     }, []);
 
     // --- API CALLS ---
-    const fetchNextQuestion = async (cYes, cNo, cAsked) => {
+    const fetchNextQuestion = async (cYes, cMaybeYes, cNo, cMaybeNo, cAsked) => {
         setLoading(true);
         try {
             const res = await fetch('http://127.0.0.1:8000/api/question-mode/next', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ yes_tags: cYes, no_tags: cNo, asked_ids: cAsked })
+                body: JSON.stringify({ 
+                    yes_tags: cYes, 
+                    maybe_yes_tags: cMaybeYes,
+                    no_tags: cNo, 
+                    maybe_no_tags: cMaybeNo,
+                    asked_ids: cAsked 
+                })
             });
-            const data = await res.json();
             
+            const data = await res.json();
+
             if (data.next_question) {
                 setCurrentQuestion(data.next_question);
                 setViewState('question');
                 setSelectedOption(null);
             } else {
-                if (data.remaining_count > 0) fetchResults(cYes, cNo);
-                else setViewState('empty');
+                // If no question is returned (or list exhausted), force results view
+                fetchResults(cYes, cMaybeYes, cNo, cMaybeNo);
             }
-        } catch (e) { console.error(e); } finally { setLoading(false); }
+
+        } catch (e) { 
+            console.error("Error fetching question:", e); 
+        } finally { 
+            setLoading(false); 
+        }
     };
 
-    const fetchResults = async (cYes, cNo) => {
+    const fetchResults = async (cYes, cMaybeYes, cNo, cMaybeNo) => {
         setLoading(true);
         try {
             const res = await fetch('http://127.0.0.1:8000/api/question-mode/results', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ yes_tags: cYes, no_tags: cNo })
+                body: JSON.stringify({ 
+                    yes_tags: cYes, 
+                    maybe_yes_tags: cMaybeYes,
+                    no_tags: cNo, 
+                    maybe_no_tags: cMaybeNo
+                })
             });
             const data = await res.json();
 
@@ -118,42 +137,52 @@ export default function TasteMode({ onBack }) {
         if (!currentQuestion) return;
         const answer = selectedOption || 'idk';
 
+        // 1. Save History (Include new states)
         const historyEntry = {
             question: currentQuestion,
             yesTags: [...yesTags],
+            maybeYesTags: [...maybeYesTags],
             noTags: [...noTags],
+            maybeNoTags: [...maybeNoTags],
             askedIds: [...askedIds],
             selectedOption: answer
         };
         setHistory([...history, historyEntry]);
 
+        // 2. Prepare new Lists
         let newYes = [...yesTags];
+        let newMaybeYes = [...maybeYesTags];
         let newNo = [...noTags];
+        let newMaybeNo = [...maybeNoTags];
         const newAsked = [...askedIds, currentQuestion.id];
 
+        // Helper: Get tags defined in JSON
+        const tagsInQuestion = currentQuestion.yes?.yes_tag || [];
+
         if (answer === 'yes') {
-            const tagsToAdd = currentQuestion.yes?.yes_tag || [];
-            const noTagsToAdd = currentQuestion.yes?.no_tag || []; 
-            newYes = [...new Set([...newYes, ...tagsToAdd])];
-            newNo = [...new Set([...newNo, ...noTagsToAdd])];
+            newYes = [...new Set([...newYes, ...tagsInQuestion])];
+        } else if (answer === 'maybe_yes') {
+            newMaybeYes = [...new Set([...newMaybeYes, ...tagsInQuestion])];
         } else if (answer === 'no') {
-            const tagsToBan = currentQuestion.no?.no_tag || [];
-            const yesTagsToAdd = currentQuestion.no?.yes_tag || [];
-            newNo = [...new Set([...newNo, ...tagsToBan])];
-            newYes = [...new Set([...newYes, ...yesTagsToAdd])];
+            newNo = [...new Set([...newNo, ...tagsInQuestion])];
+        } else if (answer === 'maybe_no') {
+            newMaybeNo = [...new Set([...newMaybeNo, ...tagsInQuestion])];
         }
+        // 'idk' adds nothing
 
         setYesTags(newYes);
+        setMaybeYesTags(newMaybeYes);
         setNoTags(newNo);
+        setMaybeNoTags(newMaybeNo);
         setAskedIds(newAsked);
         
         const nextCount = questionCount + 1;
         setQuestionCount(nextCount);
 
         if (nextCount > 0 && nextCount % 5 === 0) {
-            fetchResults(newYes, newNo);
+            fetchResults(newYes, newMaybeYes, newNo, newMaybeNo);
         } else {
-            fetchNextQuestion(newYes, newNo, newAsked);
+            fetchNextQuestion(newYes, newMaybeYes, newNo, newMaybeNo, newAsked);
         }
     };
 
@@ -174,7 +203,7 @@ export default function TasteMode({ onBack }) {
     };
 
     const handleAskMore = () => {
-        fetchNextQuestion(yesTags, noTags, askedIds);
+        fetchNextQuestion(yesTags, maybeYesTags, noTags, maybeNoTags, askedIds);
     };
 
     // --- RENDER ---
@@ -290,30 +319,27 @@ export default function TasteMode({ onBack }) {
 
             <div className="tm-question-area">
                 <div className="tm-card">
-                    <span className="tm-progress-text">Question: {questionCount + 1}/5</span>
+                    <span className="tm-progress-text">Question: {questionCount + 1}</span>
                     
                     {currentQuestion && (
                         <>
                             <h2 className="tm-question-text">{currentQuestion.question}</h2>
                             
                             <div className="tm-btn-group">
-                                <button 
-                                    className={`tm-btn-option btn-outline ${selectedOption === 'yes' ? 'selected' : ''}`} 
-                                    onClick={() => handleOptionSelect('yes')}
-                                >
+                                <button className={`tm-btn-option btn-outline ${selectedOption === 'yes' ? 'selected' : ''}`} onClick={() => handleOptionSelect('yes')}>
                                     Yes
                                 </button>
-                                <button 
-                                    className={`tm-btn-option btn-outline ${selectedOption === 'no' ? 'selected' : ''}`} 
-                                    onClick={() => handleOptionSelect('no')}
-                                >
-                                    No
+                                <button className={`tm-btn-option btn-outline ${selectedOption === 'maybe_yes' ? 'selected' : ''}`} onClick={() => handleOptionSelect('maybe_yes')}>
+                                    Maybe Yes
                                 </button>
-                                <button 
-                                    className={`tm-btn-option btn-outline ${selectedOption === 'idk' ? 'selected' : ''}`} 
-                                    onClick={() => handleOptionSelect('idk')}
-                                >
+                                <button className={`tm-btn-option btn-outline ${selectedOption === 'idk' ? 'selected' : ''}`} onClick={() => handleOptionSelect('idk')}>
                                     Don't know
+                                </button>
+                                <button className={`tm-btn-option btn-outline ${selectedOption === 'maybe_no' ? 'selected' : ''}`} onClick={() => handleOptionSelect('maybe_no')}>
+                                    Maybe No
+                                </button>
+                                <button className={`tm-btn-option btn-outline ${selectedOption === 'no' ? 'selected' : ''}`} onClick={() => handleOptionSelect('no')}>
+                                    No
                                 </button>
                             </div>
                         </>
