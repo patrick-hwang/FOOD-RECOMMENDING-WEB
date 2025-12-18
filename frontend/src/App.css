@@ -150,6 +150,7 @@ body {
   box-sizing: border-box;
 }
 
+/*
 .choose-mode-title {
   font-size: 2em;
   font-weight: 600;
@@ -165,14 +166,99 @@ body {
   margin-bottom: 2rem;
   color: #555;
 }
+*/
+
+/* Input */
+.input-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 400px;
+  margin: 60px auto;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.input-icon {
+  position: absolute;
+  left: 5px !important;
+  top: 50% !important;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #888 !important;
+}
+
+.clear-icon {
+  position: absolute;
+  right: 5px !important;
+  top: 50% !important;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #888 !important;
+}
+
+.input-container input {
+  width: 100%;
+  padding-left: 30px;
+  height: 100%;
+  font-size: 1rem;
+  color: #555;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+/* Quick pick */
+.Quick-pick-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin: 60px auto;
+  margin-top: 0px;
+  margin-bottom: 90px;
+}
+
+.Quick-pick-container h1{
+  position: absolute;
+  color: black ;
+  font-size: 1.5rem;
+  padding-top: 5px;
+  font-weight: bold;
+}
+
+.Keyword-container {
+  position: absolute;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  gap: 10px;
+  padding-right: 10px;
+  padding-top: 35px;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+  max-width: 100%;
+}
+
+.Keyword {
+  flex: 0 0 auto;
+  background-color: #ccc;   
+  border-radius: 10px;      
+  padding: 0px 15px;          
+  white-space: nowrap;       
+  font-weight: 600;          
+  cursor: pointer;           
+  user-select: none; 
+}
 
 /* Grid Options */
 .options-grid {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   width: 100%;
-  padding-bottom: 20px;
+  padding-bottom: 0px;
 }
 @media (max-width: 499px) {
   .options-grid {
@@ -182,7 +268,8 @@ body {
 }
 
 .option-card {
-  padding: 2rem 1rem;
+  position: relative;
+  padding: 100px 2rem 1rem;
   border-radius: 15px;
   color: #333;
   cursor: pointer;
@@ -194,6 +281,9 @@ body {
   justify-content: space-around;
   align-items: center;
   text-align: center;
+  margin-top: 75px;
+  margin-bottom: 0px;
+  padding-bottom: -50px;
 }
 .option-card:hover {
   transform: translateY(-5px);
@@ -205,8 +295,12 @@ body {
   margin-bottom: 10px;
 }
 .card-icon {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%); 
   font-size: 3em; 
-  margin: 10px 0;
+  margin: 0px 0;
 }
 .card-description {
   font-size: 0.85em;
@@ -222,6 +316,17 @@ body {
   color: #3b82f6; 
   border: 1px solid #93c5fd;
 }
+
+.random-card {
+  background: radial-gradient(farthest-corner at 100% 50%,  #8cc640 100%, #01a651 0%); 
+  color: white;
+}
+.taste-card {
+  background: radial-gradient(farthest-corner at 0px 0px, #f8ff6f 0%, #a6d577 100%); 
+  color: white; 
+}
+
+
 .taste-card .card-description, .taste-card .card-title {
     color: #1e3a8a;
 }
