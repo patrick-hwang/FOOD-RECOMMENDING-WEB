@@ -1,204 +1,349 @@
-/* --- RestaurantDetail.css --- */
+/* RESET BOX SIZING */
+* { box-sizing: border-box; }
 
-.rd-container {
-    background: #fff;
-    min-height: 100vh;
-    width: 100%;
+/* CONTAINER CHÍNH */
+.rd-screen {
     display: flex;
-    flex-direction: column;
-    font-family: 'Montserrat', sans-serif;
+    flex-direction: column; /* Xếp dọc: Trên -> Giữa -> Dưới */
+    height: 100vh;          /* Chiều cao bằng 100% màn hình */
+    width: 100%;
+    background-color: white;
+    overflow: hidden;       /* Cấm body cuộn, chỉ cuộn phần con */
     position: relative;
-    padding-bottom: 20px;
-    /* Hiệu ứng trượt vào từ bên phải */
-    animation: slideInRight 0.3s ease-out;
-    max-width: 480px;
-    margin: 0 auto;
-    box-shadow: 0 0 30px rgba(0,0,0,0.15);
+    font-family: 'Montserrat', sans-serif;
 }
 
-@keyframes slideInRight {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
+/* --- HEADER --- */
+.rd-fixed-top {
+    flex-shrink: 0;        /* Giữ nguyên kích thước, không bị ép nhỏ */
+    background: white;
+    z-index: 10;           /* Nổi lên trên */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Bóng đổ nhẹ ngăn cách */
+    padding-bottom: 5px;
 }
 
-/* 1. Header */
 .rd-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 20px 0px 20px;
-    background: #fff;
+    padding: 10px 15px;
+    background: white;
 }
-.rd-back-btn {
-    background: none; border: none; cursor: pointer; padding: 0;
-    display: flex; align-items: center;
-    width: 40px;
-    justify-content: flex-start;
-}
-.rd-header-title {
-    font-size: 28px; font-weight: 800; color: #333;
-    margin: 0;
-    flex: 1; text-align: center;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    padding: 0 10px;
-}
-.rd-header-logo { width: 40px; display: flex; justify-content: center; }
+.rd-header-left { cursor: pointer; display: flex; align-items: center; }
+.rd-header-right { display: flex; align-items: center; }
 
-/* 2. Tabs Pill */
-.rd-tabs {
+.rd-header-title-box {
+    padding: 2px 8px;
+}
+.rd-header-text {
+    font-weight: 850;
+    font-size: 25px;
+    color: #000;
+}
+
+.rd-custom-logo {
+  width: 30px;        /* Chỉnh độ rộng mong muốn */
+  height: 30px;       /* Chỉnh chiều cao mong muốn */
+  object-fit: contain; /* Giữ tỷ lệ ảnh không bị méo */
+  /* Nếu muốn bo tròn thì thêm dòng dưới */
+  /* border-radius: 50%; */ 
+}
+
+/* --- TABS --- */
+.rd-tabs-row {
     display: flex;
     justify-content: center;
     gap: 15px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+    padding: 0 10px;
 }
 .rd-tab {
-    border: 1px solid #4CAF50;
-    background: #fff;
-    color: #4CAF50;
+    background: white;
+    border: 1.5px solid #00AA55;
+    color: #00AA55;
     border-radius: 20px;
     padding: 6px 16px;
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s;
 }
 .rd-tab.active {
-    background: #4CAF50;
+    background: #00AA55;
     color: white;
 }
 
-/* 3. Slider */
-.rd-slider-container {
-    width: 100%;
-    height: 220px;
+/* --- SCROLL AREA (Chứa ảnh, info, tags) --- */
+.rd-scroll-view {
+    flex: 1;               /* Chiếm toàn bộ khoảng trống còn lại */
+    overflow-y: auto;      /* Cho phép cuộn dọc nội dung bên trong */
+    
+    /* Padding để nội dung không bị dính sát mép */
+    padding-top: 10px;
+    padding-bottom: 20px;
+    
+    /* Ẩn thanh cuộn (cho đẹp) */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.rd-scroll-view::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* --- IMAGE CARD --- */
+.rd-image-card {
+    width: 90%;
+    height: 200px;
+    background: #EFEFEF;
+    margin: 5px auto 15px auto;
+    border-radius: 12px;
+    overflow: hidden;
     position: relative;
-    padding: 0 20px;
-    margin-bottom: 15px;
 }
-.rd-slider-img {
-    width: 100%; height: 100%;
+.rd-main-img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    border-radius: 16px;
-    background: #f0f0f0;
 }
-.rd-dots {
-    position: absolute; bottom: 12px;
-    left: 0; right: 0;
+.rd-dots-indicator {
+    position: absolute;
+    bottom: 10px; left: 0; right: 0;
     display: flex; justify-content: center; gap: 6px;
 }
-.rd-dot {
-    width: 8px; height: 8px;
-    background: rgba(255,255,255,0.5);
-    border-radius: 50%;
-    cursor: pointer;
+.dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: white; border: 1px solid #ddd;
 }
-.rd-dot.active { background: #fff; transform: scale(1.2); }
+.dot.active { background: #00AA55; border: none; }
 
-/* 4. Info Section */
-.rd-info-section { padding: 0 25px; margin-bottom: 20px; }
-.rd-title-row {
+/* --- INFO CONTAINER --- */
+.rd-info-container {
+    padding: 0 25px;
+}
+.rd-name-row {
     display: flex; justify-content: space-between; align-items: flex-start;
-    margin-bottom: 5px;
 }
-.rd-name {
-    font-size: 22px; font-weight: 800; color: #111;
-    margin: 0; line-height: 1.2;
+.rd-item-name {
+    margin: 0; font-size: 20px; font-weight: 800; flex: 1;
 }
-.rd-bookmark-icon { margin-top: 5px; cursor: pointer; }
+.rd-bookmark-icon {
+    margin-left: 10px; margin-top: -5px;
+}
 
 .rd-rating-row {
     display: flex; align-items: center; gap: 2px;
-    margin-bottom: 12px;
+    margin: 5px 0 10px 0;
 }
-.rd-rating-num { font-weight: 700; color: #333; margin-left: 6px; font-size: 14px; }
+.rd-rating-num {
+    font-weight: 600; font-size: 14px; margin-left: 5px; color: #555;
+}
 
-.rd-detail-row {
-    display: flex; align-items: flex-start; gap: 12px;
+.rd-address-row {
+    display: flex; align-items: flex-start; gap: 10px;
     margin-bottom: 8px;
-    justify-content: flex-start;
 }
-.rd-icon-box {
-    width: 25px; display: flex; justify-content: center; margin-top: 2px;
+.rd-icon-col {
+    width: 20px; display: flex; justify-content: center; margin-top: 2px;
 }
-.rd-detail-text {
-    font-size: 15px; color: #333;
-    font-weight: 500;
-    line-height: 1.4;
-    flex: 1;
-    text-align: left;
+.rd-text-info {
+    font-size: 14px; font-weight: 500; color: #333; line-height: 1.4;
 }
 
-/* 5. Tags Box */
-.rd-tags-box {
-    margin: 0 20px 20px 20px;
-    background: #D9D9D9; 
+/* --- TAGS WRAPPER (Box xám) --- */
+.rd-tags-wrapper {
+    margin: 20px 20px;
+    background: #D9D9D9;
     border-radius: 16px;
-    padding: 15px;
+    overflow: hidden;
 }
-.rd-tag-header {
-    display: flex; align-items: center; gap: 6px;
-    margin-bottom: 12px;
-}
-.rd-tag-label {
-    background: #008848; color: white;
-    font-weight: 700; font-size: 12px;
-    padding: 3px 8px; border-radius: 4px;
-}
-.rd-tag-title { font-weight: 700; font-size: 14px; color: #333; }
-
-.rd-tags-grid {
-    display: flex; flex-wrap: wrap; gap: 8px;
-}
-.rd-tag-chip {
-    background: #fff;
-    color: #4CAF50;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px; font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    transition: all 0.2s;
-}
-
-/* Nút đã chọn: Nền xanh */
-.rd-tag-chip.selected {
-    background: #00AA00;
+.rd-tags-green-header {
+    background: #008844;
     color: white;
-    box-shadow: 0 2px 5px rgba(0,170,0,0.3);
+    font-weight: 800;
+    text-align: center;
+    padding: 8px;
+    font-size: 16px;
+}
+.rd-tags-content {
+    padding: 10px 15px 20px 15px;
+}
+.rd-tags-note {
+    text-align: center; font-style: italic; font-size: 13px;
+    margin: 0 0 12px 0;
+}
+.rd-tags-list {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
+}
+.rd-tag-btn {
+    background: white;
+    border: 1.5px solid #00AA55;
+    color: #00AA55;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px; font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.rd-tag-btn.active {
+    background: #00AA55; color: white;
 }
 
-/* 6. Footer Buttons */
-.rd-footer {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 25px; margin-top: auto;
-    gap: 15px;
+/* --- FOOTER FIXED --- */
+.rd-footer-bar {
+    flex-shrink: 0;        /* Giữ nguyên kích thước */
+    background: white;
+    padding: 15px 25px 25px 25px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    z-index: 10;
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.08); /* Bóng đổ ngược lên */
+    
+    /* Bo góc trên giống RandomModeCard */
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
 }
+
 .rd-btn-direction {
     flex: 1;
-    background: #00AA00;
+    background: #00AA55;
     color: white;
     border: none;
-    padding: 10px;
     border-radius: 30px;
-    font-size: 17px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
+    padding: 12px 10px;
+    font-size: 16px; font-weight: 800;
+    display: flex; justify-content: center; align-items: center;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,170,0,0.25);
+    margin-right: 15px;
+    box-shadow: 0 4px 8px rgba(0,170,85,0.3);
 }
 .rd-btn-direction:active { transform: scale(0.98); }
 
-.rd-shuffle-again {
-    display: flex; align-items: center; gap: 15px;
-    font-weight: 750; font-size: 17px; color: #111;
-    cursor: pointer;
+.rd-shuffle-block {
+    display: flex; align-items: center; gap: 8px; cursor: pointer;
 }
-.rd-shuffle-again:active { opacity: 0.7; }
+.rd-shuffle-label {
+    font-weight: 800; font-size: 15px; color: black;
+}
+.rd-spin-icon {
+    display: flex; align-items: center;
+}
+.rd-spin-icon svg {
+    width: 32px; height: 32px;
+}
 
-.nav-container {
-    max-width: 480px; 
-    margin: 0 auto; 
-    left: 50% !important; 
-    transform: translateX(-50%) !important;
-    box-shadow: 0 0 30px rgba(0,0,0,0.15);
+/* ... GIỮ NGUYÊN CSS CŨ TỪ PHẦN TRƯỚC ... */
+
+/* --- THÊM MỚI CSS CHO PHẦN VIEWS & REVIEWS --- */
+
+/* Tiêu đề chung cho section */
+.rd-section-title {
+  font-size: 18px;
+  font-weight: 800;
+  margin: 15px 20px 10px 20px;
+  color: #333;
+}
+
+/* === STYLE CHO TAB: VIEW === */
+.rd-view-container {
+  padding-bottom: 20px;
+}
+.rd-view-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 Cột */
+  gap: 10px;
+  padding: 0 20px;
+}
+.rd-view-item {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* Hình vuông */
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.rd-view-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+.rd-view-item img:active {
+  transform: scale(1.05);
+}
+
+/* === STYLE CHO TAB: REVIEW === *//* Container chính của tab Review */
+.rd-review-container {
+  padding: 10px 20px 20px 20px;
+}
+
+.rd-review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Khoảng cách giữa các card */
+}
+
+/* CARD REVIEW MỚI (Viền xanh) */
+.rd-review-card-green {
+  border: 1.5px solid #00AA55; /* Viền xanh lá đậm */
+  border-radius: 16px;         /* Bo góc tròn trịa */
+  padding: 15px;
+  background: white;
+  
+  display: flex; /* Xếp ngang Avatar và Nội dung */
+  gap: 15px;     /* Khoảng cách giữa Avatar và Cột bên phải */
+  align-items: flex-start; /* Căn hàng bắt đầu từ trên cùng */
+}
+
+/* Cột Trái: Ảnh Avatar */
+.rd-review-left {
+  flex-shrink: 0; /* Không cho ảnh bị bóp méo */
+}
+
+.rd-review-avatar-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%; /* Hình tròn */
+  object-fit: cover;
+  background-color: #f0f0f0; /* Màu nền nhẹ nếu ảnh lỗi */
+  border: 1px solid #eee;
+}
+
+/* Cột Phải: Nội dung */
+.rd-review-right {
+  display: flex;
+  flex-direction: column;
+  gap: 4px; /* Khoảng cách giữa các dòng Tên - Sao - Text */
+  flex: 1;
+}
+
+/* Tên User */
+.rd-review-name {
+  font-weight: 800; /* Chữ đậm */
+  font-size: 18px;
+  color: #000;
+  line-height: 1.2;
+}
+
+/* Hàng Sao */
+.rd-review-stars {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 4px; /* Cách đoạn text bên dưới một chút */
+}
+/* Chỉnh lại size sao cho vừa mắt giống hình */
+.rd-review-stars svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Nội dung Comment */
+.rd-review-content {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #333;
+  font-weight: 500;
 }
