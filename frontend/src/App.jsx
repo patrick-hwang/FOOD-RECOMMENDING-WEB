@@ -11,9 +11,12 @@ import diceIMG from './assets/images/Mode-Icon/dice.png'
 import compassIMG from './assets/images/Mode-Icon/akinator.png'
 
 // --- IMPORT FILE MỚI TẠI ĐÂY ---
-import RandomModeCard from './RandomModeCard'; 
+import RandomModeCard from './RandomModeCard';
+import BottomNavigation from './Components/BottomNavigation';
+import ProfilePage from './ProfilePage';
+import axios from 'axios';
 
-// --- 1. HIỆU ỨNG MỞ MÀN (Giữ nguyên) ---
+// --- 1. HIỆU ỨNG MỞ MÀN ---
 function AppEntranceEffect({ onDone }) {
   const [entered, setEntered] = useState(false);
   const [showText, setShowText] = useState(false);
@@ -57,10 +60,8 @@ function AppChooseMode({ onRandom, onTaste, onLogout }) {
   };*/}
 
   return (
-    <div className="choose-mode-container" style={{position: 'relative'}}>
-      <button className="logout-btn-absolute" onClick={onLogout} title="Logout">
-        <LogoutIcon />
-      </button>
+    <div className="choose-mode-container" style={{ position: 'relative' }}>
+      {/* Đã xóa nút logout ở đây */}
 
       <header className="header">
         <div className="logo-container">
@@ -76,12 +77,12 @@ function AppChooseMode({ onRandom, onTaste, onLogout }) {
         <div className="input-container">
           <span className="input-icon">🔍</span>
           {/*<span className="clear-icon" onClick={handleClear}>X</span>*/}
-          <input type="text" placeholder='What are you in the mood for?'/>
+          <input type="text" placeholder='What are you in the mood for?' />
         </div>
-        
+
         <div className="Quick-pick-container">
           <h1 className='Quick-pick'>Quick Picks for You</h1>
-          <div className='Keyword-container'> 
+          <div className='Keyword-container'>
             <div className='Keyword'>sticky rice1</div>
             <div className='Keyword'>sticky rice2</div>
             <div className='Keyword'>sticky rice3</div>
@@ -93,14 +94,14 @@ function AppChooseMode({ onRandom, onTaste, onLogout }) {
         <div className="options-grid">
           <div className="option-card random-card" onClick={onRandom}>
             <div className="card-icon">
-              <img src={diceIMG} alt="Dice" style={{width: '201px', height: '274px'}}/>
+              <img src={diceIMG} alt="Dice" style={{ width: '201px', height: '274px' }} />
             </div>
             <h2 className="card-title">Quick & Random</h2>
             <p className="card-description">Filters & random 3 spots</p>
           </div>
           <div className="option-card taste-card" onClick={onTaste}>
             <div className="card-icon">
-              <img src={compassIMG} alt="Compass" style={{width: '493px', height: '200px'}}/>
+              <img src={compassIMG} alt="Compass" style={{ width: '493px', height: '200px' }} />
             </div>
             <h2 className="card-title">Test your Taste</h2>
             <p className="card-description">Quizzes for personalized recommendations</p>
@@ -130,19 +131,25 @@ function IntroSequence() {
   );
 }
 
-// --- 3. APP MAIN (Đã xóa RandomModeCard cũ) ---
+// --- 3. APP MAIN ---
 function App() {
-  // const [mode, setMode] = useState('splash'); 
-  const GOOGLE_CLIENT_ID = '975848353478-mguhticg531ok092j9krom4mhb25j6at.apps.googleusercontent.com'; 
-  const navigate = useNavigate(); // Hook to change URL
+  const [currentUser, setCurrentUser] = useState(null);
+  const GOOGLE_CLIENT_ID = '975848353478-mguhticg531ok092j9krom4mhb25j6at.apps.googleusercontent.com';
+  const navigate = useNavigate();
 
-  // Helper function to handle Logout
-  const handleLogout = () => {
-    if (window.confirm("Bạn có chắc muốn đăng xuất?")) { 
-        navigate('/login'); 
+  function handleLoginSuccess(user) {
+    const userObj = user || { phone: "0123456789", username: "Demo User" };
+    setCurrentUser(userObj);
+    navigate('/home');
+  }
+
+  function handleLogout() {
+    if (window.confirm("Log out?")) {
+      setCurrentUser(null);
+      navigate('/login');
     }
-  };
-  
+  }
+
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <div className="App">
@@ -151,22 +158,42 @@ function App() {
           <Route path="/" element={<IntroSequence />} />
 
           {/* URL: /login */}
-          <Route path="/login" element={<LoginPage onLoginSuccess={() => navigate('/home')} />} />
+          <Route path="/login" element={<LoginPage onLoginSuccess={handleLoginSuccess} />} />
 
           {/* URL: /home */}
           <Route path="/home" element={
-             <AppChooseMode 
-                onRandom={() => navigate('/random')} 
-                onTaste={() => navigate('/taste')} 
-                onLogout={handleLogout} 
-             />
+            <>
+              <AppChooseMode
+                onRandom={() => navigate('/random')}
+                onTaste={() => navigate('/taste')}
+              />
+              <BottomNavigation activeTab="home" onTabChange={(tab) => navigate(`/${tab}`)} />
+            </>
           } />
 
           {/* URL: /random */}
-          <Route path="/random" element={<RandomModeCard onBack={() => navigate('/home')} />} />
+          <Route path="/random" element={
+            <>
+              <RandomModeCard onBack={() => navigate('/home')} currentUser={currentUser} />
+              <BottomNavigation activeTab="home" onTabChange={(tab) => navigate(`/${tab}`)} />
+            </>
+          } />
 
           {/* URL: /taste */}
-          <Route path="/taste" element={<TasteMode onBack={() => navigate('/home')} />} />
+          <Route path="/taste" element={
+            <>
+              <TasteMode onBack={() => navigate('/home')} currentUser={currentUser} />
+              <BottomNavigation activeTab="home" onTabChange={(tab) => navigate(`/${tab}`)} />
+            </>
+          } />
+
+          {/* URL: /profile */}
+          <Route path="/profile" element={
+            <>
+              <ProfilePage currentUser={currentUser} onLogout={handleLogout} />
+              <BottomNavigation activeTab="profile" onTabChange={(tab) => navigate(`/${tab}`)} />
+            </>
+          } />
         </Routes>
       </div>
     </GoogleOAuthProvider>

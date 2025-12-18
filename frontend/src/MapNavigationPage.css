@@ -1,0 +1,52 @@
+/* --- Components/MapNavigationPage.css --- */
+
+.nav-container {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: #f0f0f0;
+    
+    /* QUAN TRỌNG: Cao hơn cả Restaurant Detail (20000) */
+    z-index: 21000 !important; 
+    
+    display: flex;
+    flex-direction: column;
+    font-family: 'Montserrat', sans-serif;
+    animation: slideInRight 0.3s ease-out;
+}
+
+/* Các phần còn lại giữ nguyên như cũ */
+.nav-header {
+    background: white; padding: 15px 20px; display: flex; align-items: center;
+    justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.05); z-index: 10;
+}
+.nav-back-btn {
+    display: flex; align-items: center; gap: 5px; border: none; background: none;
+    font-size: 16px; font-weight: 600; color: #00AA00; cursor: pointer;
+}
+.nav-logo-group { display: flex; flex-direction: column; align-items: center; }
+.nav-logo-img { height: 35px; }
+.nav-logo-text { font-size: 13px; font-weight: 700; color: #4CAF50; margin-top: -2px; }
+
+.nav-map-area { flex: 1; width: 100%; position: relative; background: #e5e5e5; }
+.nav-google-btn {
+    position: absolute; bottom: 220px; right: 20px; background: white;
+    padding: 8px 12px; border-radius: 20px; font-weight: 800; font-size: 12px;
+    color: #111; box-shadow: 0 2px 6px rgba(0,0,0,0.2); border: none; cursor: pointer; z-index: 500;
+}
+
+.nav-info-card {
+    position: absolute; bottom: 20px; left: 15px; right: 15px; background: white;
+    border-radius: 20px; padding: 15px 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); z-index: 500;
+}
+.nav-card-title { font-size: 19px; font-weight: 800; margin: 0 0 2px 0; color: #111; }
+.nav-rating { display: flex; align-items: center; gap: 4px; margin-bottom: 6px; }
+.nav-rating-num { font-weight: 700; font-size: 14px; color: #333; }
+.nav-address-row, .nav-time-row {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 4px; font-size: 13px; color: #333;
+}
+.nav-secondary-text { color: #888; font-size: 13px; margin-left: 26px; text-align: left; margin-top: -2px; }
+.nav-start-btn {
+    width: 100%; margin-top: 15px; background: #008848; color: white; border: none;
+    padding: 12px; border-radius: 30px; font-size: 15px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
+}
