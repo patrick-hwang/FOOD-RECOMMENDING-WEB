@@ -1,21 +1,28 @@
-// src/Context/LanguageContext.jsx
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 import { translations } from '../utils/translations';
 
 const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
-    // Mặc định là tiếng Anh ('en')
-    const [lang, setLang] = useState('en'); 
+    // 1. KHỞI TẠO STATE: Kiểm tra localStorage trước
+    const [lang, setLang] = useState(() => {
+        // Lấy giá trị đã lưu (nếu có)
+        const savedLang = localStorage.getItem('appLanguage');
+        // Nếu có thì dùng, không thì mặc định là 'en'
+        return savedLang || 'en';
+    });
 
-    // Hàm chuyển đổi ngôn ngữ
+    // 2. HÀM CHUYỂN NGÔN NGỮ
     const switchLanguage = (language) => {
         setLang(language);
+        // Lưu ngay vào localStorage khi người dùng chọn
+        localStorage.setItem('appLanguage', language);
     };
 
-    // Hàm lấy text: t('hello') -> trả về "Xin chào" nếu lang là 'vi'
+    // Hàm lấy text dịch
     const t = (key) => {
-        return translations[lang][key] || key;
+        // Kiểm tra nếu key tồn tại trong từ điển thì trả về, không thì trả về key gốc
+        return translations[lang]?.[key] || key;
     };
 
     return (
@@ -25,5 +32,5 @@ export const LanguageProvider = ({ children }) => {
     );
 };
 
-// Custom hook để dùng nhanh ở các file khác
+// Custom hook
 export const useLanguage = () => useContext(LanguageContext);

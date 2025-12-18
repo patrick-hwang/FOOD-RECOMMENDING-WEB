@@ -3,11 +3,12 @@ import './Profile.css';
 import axios from 'axios';
 import defaultAvatar from './assets/images/logo.png';
 import RestaurantDetail from './RestaurantDetail';
-import { useLanguage } from './Context/LanguageContext'; // IMPORT CONTEXT
+import { useLanguage } from './Context/LanguageContext';
+import { useTheme } from './Context/ThemeContext'; 
 
 // Icons SVG
 const Icons = {
-    Gear: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0-1.51-1z"></path></svg>,
+    Gear: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 0-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>,
     Back: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#333" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>,
     Star: ({fill="#FFC107"}) => <svg width="12" height="12" viewBox="0 0 24 24" fill={fill} stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>,
     Cam: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>,
@@ -16,19 +17,20 @@ const Icons = {
     TabBookmark: () => <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>,
     ImgLib: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#333" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>,
     PhotoCam: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#333" strokeWidth="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>,
-    Trash: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF5252" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>,
-    Lang: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+    Trash: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF5252" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
 };
 
 export default function ProfilePage({ currentUser, onLogout }) {
-    const { t, lang, switchLanguage } = useLanguage(); // SỬ DỤNG HOOK NGÔN NGỮ
+    const { t, lang, switchLanguage } = useLanguage(); 
+    const { isDarkMode, toggleTheme } = useTheme(); 
+
     const [view, setView] = useState('main'); 
     const [subTab, setSubTab] = useState('history'); 
     const [profileData, setProfileData] = useState(null);
     const [selectedItem, setSelectedItem] = useState(null);
     const [loading, setLoading] = useState(true);
     const [deleteModal, setDeleteModal] = useState({ show: false, item: null });
-    const [showLangMenu, setShowLangMenu] = useState(false); // Menu chọn ngôn ngữ
+    const [showLangMenu, setShowLangMenu] = useState(false);
     const longPressTimer = useRef(null);
 
     const API_URL = "http://127.0.0.1:8000/api/user";
@@ -67,7 +69,8 @@ export default function ProfilePage({ currentUser, onLogout }) {
             imageUrl: thumb,
             imagesMenu: menuImages,
             imagesViews: viewImages,
-            tags: cleanTags
+            tags: cleanTags,
+            coords: dbItem.coordinates ? { lat: parseFloat(dbItem.coordinates.lat), lng: parseFloat(dbItem.coordinates.long) } : null
         };
     };
 
@@ -105,7 +108,6 @@ export default function ProfilePage({ currentUser, onLogout }) {
         } catch (e) { console.error(e); }
     };
 
-    // Chuyển ngôn ngữ
     const handleLanguageChange = (newLang) => {
         switchLanguage(newLang);
         setShowLangMenu(false);
@@ -113,7 +115,7 @@ export default function ProfilePage({ currentUser, onLogout }) {
 
     if (selectedItem) {
         return (
-            <div style={{position:'fixed', top:0, left:0, width:'100vw', height:'100vh', zIndex:20000, background:'white'}}>
+            <div style={{position:'fixed', top:0, left:0, width:'100vw', height:'100vh', zIndex:20000, background: isDarkMode ? '#121212' : 'white'}}>
                 <RestaurantDetail 
                     item={selectedItem} 
                     onBack={() => { setSelectedItem(null); fetchProfile(); }} 
@@ -141,7 +143,7 @@ export default function ProfilePage({ currentUser, onLogout }) {
                     </div>
                 </div>
                 <div className="prof-info-section">
-                    <div className="prof-name">{profileData?.username || currentUser?.name || t('guest')}</div>
+                    <div className="prof-name">{profileData?.username || currentUser?.username || currentUser?.name || t('guest')}</div>
                     <div className="prof-badges">
                         <div className="prof-badge-pill"><span style={{color:'gold'}}>★</span> Badges</div>
                         <div className="prof-badge-pill"><span style={{color:'red'}}>★</span> Bagdes</div>
@@ -191,12 +193,12 @@ export default function ProfilePage({ currentUser, onLogout }) {
         );
     }
 
-    // SETTINGS VIEW
     if (view === 'settings') {
         return (
             <div className="prof-container prof-fullscreen-overlay">
                 <div style={{padding:'20px', display:'flex', alignItems:'center'}}>
-                    <div onClick={()=>setView('main')} style={{cursor:'pointer'}}><Icons.Back /></div>
+                    {/* THÊM CLASS prof-back-btn Ở ĐÂY */}
+                    <div className="prof-back-btn" onClick={()=>setView('main')} style={{cursor:'pointer'}}><Icons.Back /></div>
                     <h2 style={{flex:1, textAlign:'center', margin:0}}>{t('settings')}</h2>
                     <div style={{width:24}}></div>
                 </div>
@@ -205,30 +207,30 @@ export default function ProfilePage({ currentUser, onLogout }) {
                         <span className="setting-icon">📝</span> {t('edit_profile')} <span className="setting-arrow">&gt;</span>
                     </div>
                     
-                    {/* LANGUAGE SETTING */}
                     <div className="setting-row" onClick={() => setShowLangMenu(true)}>
                         <span className="setting-icon">🌐</span> {t('language')} <span className="setting-arrow">{lang === 'vi' ? 'Tiếng Việt' : 'English'} &gt;</span>
                     </div>
 
                     <div className="setting-row"><span className="setting-icon">🔔</span> {t('notification')} <span className="setting-arrow">{t('on')} &gt;</span></div>
-                    <div className="setting-row"><span className="setting-icon">🌙</span> {t('night_mode')} <span className="setting-arrow">{t('off')} &gt;</span></div>
+                    
+                    <div className="setting-row" onClick={toggleTheme}>
+                        <span className="setting-icon">🌙</span> {t('night_mode')} <span className="setting-arrow">{isDarkMode ? t('on') : t('off')} &gt;</span>
+                    </div>
+
                     <div className="setting-row"><span className="setting-icon">❓</span> {t('help')}</div>
                     <button className="logout-btn" onClick={onLogout}>{t('logout')}</button>
                 </div>
 
-                {/* LANGUAGE MENU BOTTOM SHEET */}
                 {showLangMenu && (
                     <div className="avatar-menu-overlay" onClick={() => setShowLangMenu(false)}>
                         <div className="avatar-menu-card" onClick={e => e.stopPropagation()}>
                             <div style={{textAlign:'center', fontWeight:'bold', marginBottom:10, fontSize:18}}>{t('language')}</div>
-                            
                             <div className="avatar-menu-item" onClick={() => handleLanguageChange('en')}>
-                                <div className="avatar-menu-text" style={{fontWeight: lang==='en'?'bold':'normal', color: lang==='en'?'#4CAF50':'#333'}}>English</div>
+                                <div className="avatar-menu-text" style={{fontWeight: lang==='en'?'bold':'normal', color: lang==='en'?'#4CAF50':'inherit'}}>English</div>
                                 {lang === 'en' && <span style={{marginLeft:'auto', color:'#4CAF50'}}>✔</span>}
                             </div>
-
                             <div className="avatar-menu-item" onClick={() => handleLanguageChange('vi')}>
-                                <div className="avatar-menu-text" style={{fontWeight: lang==='vi'?'bold':'normal', color: lang==='vi'?'#4CAF50':'#333'}}>Tiếng Việt</div>
+                                <div className="avatar-menu-text" style={{fontWeight: lang==='vi'?'bold':'normal', color: lang==='vi'?'#4CAF50':'inherit'}}>Tiếng Việt</div>
                                 {lang === 'vi' && <span style={{marginLeft:'auto', color:'#4CAF50'}}>✔</span>}
                             </div>
                         </div>
@@ -248,7 +250,7 @@ export default function ProfilePage({ currentUser, onLogout }) {
 function EditProfile({ currentUser, profileData, onBack }) {
     const { t } = useLanguage();
     const [formData, setFormData] = useState({
-        username: profileData?.username || currentUser?.name || "",
+        username: profileData?.username || currentUser?.username || currentUser?.name || "",
         email: profileData?.email || currentUser?.email || "",
         phone: profileData?.phone || currentUser?.phone || "",
         age: profileData?.age || "",
@@ -288,13 +290,14 @@ function EditProfile({ currentUser, profileData, onBack }) {
     return (
         <div className="prof-container prof-fullscreen-overlay">
             <div style={{padding:'20px', display:'flex', alignItems:'center'}}>
-                <div onClick={onBack} style={{cursor:'pointer'}}><Icons.Back /></div>
+                {/* THÊM CLASS prof-back-btn Ở ĐÂY NỮA */}
+                <div className="prof-back-btn" onClick={onBack} style={{cursor:'pointer'}}><Icons.Back /></div>
                 <h2 style={{flex:1, textAlign:'center', margin:0}}>{t('edit_profile')}</h2>
                 <div style={{width:24}}></div>
             </div>
 
             <div style={{position:'relative', width:120, height:120, margin:'0 auto 30px auto'}}>
-                <div className="prof-avatar-wrapper" style={{bottom:0, background:'#c8e6c9', border:'none', width:120, height:120}}>
+                <div className="prof-avatar-wrapper" style={{bottom:0, background:'var(--bg-secondary)', border:'none', width:120, height:120}}>
                     <img src={formData.avatar} className="prof-avatar-img" alt="avt" />
                 </div>
                 <div className="prof-edit-cam" onClick={() => setShowAvatarMenu(true)}>

@@ -152,15 +152,22 @@ async def google_login(payload: GoogleAuthRequest):
         
         user_info = response.json()
         email = user_info.get("email")
-        name = user_info.get("name")
+        # Lấy tên từ Google, nếu không có thì lấy phần đầu email
+        name = user_info.get("name") or email.split("@")[0]
         picture = user_info.get("picture")
         
         existing_user = collection_users.find_one({"email": email})
         
         if not existing_user:
             new_user = {
-                "email": email, "username": name, "avatar": picture, "phone": email,
-                "created_at": time.time(), "login_type": "google", "history": [], "bookmarks": []
+                "email": email, 
+                "username": name, # Lưu vào field username
+                "avatar": picture, 
+                "phone": email,
+                "created_at": time.time(), 
+                "login_type": "google", 
+                "history": [], 
+                "bookmarks": []
             }
             collection_users.insert_one(new_user)
             return {"message": "Google Login", "user": convert_document(new_user)}
@@ -177,9 +184,15 @@ async def facebook_login(payload: FacebookAuthRequest):
     
     if not existing_user:
         new_user = {
-            "facebook_id": payload.userID, "username": payload.name, "email": payload.email, 
-            "avatar": payload.picture, "phone": user_key, "created_at": time.time(),
-            "login_type": "facebook", "history": [], "bookmarks": []
+            "facebook_id": payload.userID, 
+            "username": payload.name, 
+            "email": payload.email, 
+            "avatar": payload.picture, 
+            "phone": user_key, 
+            "created_at": time.time(),
+            "login_type": "facebook", 
+            "history": [], 
+            "bookmarks": []
         }
         collection_users.insert_one(new_user)
         return {"message": "FB Login", "user": convert_document(new_user)}
@@ -229,25 +242,14 @@ async def add_history(phone: str, payload: HistoryRequest):
     collection_users.update_one({"phone": phone}, {"$addToSet": {"history": payload.restaurant_id}})
     return {"message": "Added history"}
 
-# --- ĐÃ SỬA: Xóa History dùng Query Parameter để an toàn và chính xác ---
 @app.delete("/api/user/{phone}/history")
 async def delete_history(phone: str, restaurant_id: Optional[str] = None):
     if collection_users is None: raise HTTPException(status_code=503)
-
     if restaurant_id:
-         # CHỈ XÓA ID QUÁN KHỎI DANH SÁCH HISTORY CỦA USER
-         # Dùng $pull để lấy ra khỏi mảng
-         collection_users.update_one(
-            {"phone": phone},
-            {"$pull": {"history": restaurant_id}}
-        )
+         collection_users.update_one({"phone": phone}, {"$pull": {"history": restaurant_id}})
          return {"message": "Removed item from history"}
     else:
-        # Nếu không gửi ID -> Xóa hết (Tính năng tùy chọn)
-         collection_users.update_one(
-            {"phone": phone},
-            {"$set": {"history": []}}
-        )
+         collection_users.update_one({"phone": phone}, {"$set": {"history": []}})
          return {"message": "Cleared all history"}
 
 @app.post("/api/user/{phone}/bookmark")
@@ -269,8 +271,6 @@ async def filter_random(payload: FilterRandomRequest):
     if collection_quan_an is None: raise HTTPException(status_code=503)
     try:
         pipeline = []
-        # (Giữ nguyên logic random cũ của bạn ở đây nếu có thêm geo/tags...)
-        # Ở đây tôi để đơn giản để chạy được
         pipeline.append({"$sample": {"size": payload.count}})
         docs = list(collection_quan_an.aggregate(pipeline))
         return [convert_document(d) for d in docs]

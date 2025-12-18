@@ -1,119 +1,97 @@
 /* --- RestaurantDetail.css --- */
 
 .rd-container {
-    position: fixed; /* Cố định để phủ kín màn hình */
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: #fff;
-    
-    /* QUAN TRỌNG: Cao hơn Bottom Nav (9000) và Profile Overlay (10000) */
-    z-index: 20000 !important; 
-    
-    display: flex;
-    flex-direction: column;
-    font-family: 'Montserrat', sans-serif;
-    overflow-y: auto; /* Cho phép cuộn nội dung bên trong */
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: var(--bg-primary); /* Dùng biến */
+    z-index: 20000 !important; display: flex; flex-direction: column;
+    font-family: 'Montserrat', sans-serif; overflow-y: auto;
     animation: slideInRight 0.3s ease-out;
 }
 
-@keyframes slideInRight {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-}
+@keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-/* 1. Header */
+/* Header */
 .rd-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 20px 0px 20px;
-    background: #fff;
-    flex-shrink: 0; /* Không bị co khi cuộn */
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 20px 0px 20px; background: var(--bg-primary); /* Dùng biến */
+    flex-shrink: 0;
 }
 .rd-back-btn {
     background: none; border: none; cursor: pointer; padding: 0;
-    display: flex; align-items: center;
-    width: 40px;
-    justify-content: flex-start;
+    display: flex; align-items: center; width: 40px; justify-content: flex-start;
 }
+
+/* --- FIX NÚT BACK CHO DARK MODE --- */
+.rd-back-btn svg {
+    stroke: #00AA00; /* Mặc định xanh */
+    transition: stroke 0.3s;
+}
+body.dark-mode .rd-back-btn svg {
+    stroke: #ffffff !important; /* Chuyển trắng khi Dark Mode */
+}
+
 .rd-header-title {
-    font-size: 20px; font-weight: 800; color: #333;
-    margin: 0;
-    flex: 1; text-align: center;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    padding: 0 10px;
+    font-size: 20px; font-weight: 800; color: var(--text-primary); /* Dùng biến */
+    margin: 0; flex: 1; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 10px;
 }
 .rd-header-logo img { height: 40px; }
 
-/* 2. Tabs Pill */
-.rd-tabs {
-    display: flex; justify-content: center; gap: 15px; margin: 15px 0; flex-shrink: 0;
-}
+/* Tabs */
+.rd-tabs { display: flex; justify-content: center; gap: 15px; margin: 15px 0; flex-shrink: 0; }
 .rd-tab {
-    border: 1px solid #4CAF50; background: #fff; color: #4CAF50;
+    border: 1px solid #4CAF50; background: var(--bg-card); color: #4CAF50;
     border-radius: 20px; padding: 6px 16px; font-size: 13px; font-weight: 600;
     cursor: pointer; transition: all 0.2s;
 }
 .rd-tab.active { background: #4CAF50; color: white; }
 
-/* 3. Slider */
+/* Slider */
 .rd-slider-container {
     width: 100%; height: 220px; position: relative; padding: 0 20px; margin-bottom: 15px;
     box-sizing: border-box; flex-shrink: 0;
 }
-.rd-slider-img {
-    width: 100%; height: 100%; object-fit: cover; border-radius: 16px; background: #f0f0f0;
-}
+.rd-slider-img { width: 100%; height: 100%; object-fit: cover; border-radius: 16px; background: var(--bg-secondary); }
 .rd-dots {
     position: absolute; bottom: 12px; left: 0; right: 0;
     display: flex; justify-content: center; gap: 6px;
 }
-.rd-dot {
-    width: 8px; height: 8px; background: rgba(255,255,255,0.5); border-radius: 50%; cursor: pointer;
-}
+.rd-dot { width: 8px; height: 8px; background: rgba(255,255,255,0.5); border-radius: 50%; cursor: pointer; }
 .rd-dot.active { background: #fff; transform: scale(1.2); }
 
-/* 4. Info Section */
+/* Info Section */
 .rd-info-section { padding: 0 25px; margin-bottom: 20px; flex-shrink: 0; }
-.rd-title-row {
-    display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px;
-}
-.rd-name { font-size: 22px; font-weight: 800; color: #111; margin: 0; line-height: 1.2; width: 85%; }
+.rd-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; }
+.rd-name { font-size: 22px; font-weight: 800; color: var(--text-primary); margin: 0; line-height: 1.2; width: 85%; }
 .rd-bookmark-icon { margin-top: 5px; cursor: pointer; }
 
-.rd-rating-row {
-    display: flex; align-items: center; gap: 2px; margin-bottom: 12px;
-}
-.rd-rating-num { font-weight: 700; color: #333; margin-left: 6px; font-size: 14px; }
+.rd-rating-row { display: flex; align-items: center; gap: 2px; margin-bottom: 12px; }
+.rd-rating-num { font-weight: 700; color: var(--text-primary); margin-left: 6px; font-size: 14px; }
 
-.rd-detail-row {
-    display: flex; align-items: flex-start; gap: 12px; margin-bottom: 8px; justify-content: flex-start;
-}
+.rd-detail-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 8px; justify-content: flex-start; }
 .rd-icon-box { width: 25px; display: flex; justify-content: center; margin-top: 2px; }
-.rd-detail-text { font-size: 15px; color: #333; font-weight: 500; line-height: 1.4; flex: 1; text-align: left; }
+.rd-detail-text { font-size: 15px; color: var(--text-primary); font-weight: 500; line-height: 1.4; flex: 1; text-align: left; }
 
-/* 5. Tags Box */
+/* Tags Box */
 .rd-tags-box {
-    margin: 0 20px 80px 20px; /* Margin bottom lớn để không bị nút che */
-    background: #f5f5f5; border-radius: 16px; padding: 15px;
+    margin: 0 20px 80px 20px;
+    background: var(--bg-secondary); /* Dùng biến */
+    border-radius: 16px; padding: 15px;
 }
 .rd-tags-grid { display: flex; flex-wrap: wrap; gap: 8px; }
 .rd-tag-chip {
-    background: #fff; color: #4CAF50; border: none; padding: 6px 12px;
+    background: var(--bg-card); color: #4CAF50; border: none; padding: 6px 12px;
     border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px var(--shadow-color);
 }
 .rd-tag-chip.selected { background: #00AA00; color: white; }
 
-/* 6. Footer Buttons (Fixed Bottom) */
+/* Footer */
 .rd-footer {
     position: fixed; bottom: 0; left: 0; width: 100%;
-    background: white; padding: 15px 25px 25px 25px;
+    background: var(--bg-card); padding: 15px 25px 25px 25px;
     box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
     display: flex; align-items: center; justify-content: space-between; gap: 15px;
-    z-index: 20001; /* Nổi trên cùng của trang detail */
+    z-index: 20001;
 }
 .rd-btn-direction {
     flex: 1; background: #00AA00; color: white; border: none; padding: 12px;
@@ -121,5 +99,5 @@
     display: flex; align-items: center; justify-content: center; cursor: pointer;
 }
 .rd-shuffle-again {
-    display: flex; align-items: center; gap: 10px; font-weight: 700; color: #333; cursor: pointer;
+    display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--text-primary); cursor: pointer;
 }

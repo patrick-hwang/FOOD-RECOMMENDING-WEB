@@ -2,13 +2,60 @@
 
 export const translations = {
     en: {
-        // Random Mode
+        // --- AUTH (LOGIN/REGISTER) ---
+        lets_in: "Let's you in",
+        continue_fb: "Continue with Facebook",
+        continue_gg: "Continue with Google",
+        or: "or",
+        sign_in_phone: "Sign in with Phone number",
+        dont_have_acc: "Don’t have an account?",
+        sign_up: "Sign up",
+        sign_in: "Sign in",
+        login_title: "Login to your account",
+        create_acc: "Create new account",
+        phone_ph: "Phone number",
+        pass_ph: "Password",
+        name_ph: "Username",
+        confirm_pass_ph: "Confirm Password",
+        remember_me: "Remember me",
+        forgot_pass: "Forgot password?",
+        already_have_acc: "Already have an account?",
+        reset_pass: "Reset Password",
+        new_pass_ph: "New Password",
+        reset_desc: "Enter your phone number and new password below.",
+        update_loading: "Updating...",
+        signing_in: "Signing in...",
+        signing_up: "Signing up...",
+        
+        // --- ONBOARDING ---
+        ob_title_0: "WELCOME TO\nFoodRec!👋",
+        ob_desc_0: "\"Welcome to FoodRec. We turn your cravings into concrete plans. Whether you need a Quick Pick or a personalized Flavor Profile match, your perfect meal is just a tap away.\"",
+        ob_title_1: "Explore Local Flavors",
+        ob_desc_1: "Unlock a world of authentic tastes! FoodRec helps you discover hidden culinary gems and popular local eateries wherever your travels take you.",
+        ob_title_2: "Personalized Picks",
+        ob_desc_2: "No more endless scrolling! Get instant recommendations tailored to your mood, cravings, and dietary preferences. Your perfect meal, found in seconds.",
+        ob_title_3: "Decide with Ease",
+        ob_desc_3: "Whether you're after a Quick Pick or a detailed Flavor Profile, we make choosing where to eat effortless. Spend less time planning, more time enjoying.",
+        next: "Next",
+        get_started: "Get started!",
+        skip: "Skip",
+
+        // --- RANDOM MODE (QUICK PICK) ---
         quick_pick: "Quick Pick",
         random_subtitle: "Randomized for you",
         hot_picks: "Hot picks",
         find_match: "Find my match",
+        shuffle: "Shuffle",
         
-        // Profile Main
+        // Filters Labels
+        price_range: "Price",
+        cuisine_origin: "Origin",
+        main_dishes: "Dish",
+        place: "Place",
+        distance: "Distance",
+        speciality_vn: "Speciality",
+
+        // --- PROFILE ---
         guest: "Guest User",
         history: "History",
         saved: "Saved",
@@ -17,8 +64,6 @@ export const translations = {
         delete_confirm: "Delete from History?",
         yes: "Yes",
         no: "No",
-
-        // Settings
         settings: "Settings",
         edit_profile: "Edit profile",
         language: "Language",
@@ -28,8 +73,8 @@ export const translations = {
         logout: "Log out",
         on: "On",
         off: "Off",
-
-        // Edit Profile
+        
+        // --- EDIT PROFILE ---
         name: "Name",
         email: "Email",
         phone: "Phone number",
@@ -38,28 +83,114 @@ export const translations = {
         submit: "Submit",
         save_changes: "Save Changes",
         updated: "Updated successfully!",
-        
-        // Avatar Menu
         import_lib: "Import from library",
         take_photo: "Take a photo",
         delete_photo: "Delete photo",
 
-        // Restaurant Detail
+        // --- RESTAURANT DETAIL ---
         menu: "Menu",
         view: "View",
         address: "Address",
         open: "Open",
         get_direction: "Get direction",
-        shuffle_again: "Shuffle Again"
+        shuffle_again: "Shuffle Again",
+        km: "km",
+        mins_walk: "mins walking",
+        start_nav: "Start Navigation",
+        open_google: "Open in Google Maps",
+
+        // --- TAGS TRANSLATION (DỊCH TAG) ---
+        // Mapping từ Tiếng Việt (DB) -> Tiếng Anh
+        "miền Bắc": "Northern",
+        "miền Trung": "Central",
+        "miền Tây": "Western",
+        "miền Nam": "Southern",
+        "Tây Nguyên": "Highlands",
+        "nước ngoài": "Foreign",
+        
+        "món ăn nước": "Soup/Liquid",
+        "món khô": "Dry dish",
+        "sợi": "Noodle",
+        "món rời": "Rice/Grain",
+        "bánh bột gạo": "Rice Cake",
+        "bánh bột mì": "Wheat Cake",
+        "hải sản": "Seafood",
+        "thịt gia súc": "Red Meat",
+        "thịt gia cầm": "Poultry",
+        "món chay": "Vegetarian",
+        
+        "không gian": "Space",
+        "vật chất": "Decor",
+        "âm thanh": "Sound",
+        "giá tiền": "Price",
+        
+        "siêu rẻ": "Super Cheap",
+        "rẻ": "Cheap",
+        "bình dân": "Affordable",
+        "sang": "Fancy",
+        "nhà hàng": "Restaurant",
+        "cao cấp": "High-end",
+        "thượng lưu": "Luxury",
+        "đại gia": "Elite",
+
+        "yes": "Yes",
+        "no": "No"
     },
     vi: {
-        // Random Mode
+        // --- AUTH ---
+        lets_in: "Đăng nhập ngay",
+        continue_fb: "Tiếp tục với Facebook",
+        continue_gg: "Tiếp tục với Google",
+        or: "hoặc",
+        sign_in_phone: "Đăng nhập bằng SĐT",
+        dont_have_acc: "Chưa có tài khoản?",
+        sign_up: "Đăng ký",
+        sign_in: "Đăng nhập",
+        login_title: "Đăng nhập tài khoản",
+        create_acc: "Tạo tài khoản mới",
+        phone_ph: "Số điện thoại",
+        pass_ph: "Mật khẩu",
+        name_ph: "Tên hiển thị",
+        confirm_pass_ph: "Xác nhận mật khẩu",
+        remember_me: "Ghi nhớ đăng nhập",
+        forgot_pass: "Quên mật khẩu?",
+        already_have_acc: "Đã có tài khoản?",
+        reset_pass: "Đặt lại mật khẩu",
+        new_pass_ph: "Mật khẩu mới",
+        reset_desc: "Nhập số điện thoại và mật khẩu mới bên dưới.",
+        update_loading: "Đang cập nhật...",
+        signing_in: "Đang đăng nhập...",
+        signing_up: "Đang đăng ký...",
+
+        // --- ONBOARDING ---
+        ob_title_0: "CHÀO MỪNG ĐẾN\nFoodRec!👋",
+        ob_desc_0: "\"Chào mừng bạn đến với FoodRec. Chúng tôi biến cơn thèm ăn của bạn thành kế hoạch cụ thể. Dù là chọn nhanh hay theo khẩu vị, bữa ăn hoàn hảo chỉ cách bạn một chạm.\"",
+        ob_title_1: "Khám Phá Hương Vị",
+        ob_desc_1: "Mở khóa thế giới ẩm thực! FoodRec giúp bạn khám phá những quán ăn địa phương và những viên ngọc ẩn giấu trên mọi nẻo đường.",
+        ob_title_2: "Gợi Ý Cá Nhân Hóa",
+        ob_desc_2: "Không cần lướt mỏi tay! Nhận gợi ý ngay lập tức dựa trên tâm trạng và khẩu vị của bạn. Tìm thấy bữa ăn hoàn hảo chỉ trong vài giây.",
+        ob_title_3: "Quyết Định Dễ Dàng",
+        ob_desc_3: "Dù bạn muốn Chọn Nhanh hay tìm theo Hồ Sơ Khẩu Vị, chúng tôi giúp việc chọn quán trở nên dễ dàng. Bớt thời gian nghĩ, thêm thời gian ăn.",
+        next: "Tiếp theo",
+        get_started: "Bắt đầu ngay!",
+        skip: "Bỏ qua",
+
+        // --- RANDOM MODE ---
         quick_pick: "Chọn Nhanh",
         random_subtitle: "Ngẫu nhiên cho bạn",
         hot_picks: "Nổi bật",
         find_match: "Tìm quán ngay",
+        shuffle: "Trộn",
 
-        // Profile Main
+        // Filters Labels
+        price_range: "Giá cả",
+        cuisine_origin: "Vùng miền",
+        main_dishes: "Món chính",
+        place: "Không gian",
+        distance: "Khoảng cách",
+        speciality_vn: "Đặc sản VN",
+
+        // --- PROFILE ---
         guest: "Khách",
         history: "Lịch sử",
         saved: "Đã lưu",
@@ -68,8 +199,6 @@ export const translations = {
         delete_confirm: "Xóa khỏi lịch sử?",
         yes: "Có",
         no: "Không",
-
-        // Settings
         settings: "Cài đặt",
         edit_profile: "Chỉnh sửa hồ sơ",
         language: "Ngôn ngữ",
@@ -80,7 +209,7 @@ export const translations = {
         on: "Bật",
         off: "Tắt",
 
-        // Edit Profile
+        // --- EDIT PROFILE ---
         name: "Tên hiển thị",
         email: "Email",
         phone: "Số điện thoại",
@@ -89,18 +218,56 @@ export const translations = {
         submit: "Lưu thông tin",
         save_changes: "Lưu thay đổi",
         updated: "Cập nhật thành công!",
-
-        // Avatar Menu
         import_lib: "Chọn từ thư viện",
         take_photo: "Chụp ảnh mới",
         delete_photo: "Xóa ảnh",
 
-        // Restaurant Detail
+        // --- RESTAURANT DETAIL ---
         menu: "Thực đơn",
         view: "Không gian",
         address: "Địa chỉ",
         open: "Mở cửa",
         get_direction: "Chỉ đường",
-        shuffle_again: "Random lại"
+        shuffle_again: "Random lại",
+        km: "km",
+        mins_walk: "phút đi bộ",
+        start_nav: "Bắt đầu đi",
+        open_google: "Mở Google Maps",
+
+        // --- TAGS (Giữ nguyên hoặc mapping nếu cần hiển thị khác) ---
+        "miền Bắc": "Miền Bắc",
+        "miền Trung": "Miền Trung",
+        "miền Tây": "Miền Tây",
+        "miền Nam": "Miền Nam",
+        "Tây Nguyên": "Tây Nguyên",
+        "nước ngoài": "Nước ngoài",
+        
+        "món ăn nước": "Món nước",
+        "món khô": "Món khô",
+        "sợi": "Món sợi",
+        "món rời": "Món rời",
+        "bánh bột gạo": "Bánh bột gạo",
+        "bánh bột mì": "Bánh bột mì",
+        "hải sản": "Hải sản",
+        "thịt gia súc": "Thịt gia súc",
+        "thịt gia cầm": "Thịt gia cầm",
+        "món chay": "Món chay",
+        
+        "không gian": "Không gian",
+        "vật chất": "Vật chất",
+        "âm thanh": "Âm thanh",
+        "giá tiền": "Giá tiền",
+
+        "siêu rẻ": "Siêu rẻ",
+        "rẻ": "Rẻ",
+        "bình dân": "Bình dân",
+        "sang": "Sang trọng",
+        "nhà hàng": "Nhà hàng",
+        "cao cấp": "Cao cấp",
+        "thượng lưu": "Thượng lưu",
+        "đại gia": "Đại gia",
+
+        "yes": "Có",
+        "no": "Không"
     }
 };

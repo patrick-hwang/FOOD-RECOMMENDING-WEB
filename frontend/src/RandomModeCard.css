@@ -1,7 +1,9 @@
+/* --- src/RandomModeCard.css --- */
+
 /* --- RESET CƠ BẢN --- */
 * {
     box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent; /* Bỏ màu highlight khi bấm trên mobile */
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* CONTAINER CHÍNH: NỀN BONG BÓNG XANH */
@@ -14,17 +16,20 @@
     position: relative;
     overflow: hidden;
 
-    /* Nền trắng pha gradient xanh nhẹ dạng bong bóng */
-    background-color: #fcfdfc;
+    /* Dùng biến màu nền */
+    background-color: var(--bg-primary); 
+    
+    /* Gradient bong bóng (giữ nguyên nhưng làm mờ đi chút ở dark mode) */
     background-image: 
         radial-gradient(circle at 10% 20%, rgba(76, 175, 80, 0.08) 0%, transparent 20%),
         radial-gradient(circle at 90% -5%, rgba(76, 175, 80, 0.1) 0%, transparent 25%),
         radial-gradient(circle at 85% 40%, rgba(76, 175, 80, 0.05) 0%, transparent 15%),
         radial-gradient(circle at 0% 50%, rgba(76, 175, 80, 0.06) 0%, transparent 15%);
     background-attachment: fixed;
+    transition: background-color 0.3s;
 }
 
-/* --- 1. LOGO BAR (Góc trái trên) --- */
+/* --- 1. LOGO BAR --- */
 .rm-brand-bar {
     display: flex;
     align-items: center;
@@ -32,111 +37,60 @@
     flex-shrink: 0;
 }
 
-.rm-logo-img {
-    height: 32px;
-    width: auto;
-    margin-right: 8px;
-}
-
-.rm-brand-name {
-    font-size: 18px;
-    font-weight: 700;
-    color: #4CAF50; /* Xanh lá thương hiệu */
-}
+.rm-logo-img { height: 32px; width: auto; margin-right: 8px; }
+.rm-brand-name { font-size: 18px; font-weight: 700; color: #4CAF50; }
 
 /* --- 2. HEADER QUICK PICK --- */
-.rm-header {
-    padding: 10px 20px 5px 20px;
-    flex-shrink: 0;
-}
+.rm-header { padding: 10px 20px 5px 20px; flex-shrink: 0; }
 
 .rm-title-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
 }
 
 .rm-title {
-    font-size: 34px; /* Tăng từ 26px lên 34px */
-    font-weight: 800;
-    color: #2F3E37;
-    margin: 0;
-    line-height: 1.1;
-    letter-spacing: -0.5px; /* Giúp chữ to mà vẫn gọn */
+    font-size: 34px; font-weight: 800;
+    color: var(--text-primary); /* Đổi thành biến */
+    margin: 0; line-height: 1.1; letter-spacing: -0.5px;
 }
 
 .rm-subtitle {
     font-size: 14px;
-    color: #888;
+    color: var(--text-secondary); /* Đổi thành biến */
     margin: 2px 0 0 0;
 }
 
-/* Nút Shuffle tròn */
+/* Nút Shuffle */
 .rm-shuffle-btn {
-    background: #4CAF50;
-    border: none;
-    border-radius: 100%;
-    width: 56px;
-    height: 56px;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
-    cursor: pointer;
-    transition: transform 0.1s;
+    background: #4CAF50; border: none; border-radius: 100%; width: 56px; height: 56px;
+    color: white; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3); cursor: pointer; transition: transform 0.1s;
 }
 .rm-shuffle-btn:active { transform: scale(0.9); }
 
-/* GRID 3 CARD QUICK PICK */
-.rm-quick-pick-grid {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    width: 100%;
-}
+/* GRID CARD */
+.rm-quick-pick-grid { display: flex; justify-content: space-between; gap: 10px; width: 100%; }
 
 .qp-card {
-    background: white;
+    background: var(--bg-card); /* Đổi thành biến */
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    /* Không set height cứng, để nó tự co theo nội dung bên trong */
+    box-shadow: 0 4px 12px var(--shadow-color); /* Đổi thành biến */
+    flex: 1; min-width: 0; overflow: hidden; cursor: pointer;
+    display: flex; flex-direction: column; position: relative;
 }
 
 .qp-image-container {
-    width: 100%;
-    height: 115px; /* Cố định chiều cao nhỏ lại (trước đây là hình vuông to) */
-    background: #f0f0f0;
+    width: 100%; height: 115px;
+    background: var(--bg-secondary); /* Đổi thành biến */
     position: relative;
 }
-/* Đảm bảo ảnh vẫn đẹp dù khung nhỏ */
-.qp-image-container img { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-}
+.qp-image-container img { width: 100%; height: 100%; object-fit: cover; }
 
-.qp-info { 
-    padding: 6px 5px; /* Giảm padding để card gọn hơn */
-}
+.qp-info { padding: 6px 5px; }
 
 .qp-name {
-    font-size: 11px; 
-    font-weight: 700; 
-    margin: 0 0 2px 0; 
-    color: #333;
-    white-space: nowrap; 
-    overflow: hidden; 
-    text-overflow: ellipsis;
+    font-size: 11px; font-weight: 700; margin: 0 0 2px 0;
+    color: var(--text-primary); /* Đổi thành biến */
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
 .qp-bookmark {
@@ -148,173 +102,92 @@
 .qp-rating { display: flex; align-items: center; gap: 1px; }
 .qp-score { font-size: 10px; color: #FFC107; font-weight: bold; margin-left: 2px; }
 
-/* --- 3. HOT PICKS SECTION (Sticky Header) --- */
+/* --- 3. HOT PICKS --- */
 .rm-hot-picks-section {
-    flex: 1; /* Chiếm phần còn lại */
-    /* Padding bottom vừa đủ để nội dung cuối không bị footer che */
-    padding: 0 20px 90px 20px; 
-    overflow-y: auto; /* Cho phép cuộn dọc */
-    -webkit-overflow-scrolling: touch;
-    width: 100%;
-    position: relative;
+    flex: 1; padding: 0 20px 90px 20px; overflow-y: auto; width: 100%; position: relative;
 }
 
-/* Tiêu đề dính (Sticky) */
 .rm-section-title.sticky-header {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    /* Màu nền trùng với background chính nhưng mờ đi */
-    background: rgba(252, 253, 252, 0.9); 
-    backdrop-filter: blur(8px); /* Hiệu ứng kính mờ */
-    padding: 8px 0 8px 0;
-    font-size: 23px;
-    font-weight: 700;
-    color: #FBC02D;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 5px;
+    position: sticky; top: 0; z-index: 10;
+    /* Nền mờ thay đổi theo chế độ tối/sáng */
+    background: var(--bg-primary); 
+    opacity: 0.95;
+    padding: 8px 0 8px 0; font-size: 23px; font-weight: 700; color: #FBC02D;
+    display: flex; align-items: center; gap: 6px; margin-bottom: 5px;
 }
 
-.rm-hot-picks-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
+.rm-hot-picks-list { display: flex; flex-direction: column; gap: 12px; }
 
 .hp-card {
-    width: 100%;
-    height: 130px;
-    border-radius: 12px;
-    overflow: hidden;
-    position: relative;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    flex-shrink: 0;
+    width: 100%; height: 130px; border-radius: 12px; overflow: hidden; position: relative;
+    cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.1); flex-shrink: 0;
 }
 .hp-bg-image { width: 100%; height: 100%; object-fit: cover; }
 .hp-overlay {
     position: absolute; bottom: 0; left: 0; right: 0; height: 70%;
     background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
 }
-.hp-content {
-    position: absolute; bottom: 12px; left: 15px;
-    text-align: left; color: white; right: 10px;
-}
-.hp-name {
-    font-size: 18px; font-weight: 700; margin: 0 0 4px 0;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-}
+.hp-content { position: absolute; bottom: 12px; left: 15px; text-align: left; color: white; right: 10px; }
+.hp-name { font-size: 18px; font-weight: 700; margin: 0 0 4px 0; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 .hp-rating { display: flex; align-items: center; gap: 2px; }
 .hp-score { font-size: 14px; margin-left: 5px; font-weight: 700; color: #FFC107; }
 
-/* --- 4. FOOTER COMPACT (Nhỏ gọn hơn) --- */
+/* --- 4. FOOTER --- */
 .rm-footer {
-    position: fixed; 
-    bottom: 0; 
-    left: 0; 
-    width: 100%;
-    background: white;
-    /* Giảm padding để tiết kiệm diện tích */
-    padding: 10px 15px 15px 15px; 
-    border-top-left-radius: 24px;
-    border-top-right-radius: 24px;
-    box-shadow: 0 -5px 20px rgba(0,0,0,0.08);
-    z-index: 50;
+    position: fixed; bottom: 0; left: 0; width: 100%;
+    background: var(--nav-bg); /* Đổi thành biến */
+    padding: 10px 15px 15px 15px;
+    border-top-left-radius: 24px; border-top-right-radius: 24px;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.08); z-index: 50;
+    border-top: 1px solid var(--border-color);
 }
 
-.rm-filters-bar { 
-    display: flex; 
-    justify-content: space-between; 
-    margin-bottom: 10px; /* Giảm khoảng cách */
-    padding: 0 5px; 
-}
+.rm-filters-bar { display: flex; justify-content: space-between; margin-bottom: 10px; padding: 0 5px; }
 
 .rm-filter-icon { 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    cursor: pointer; 
-    width: 18%; 
+    display: flex; flex-direction: column; align-items: center; cursor: pointer; width: 18%; 
 }
 
-/* Vòng tròn icon nhỏ lại (32px) */
 .rm-icon-circle {
-    width: 35px; 
-    height: 35px; 
-    border-radius: 50%; 
+    width: 35px; height: 35px; border-radius: 50%;
     border: 1.5px solid #4CAF50;
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    margin-bottom: 3px;
-    background: white;
+    display: flex; align-items: center; justify-content: center; margin-bottom: 3px;
+    background: var(--bg-card); /* Đổi thành biến */
 }
-.rm-icon-circle svg { width: 16px; height: 16px; }
+.rm-icon-circle svg { width: 16px; height: 16px; stroke: #4CAF50; }
 
 .rm-filter-icon.active .rm-icon-circle { background: #E8F5E9; border-color: #2E7D32; }
 
-/* Chữ tag nhỏ lại */
-.rm-icon-label { 
-    font-size: 9px; 
-    color: #4CAF50; 
-    font-weight: 600; 
-    white-space: nowrap; 
+.rm-icon-label { font-size: 9px; color: #4CAF50; font-weight: 600; white-space: nowrap; }
+
+/* --- FIX NÚT BACK (Mũi tên quay lại) --- */
+/* Khi ở chế độ tối, ép màu icon về trắng */
+body.dark-mode .rm-filter-icon svg {
+    stroke: #ffffff !important;
+}
+/* Riêng icon trong nút tròn active giữ nguyên màu xanh */
+body.dark-mode .rm-filter-icon.active .rm-icon-circle svg {
+    stroke: #2E7D32 !important;
 }
 
-/* Nút tìm kiếm nhỏ gọn hơn */
 .rm-find-match-btn {
-    width: 100%; 
-    padding: 12px;
+    width: 100%; padding: 12px;
     background: linear-gradient(90deg, #4CAF50 0%, #43A047 100%);
-    color: white; 
-    border: none; 
-    border-radius: 30px;
-    font-size: 16px; 
-    font-weight: 700; 
-    cursor: pointer;
+    color: white; border: none; border-radius: 30px;
+    font-size: 16px; font-weight: 700; cursor: pointer;
     box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
 }
 .rm-find-match-btn:active { transform: scale(0.98); }
 
-/* --- 5. MODAL & POPUP --- */
-.modal-overlay {
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.6); z-index: 100;
-    display: flex; justify-content: center; align-items: center;
-    backdrop-filter: blur(3px);
-}
-.modal-card {
-    background: white; width: 90%; max-width: 95vw;
-    border-radius: 20px; padding: 20px; position: relative;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    max-height: 80vh; display: flex; flex-direction: column;
-}
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-.modal-title { margin: 0; font-size: 18px; font-weight: bold; }
-.modal-close { background: #f0f0f0; border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 20px; cursor: pointer;}
-.image-group-toggle { display: flex; gap: 10px; margin-bottom: 10px; justify-content: center; }
-.toggle-btn { padding: 6px 15px; border: 1px solid #ddd; background: white; border-radius: 20px; font-size: 12px; cursor: pointer; }
-.toggle-btn.active { background: #4CAF50; color: white; border-color: #4CAF50; }
-
-.modal-image-strip { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; padding: 10px; }
-.modal-image-strip img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: zoom-in; }
-.tag-chip { display: inline-block; background: #e8f5e9; color: #2e7d32; padding: 4px 8px; border-radius: 4px; font-size: 11px; margin: 10px 5px 0 0; }
-
-/* Filter Popup */
+/* POPUP FILTER */
 .rm-filter-popup {
-    position: absolute; bottom: 120px; /* Thấp hơn vì footer thấp hơn */
-    left: 50%; transform: translateX(-50%);
-    background: white; padding: 10px; border-radius: 12px;
+    position: absolute; bottom: 120px; left: 50%; transform: translateX(-50%);
+    background: var(--bg-card); /* Đổi thành biến */
+    padding: 10px; border-radius: 12px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.2); display: flex; gap: 5px; z-index: 60;
 }
-.rm-popup-opt { border: 1px solid #ddd; background: white; padding: 5px 10px; border-radius: 15px; font-size: 12px; }
-
-/* Lightbox */
-.image-lightbox {
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: black; z-index: 200;
-    display: flex; justify-content: center; align-items: center;
+.rm-popup-opt { 
+    border: 1px solid var(--border-color); 
+    background: var(--bg-secondary); color: var(--text-primary);
+    padding: 5px 10px; border-radius: 15px; font-size: 12px; cursor: pointer;
 }
-.image-lightbox img { max-width: 100%; max-height: 100%; }
-.lightbox-close { position: absolute; top: 20px; right: 20px; background: white; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 24px; }

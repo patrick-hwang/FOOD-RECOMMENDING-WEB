@@ -3,11 +3,11 @@ import './RandomModeCard.css';
 import logo from './assets/images/logo.png';
 import RestaurantDetail from './RestaurantDetail';
 import MapNavigationPage from './MapNavigationPage';
-import { TAG_DEFINITIONS } from './tags';
+import { TAG_DEFINITIONS } from './tags'; // Vẫn giữ để lấy list
 import axios from 'axios';
+import { useLanguage } from './Context/LanguageContext'; // Import
 
-// ... (Giữ nguyên các Icons như cũ) ...
-// Để ngắn gọn, tôi chỉ hiển thị phần render chính, bạn giữ nguyên phần import và icons ở trên nhé.
+// ... (Giữ nguyên Icons) ...
 const Icons = {
   Shuffle: () => (<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>),
   Star: ({ fill = "none" }) => (<svg width="12" height="12" viewBox="0 0 24 24" fill={fill} stroke="#FFC107" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>),
@@ -25,9 +25,7 @@ const QuickPickCard = ({ item, onClick, onSave, isSaved }) => (
   <div className="qp-card" onClick={onClick}>
     <div className="qp-image-container">
       <img src={item.imageUrl} alt={item.name} onError={(e) => { e.target.src = 'https://placehold.co/150x150?text=Food'; }} />
-      <div className="qp-bookmark" onClick={(e) => { e.stopPropagation(); onSave(item); }}>
-          <Icons.Bookmark filled={isSaved} />
-      </div>
+      <div className="qp-bookmark" onClick={(e) => { e.stopPropagation(); onSave(item); }}><Icons.Bookmark filled={isSaved} /></div>
     </div>
     <div className="qp-info">
       <h4 className="qp-name">{item.name}</h4>
@@ -54,6 +52,7 @@ const HotPickCard = ({ item, onClick }) => (
 );
 
 export default function RandomModeCard({ onBack, currentUser }) {
+  const { t } = useLanguage(); // Dùng hàm dịch
   const [quickPicks, setQuickPicks] = useState([]);
   const [hotPicks, setHotPicks] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -65,22 +64,25 @@ export default function RandomModeCard({ onBack, currentUser }) {
   const [distanceKm, setDistanceKm] = useState(null);
   const [savedIds, setSavedIds] = useState([]);
 
+  // Dịch Label của Filter
   const filtersList = [
-    { key: 'price_range', Icon: Icons.Budget, label: 'Price' },
-    { key: 'cuisine_origin', Icon: Icons.Origin, label: 'Origin' },
-    { key: 'main_dishes', Icon: Icons.Types, label: 'Dish' },
-    { key: 'place', Icon: Icons.Place, label: 'Place' },
-    { key: 'distance', Icon: Icons.Location, label: 'Distance' },
-    { key: 'speciality_vn', Icon: Icons.Specialty, label: 'Speciality' },
+    { key: 'price_range', Icon: Icons.Budget, label: t('price_range') },
+    { key: 'cuisine_origin', Icon: Icons.Origin, label: t('cuisine_origin') },
+    { key: 'main_dishes', Icon: Icons.Types, label: t('main_dishes') },
+    { key: 'place', Icon: Icons.Place, label: t('place') },
+    { key: 'distance', Icon: Icons.Location, label: t('distance') },
+    { key: 'speciality_vn', Icon: Icons.Specialty, label: t('speciality_vn') },
   ];
 
   const getFilterOptions = (key) => {
+      // Logic: Lấy list tiếng Việt gốc từ tags.js để gửi API
+      // Nhưng khi hiển thị ra màn hình (trong map) thì dùng t() để dịch
       switch(key) {
           case 'price_range': return TAG_DEFINITIONS["giá tiền"];
           case 'cuisine_origin': return [...TAG_DEFINITIONS["miền Bắc"], ...TAG_DEFINITIONS["miền Trung"], ...TAG_DEFINITIONS["miền Nam"], ...TAG_DEFINITIONS["nước ngoài"]];
           case 'main_dishes': return [...TAG_DEFINITIONS["món ăn nước"], ...TAG_DEFINITIONS["món khô"], ...TAG_DEFINITIONS["sợi"], ...TAG_DEFINITIONS["món rời"], ...TAG_DEFINITIONS["hải sản"], ...TAG_DEFINITIONS["thịt gia súc"], ...TAG_DEFINITIONS["thịt gia cầm"], ...TAG_DEFINITIONS["bánh bột gạo"], ...TAG_DEFINITIONS["bánh bột mì"]];
           case 'place': return [...TAG_DEFINITIONS["không gian"], ...TAG_DEFINITIONS["vật chất"], ...TAG_DEFINITIONS["âm thanh"]];
-          case 'distance': return ['1 km', '3 km', '5 km'];
+          case 'distance': return ['1 km', '3 km', '5 km']; // Cái này không cần dịch
           case 'speciality_vn': return ['yes', 'no'];
           default: return [];
       }
@@ -121,7 +123,6 @@ export default function RandomModeCard({ onBack, currentUser }) {
                     ...item, imageUrl: thumb,
                     imagesMenu: item.menu_images || [], imagesViews: item.places_images || [],
                     tags: Object.values(item.tags || {}).flat().filter(t => typeof t === 'string'),
-                    coords: item.coordinates ? { lat: parseFloat(item.coordinates.lat), lng: parseFloat(item.coordinates.long) } : null,
                     address: item.address || "Unknown",
                     openTime: item.opening_hours?.[0]?.hours || "See details"
                 };
@@ -137,10 +138,7 @@ export default function RandomModeCard({ onBack, currentUser }) {
       const isCurrentlySaved = savedIds.includes(item.id);
       if (isCurrentlySaved) setSavedIds(prev => prev.filter(id => id !== item.id));
       else setSavedIds(prev => [...prev, item.id]);
-
-      try {
-          await axios.post(`${API_URL}/user/${userId}/bookmark`, { restaurant_id: item.id });
-      } catch (e) { console.error(e); }
+      try { await axios.post(`${API_URL}/user/${userId}/bookmark`, { restaurant_id: item.id }); } catch (e) { console.error(e); }
   };
 
   function onFilterClick(key) {
@@ -163,27 +161,13 @@ export default function RandomModeCard({ onBack, currentUser }) {
   }
 
   if (isNavigating && detailItem) {
-      return (
-          // NAV CONTAINER: Z-INDEX 21000
-          <div style={{position:'fixed', top:0, left:0, width:'100%', height:'100%', zIndex:21000}}>
-              <MapNavigationPage item={detailItem} onBack={() => setIsNavigating(false)} />
-          </div>
-      );
+      return (<div style={{position:'fixed', top:0, left:0, width:'100%', height:'100%', zIndex:21000}}>
+              <MapNavigationPage item={detailItem} onBack={() => setIsNavigating(false)} /></div>);
   }
 
   if (detailItem) {
-      return (
-          // DETAIL CONTAINER: Z-INDEX 20000
-          <div style={{position:'fixed', top:0, left:0, width:'100%', height:'100%', zIndex:20000, background:'white'}}>
-              <RestaurantDetail 
-                  item={detailItem} 
-                  onBack={() => setDetailItem(null)} 
-                  onShuffleAgain={() => { setDetailItem(null); handleShuffle(); }}
-                  onGetDirection={() => setIsNavigating(true)} 
-                  currentUser={currentUser} 
-              />
-          </div>
-      );
+      return (<div style={{position:'fixed', top:0, left:0, width:'100%', height:'100%', zIndex:20000, background:'white'}}>
+              <RestaurantDetail item={detailItem} onBack={() => setDetailItem(null)} onShuffleAgain={() => { setDetailItem(null); handleShuffle(); }} onGetDirection={() => setIsNavigating(true)} currentUser={currentUser} /></div>);
   }
 
   return (
@@ -195,22 +179,18 @@ export default function RandomModeCard({ onBack, currentUser }) {
 
       <div className="rm-header">
         <div className="rm-title-row">
-            <div><h1 className="rm-title">Quick Pick</h1><p className="rm-subtitle">Randomized for you</p></div>
-            <button className="rm-shuffle-btn" onClick={handleShuffle} disabled={loading}><Icons.Shuffle /><span style={{fontSize: '0.6em', marginTop:'2px'}}>Shuffle</span></button>
+            <div><h1 className="rm-title">{t('quick_pick')}</h1><p className="rm-subtitle">{t('random_subtitle')}</p></div>
+            <button className="rm-shuffle-btn" onClick={handleShuffle} disabled={loading}><Icons.Shuffle /><span style={{fontSize: '0.6em', marginTop:'2px'}}>{t('shuffle')}</span></button>
         </div>
         <div className="rm-quick-pick-grid">
-            {quickPicks.map((item, idx) => (
-                <QuickPickCard key={idx} item={item} onClick={() => setDetailItem(item)} onSave={handleQuickSave} isSaved={savedIds.includes(item.id)} />
-            ))}
+            {quickPicks.map((item, idx) => (<QuickPickCard key={idx} item={item} onClick={() => setDetailItem(item)} onSave={handleQuickSave} isSaved={savedIds.includes(item.id)} />))}
         </div>
       </div>
 
       <div className="rm-hot-picks-section">
-          <div className="rm-section-title sticky-header">Hot picks <span style={{fontSize:'1.2em'}}>🏆</span></div>
+          <div className="rm-section-title sticky-header">{t('hot_picks')} <span style={{fontSize:'1.2em'}}>🏆</span></div>
           <div className="rm-hot-picks-list">
-              {hotPicks.map((item, idx) => (
-                  <HotPickCard key={idx} item={item} onClick={() => setDetailItem(item)} />
-              ))}
+              {hotPicks.map((item, idx) => (<HotPickCard key={idx} item={item} onClick={() => setDetailItem(item)} />))}
               <div style={{height: '80px'}}></div>
           </div>
       </div>
@@ -219,7 +199,8 @@ export default function RandomModeCard({ onBack, currentUser }) {
           {activeFilter && (
             <div className="rm-filter-popup">
                 {getFilterOptions(activeFilter).map(opt => (
-                    <button key={opt} className="rm-popup-opt" onClick={() => handleChooseFilter(activeFilter, opt)}>{opt}</button>
+                    // Hiển thị text đã dịch (t(opt)), nhưng gửi giá trị gốc (opt) vào hàm xử lý
+                    <button key={opt} className="rm-popup-opt" onClick={() => handleChooseFilter(activeFilter, opt)}>{t(opt)}</button>
                 ))}
             </div>
           )}
@@ -234,7 +215,7 @@ export default function RandomModeCard({ onBack, currentUser }) {
                    <div className="rm-icon-circle" style={{border:'none'}}><Icons.Back /></div>
               </div>
           </div>
-          <button className="rm-find-match-btn" onClick={handleShuffle}>Find my match</button>
+          <button className="rm-find-match-btn" onClick={handleShuffle}>{t('find_match')}</button>
       </div>
     </div>
   );
