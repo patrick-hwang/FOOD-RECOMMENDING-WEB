@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import axios from 'axios';
 import './RandomModeCard.css';
 import logo from './assets/images/logo.png';
 import RestaurantDetail from './RestaurantDetail';
@@ -12,8 +13,19 @@ const Icons = {
     Atmosphere: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.5,19c0-1.7-1.3-3-3-3c-0.4,0-0.7,0.1-1.1,0.2c-0.3-2.6-2.6-4.7-5.4-4.7c-3,0-5.5,2.5-5.5,5.5c0,1.7,1.3,3,3,3H17.5z"></path></svg>,
     Occasion: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="3 2 21 2 21 22 3 22"></polygon><line x1="12" y1="6" x2="12" y2="10"></line><line x1="12" y1="14" x2="12" y2="18"></line></svg>,
     Distance: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>,
-    Star: ({ fill = "none" }) => (<svg width="14" height="14" viewBox="0 0 24 24" fill={fill} stroke="#FFC107" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>),
-    Bookmark: () => (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#333" strokeWidth="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>),
+    Star: ({ fill = "none" }) => {
+        const stroke = fill !== "none" ? "#FFC107" : "#E0E0E0";
+        return (
+            <svg width="14" height="14" viewBox="0 0 24 24" fill={fill} stroke={stroke} strokeWidth="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+        );
+    },
+    Bookmark: ({ filled = false }) => (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill={filled ? "#FFC107" : "none"} stroke={filled ? "#FFC107" : "#333"} strokeWidth="2">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+        </svg>
+    ),
     Back: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>,
     Close: () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>,
     ArrowLeft: () => <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>,
@@ -38,28 +50,57 @@ const FILTER_ORDER = [
 // --- MOCK DATA HIERARCHY (Cấu trúc 3 chiều như bạn yêu cầu) ---
 const HIERARCHICAL_TAGS = {
     price_range: [
-        { name: "Bình dân", children: ["$ (Dưới 50k)", "$$ (50k - 100k)"] },
-        { name: "Sang trọng", children: ["$$$ (100k - 500k)", "$$$$ (Trên 500k)"] }
+        { name: "giá tiền", children: ["siêu rẻ", "rẻ", "bình dân", "sang", "nhà hàng", "cao cấp", "thượng lưu", "đại gia"] }
     ],
     cuisine_origin: [
-        { name: "Việt Nam", children: ["Miền Bắc", "Miền Trung", "Miền Nam", "Miền Tây"] },
-        { name: "Quốc tế", children: ["Hàn Quốc", "Nhật Bản", "Trung Hoa", "Âu Mỹ", "Thái Lan"] }
+        { name: "Bắc", children: [] },
+        { name: "Trung", children: [] },
+        { name: "Tây", children: [] },
+        { name: "Nam", children: [] },
+        { name: "Tây Nguyên", children: [] },
+        { name: "nước ngoài", children: [] },
+        { name: "miền Bắc", children: ["Hà Nội", "Hải Phòng", "Tây Bắc"] },
+        { name: "miền Trung", children: ["Phú Yên", "Huế", "Quảng Ngãi", "Đà Nẵng", "Quảng Nam", "Khánh Hòa", "Phan Rang", "Bình Định", "Nghệ An", "Hà Tĩnh"] },
+        { name: "miền Tây", children: ["Tiền Giang", "Đồng Tháp", "Cà Mau", "Sóc Trăng", "An Giang"] },
+        { name: "miền Nam", children: ["Sài Gòn", "Bà Rịa - Vũng Tàu"] },
+        { name: "Tây Nguyên", children: ["Đắk Lắk", "Kon Tum", "Lâm Đồng", "Pleiku", "Đắk Nông", "Gia Lai"] },
+        { name: "nước ngoài", children: ["Anh", "Pháp", "Mỹ", "Ý", "Đức", "Hy Lạp", "Nhật Bản", "Hàn Quốc", "Trung Quốc"] }
     ],
     main_dishes: [
-        { name: "Món nước", children: ["Phở", "Bún", "Miến", "Hủ tiếu", "Bánh canh"] },
-        { name: "Cơm & Xôi", children: ["Cơm tấm", "Cơm rang", "Xôi mặn", "Cơm văn phòng"] },
-        { name: "Bánh mì & Bột", children: ["Bánh mì", "Bánh cuốn", "Bánh bao"] },
-        { name: "Lẩu & Nướng", children: ["Lẩu thái", "Lẩu riêu", "Nướng BBQ"] },
-        { name: "Đồ ăn nhẹ", children: ["Chè", "Trà sữa", "Bánh ngọt"] }
+        { name: "nhiệt độ", children: ["lạnh như băng", "lạnh", "mát", "nguội", "ấm", "nóng", "sôi/rất nóng"] },
+        { name: "độ ngọt", children: ["không ngọt", "ít ngọt", "vừa ngọt", "ngọt đậm", "rất ngọt"] },
+        { name: "độ cay", children: ["không cay", "cay nhẹ", "cay vừa", "cay nhiều", "rất cay"] },
+        { name: "độ béo", children: ["không béo", "béo nhẹ", "béo vừa", "béo đậm"] },
+        { name: "độ mặn", children: ["nhạt", "hơi mặn", "mặn vừa", "mặn đậm"] },
+        { name: "độ chua", children: ["không chua", "chua nhẹ", "chua vừa", "chua đậm"] },
+        { name: "sợi", children: ["bún", "phở", "hủ tiếu", "mì sợi", "bánh canh bột gạo", "bánh đa", "miến dong", "miến/bún tàu"] },
+        { name: "món nếp", children: ["cơm", "xôi", "cốm"] },
+        { name: "bánh bột gạo", children: ["bánh xèo", "bánh bèo", "bánh căn", "bánh cuốn", "bánh ướt", "bánh hỏi", "bánh bò", "bánh đúc", "bánh nếp"] },
+        { name: "bánh bột mì", children: ["bánh mì", "bánh bao", "bánh quẩy", "bánh tiêu", "bánh su kem", "bánh bông lan", "donut"] },
+        { name: "món ăn nước", children: ["súp", "lẩu", "cháo", "cà ri", "hầm"] },
+        { name: "món khô", children: ["xào", "chiên", "nướng", "trộn", "hấp", "kho", "rang", "quay", "luộc"] },
+        { name: "thức uống", children: ["cà phê", "trà sữa", "nước ép/ sinh tố", "có cồn", "nước có ga", "trà"] },
+        { name: "đồ ăn ngọt", children: ["chè", "kem tươi", "kem cheese", "sữa chua", "trân châu", "thạch", "kem trứng", "flan"] },
+        { name: "tinh bột", children: ["gạo", "bắp"] },
+        { name: "thảo mộc", children: ["sả", "hồi", "quế", "gừng", "lá dứa", "vani", "matcha"] },
+        { name: "thịt gia súc", children: ["thịt bò", "thịt heo", "thịt trâu", "thịt dê", "thịt cừu"] },
+        { name: "thịt gia cầm", children: ["thịt gà", "thịt vịt", "thịt ngan", "thịt ngỗng", "thịt chim cút"] },
+        { name: "hải sản", children: ["tôm", "mực", "cá", "nghêu", "sò", "ốc", "cua", "bào ngư"] },
+        { name: "món chay", children: ["rau củ", "đậu hũ", "nấm", "chả chay"] },
+        { name: "trái cây", children: ["họ cam", "dâu/phúc bồn tử", "đào", "vải/nhãn", "xoài", "cóc", "bơ", "táo", "mít", "sầu riêng"] },
+        { name: "sữa", children: ["sữa"] },
+        { name: "trứng", children: ["trứng gà", "trứng cút"] },
+        { name: "dừa", children: ["nước cốt dừa", "dừa"] },
+        { name: "đậu - hạt", children: ["cà phê", "đậu phộng", "đậu đen", "đậu đỏ", "đậu ván", "cacao", "hạt sen"] },
+        { name: "không phải trái cây", children: ["rau má", "matcha", "cacao"] }
     ],
     atmosphere: [
-        { name: "Trong nhà", children: ["Ấm cúng", "Máy lạnh", "Yên tĩnh"] },
-        { name: "Ngoài trời", children: ["Sân vườn", "Vỉa hè", "Rooftop", "Ven hồ"] },
-        { name: "Decor", children: ["Vintage", "Hiện đại", "Sống ảo"] }
+        { name: "vật chất", children: ["đèn vàng", "cửa sổ", "ghế êm", "chậu hoa", "bàn hai người", "nến", "tiểu cảnh", "rèm"] },
+        { name: "không gian", children: ["thoáng đãng", "ấm áp", "riêng tư", "hương tinh dầu", "lãng mạn", "kết nối"] },
+        { name: "âm thanh", children: ["nhạc", "yên tĩnh", "âm thanh nền"] }
     ],
     occasion: [
-        { name: "Bữa chính", children: ["Ăn sáng", "Ăn trưa", "Ăn tối"] },
-        { name: "Gặp gỡ", children: ["Hẹn hò", "Tiếp khách", "Họp nhóm", "Sinh nhật"] }
+        { name: "thời điểm/dịp", children: ["bữa sáng", "ăn vặt", "tráng miệng", "buổi đêm", "buổi trưa"] }
     ],
     distance: [
         { name: "Gần tôi", children: ["Dưới 1km", "1km - 3km"] },
@@ -67,23 +108,39 @@ const HIERARCHICAL_TAGS = {
     ]
 };
 
-const PlaceCard = ({ item, onClick }) => (
+// Map child tag -> parent tags to allow parent matching when only children are present
+const CHILD_TO_PARENT = (() => {
+    const map = new Map();
+    Object.values(HIERARCHICAL_TAGS).forEach(groups => {
+        groups.forEach(({ name, children = [] }) => {
+            children.forEach(child => {
+                if (!map.has(child)) map.set(child, new Set());
+                map.get(child).add(name);
+            });
+        });
+    });
+    return map;
+})();
+
+const PlaceCard = ({ item, onClick, isSaved, onToggleSave }) => (
     <div className="place-card" onClick={onClick}>
         <div className="place-image-wrapper">
             <img src={item.imageUrl} alt={item.name} onError={(e) => { e.target.src = 'https://placehold.co/400x300?text=No+Image'; }} />
-            <div className="place-bookmark"><Icons.Bookmark /></div>
+            <div className="place-bookmark" onClick={(e) => { e.stopPropagation(); onToggleSave(item); }}>
+                <Icons.Bookmark filled={isSaved} />
+            </div>
         </div>
         <div className="place-info-overlay">
             <h3 className="place-name">{item.name}</h3>
             <div className="place-rating">
-                {[1, 2, 3, 4, 5].map(s => <Icons.Star key={s} fill={s <= (item.rating || 4.5) ? "#FFC107" : "none"} />)}
-                <span style={{ marginLeft: 4, color: 'white', fontWeight: 'bold' }}>{item.rating || 4.5}</span>
+                {[1, 2, 3, 4, 5].map(s => <Icons.Star key={s} fill={s <= (item.rating ?? 0) ? "#FFC107" : "none"} />)}
+                <span style={{ marginLeft: 4, color: '#FFC107', fontWeight: 'bold' }}>{item.rating ?? 0}</span>
             </div>
         </div>
     </div>
 );
 
-export default function RandomModeCard({ onBack, currentUser }) {
+export default function RandomModeCard({ onBack, currentUser, onDetailViewChange }) {
     const [recommendations, setRecommendations] = useState([]);
     const [selectedFilters, setSelectedFilters] = useState({});
     const [detailItem, setDetailItem] = useState(null);
@@ -102,6 +159,11 @@ export default function RandomModeCard({ onBack, currentUser }) {
 
     // Navigation
     const [isNavigating, setIsNavigating] = useState(false);
+
+    // Notify parent when detail view opens/closes
+    useEffect(() => {
+        if (onDetailViewChange) onDetailViewChange(!!detailItem);
+    }, [detailItem, onDetailViewChange]);
 
     // Geolocation & Distance
     const [userLoc, setUserLoc] = useState(null);
@@ -167,12 +229,28 @@ export default function RandomModeCard({ onBack, currentUser }) {
                     else if (item.menu_images?.length) thumb = item.menu_images[0];
                     else if (item.thumbnail) thumb = item.thumbnail;
 
+                    const rawScore = item?.rating_info?.score ?? item?.rating ?? item?.rating_score ?? item?.score ?? 0;
+                    const ratingScore = Number(String(rawScore).replace(',', '.')) || 0;
+                    const ratingCount = item?.rating_info?.count ?? item?.rating_count ?? item?.reviews_count ?? 0;
+
+                    const rawTags = Object.values(item.tags || {}).flat().filter(t => typeof t === 'string');
+                    const tagSet = new Set(rawTags);
+                    rawTags.forEach(tag => {
+                        if (CHILD_TO_PARENT.has(tag)) {
+                            CHILD_TO_PARENT.get(tag).forEach(parent => tagSet.add(parent));
+                        }
+                    });
+
                     return {
-                        ...item, imageUrl: thumb,
-                        imagesMenu: item.menu_images || [], imagesViews: item.places_images || [],
-                        tags: Object.values(item.tags || {}).flat().filter(t => typeof t === 'string'),
+                        ...item,
+                        imageUrl: thumb,
+                        imagesMenu: item.menu_images || [],
+                        imagesViews: item.places_images || [],
+                        tags: Array.from(tagSet),
                         address: item.address || "Unknown",
-                        openTime: item.opening_hours?.[0]?.hours || "See details"
+                        openTime: item.opening_hours?.[0]?.hours || "See details",
+                        rating: ratingScore,
+                        ratingCount
                     };
                 });
                 setRecommendations(normalized);
@@ -211,24 +289,6 @@ export default function RandomModeCard({ onBack, currentUser }) {
         });
         return list;
     }, [selectedFilters]);
-
-    // Mock Data Init
-    useEffect(() => { handleShuffle(); }, []);
-
-    async function handleShuffle() {
-        setLoading(true);
-        setRecommendations([]);
-        setTimeout(() => {
-            const mockData = [
-                { id: 1, name: "Phở Thìn Lò Đúc", imageUrl: "https://vcdn-dulich.vnecdn.net/2021/03/17/pho-thin-1-1615970222.jpg", rating: 4.8, address: "13 Lò Đúc, Hà Nội", tags: ["#LocalSpecility", "#BanhMi", "#Takeaway"] },
-                { id: 2, name: "Bún Chả Hương Liên", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Bun_Cha_Huong_Lien.jpg/1200px-Bun_Cha_Huong_Lien.jpg", rating: 4.5, address: "24 Lê Văn Hưu" },
-                { id: 3, name: "Cà phê Giảng", imageUrl: "https://cafegiang.vn/wp-content/uploads/2019/07/cafe-trung-hanoi-1.jpg", rating: 4.7, address: "39 Nguyễn Hữu Huân" },
-                { id: 4, name: "Bánh Mì Dân Tổ", imageUrl: "https://cdn.tgdd.vn/Files/2020/09/24/1293345/banh-mi-dan-to-la-gi-o-dau-ma-khien-gioi-tre-xep-hang-luc-3-gio-sang-de-mua-202201131014197368.jpg", rating: 4.2, address: "Ngã 3 Cao Thắng" },
-            ];
-            setRecommendations(mockData);
-            setLoading(false);
-        }, 800);
-    }
 
     // --- CAROUSEL NAVIGATION ---
     const handlePrevFilter = () => {
@@ -330,7 +390,7 @@ export default function RandomModeCard({ onBack, currentUser }) {
     };
 
     if (detailItem) {
-        return <RestaurantDetail item={detailItem} onBack={() => setDetailItem(null)} onShuffleAgain={() => { setDetailItem(null); handleShuffle(); }} activeTags={allSelectedTagValues} onToggleTag={handleDetailTagToggle} />;
+        return <RestaurantDetail item={detailItem} onBack={() => setDetailItem(null)} onShuffleAgain={() => { setDetailItem(null); handleShuffle(); }} activeTags={allSelectedTagValues} onToggleTag={handleDetailTagToggle} currentUser={currentUser} />;
     }
 
     if (isNavigating && detailItem) {
@@ -377,7 +437,13 @@ export default function RandomModeCard({ onBack, currentUser }) {
             {/* --- CARDS --- */}
             <div className="rm-cards-container">
                 {recommendations.length > 0 ? recommendations.map((item, idx) => (
-                    <PlaceCard key={idx} item={item} onClick={() => setDetailItem(item)} />
+                    <PlaceCard
+                        key={idx}
+                        item={item}
+                        isSaved={savedIds.includes(item.id)}
+                        onToggleSave={handleQuickSave}
+                        onClick={() => setDetailItem(item)}
+                    />
                 )) : <div className="rm-empty-state">{loading ? "Finding best matches..." : "Press 'Find my match' to start!"}</div>}
             </div>
 

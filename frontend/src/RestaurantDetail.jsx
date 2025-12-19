@@ -7,7 +7,15 @@ import { useLanguage } from './Context/LanguageContext';
 // --- BỘ ICON PHONG PHÚ (Kết hợp cả 2) ---
 const DetailIcons = {
     Back: () => (<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00AA55" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>),
-    Star: ({ fill }) => (<svg width="16" height="16" viewBox="0 0 24 24" fill={fill} stroke="#FFC107" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>),
+    Star: ({ fill }) => {
+        const effectiveFill = fill || "none";
+        const stroke = effectiveFill !== "none" ? "#FFC107" : "#E0E0E0";
+        return (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill={effectiveFill} stroke={stroke} strokeWidth="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+        );
+    },
     Bookmark: () => (<svg width="32" height="32" viewBox="0 0 24 24" fill="#00AA55" stroke="none"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>),
     BookmarkFlag: ({ filled }) => (<svg width="32" height="32" viewBox="0 0 24 24" fill={filled ? "#FFC107" : "none"} stroke={filled ? "#FFC107" : "#00AA00"} strokeWidth="2"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z" /></svg>),
     Pin: () => (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00AA55" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>),
@@ -25,6 +33,9 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
     const [activeTab, setActiveTab] = useState('menu'); // 'menu' | 'view' | 'review'
     const [sliderIndex, setSliderIndex] = useState(0);
     const [isSaved, setIsSaved] = useState(false);
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [lightboxIndex, setLightboxIndex] = useState(0);
+    const [lightboxImages, setLightboxImages] = useState([]);
 
     // API Config
     const userId = currentUser?.phone || currentUser?.email || currentUser?.facebook_id;
@@ -101,7 +112,31 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
             axios.post(`${API_URL}/${userId}/history`, { restaurant_id: item.id })
                 .catch(e => console.error('History error:', e));
         }
-        onGetDirection();
+
+        const query = encodeURIComponent(item?.address || item?.name || '');
+        if (query) {
+            window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
+        }
+
+        if (onGetDirection) onGetDirection();
+    };
+
+    const openLightbox = (images, index) => {
+        setLightboxImages(images);
+        setLightboxIndex(index);
+        setLightboxOpen(true);
+    };
+
+    const closeLightbox = () => {
+        setLightboxOpen(false);
+    };
+
+    const goToPrevImage = () => {
+        setLightboxIndex((prev) => (prev - 1 + lightboxImages.length) % lightboxImages.length);
+    };
+
+    const goToNextImage = () => {
+        setLightboxIndex((prev) => (prev + 1) % lightboxImages.length);
     };
 
     // --- RENDER CONTENT CHO TỪNG TAB ---
@@ -116,6 +151,8 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
                                 src={currentImages[sliderIndex] || "https://placehold.co/600x400/png"}
                                 alt="Food"
                                 className="rd-main-img"
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => openLightbox(imagesMenu, sliderIndex)}
                                 onError={(e) => { e.target.src = 'https://placehold.co/600x400?text=Image'; }}
                             />
                             <div className="rd-dots-indicator">
@@ -139,13 +176,23 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
                             </div>
 
                             <div className="rd-rating-row">
-                                {[1, 2, 3, 4, 5].map(star => (
-                                    <DetailIcons.Star
-                                        key={star}
-                                        fill={star <= (item?.rating || 4) ? "#FFC107" : "#E0E0E0"}
-                                    />
-                                ))}
-                                <span className="rd-rating-num">{item?.rating || 4.0}</span>
+                                {(() => {
+                                    const rawScore = item?.rating ?? item?.rating_info?.score ?? 0;
+                                    const ratingScore = Number(String(rawScore).replace(',', '.')) || 0;
+                                    return (
+                                        <>
+                                            {[1, 2, 3, 4, 5].map(star => (
+                                                <DetailIcons.Star
+                                                    key={star}
+                                                    fill={star <= ratingScore ? "#FFC107" : "#E0E0E0"}
+                                                />
+                                            ))}
+                                            <span className="rd-rating-num" style={{ color: '#FFC107', fontWeight: 700 }}>
+                                                {ratingScore}
+                                            </span>
+                                        </>
+                                    );
+                                })()}
                             </div>
 
                             <div className="rd-address-row">
@@ -191,7 +238,7 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
                         <h3 className="rd-section-title">{t('photos') || 'Photos'} ({mockViews.length})</h3>
                         <div className="rd-view-grid">
                             {mockViews.map((src, idx) => (
-                                <div key={idx} className="rd-view-item">
+                                <div key={idx} className="rd-view-item" style={{ cursor: 'pointer' }} onClick={() => openLightbox(mockViews, idx)}>
                                     <img src={src} alt={`view-${idx}`} loading="lazy" onError={(e) => { e.target.src = 'https://placehold.co/300x300?text=View'; }} />
                                 </div>
                             ))}
@@ -241,6 +288,43 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
 
     return (
         <div className="rd-screen">
+            {/* Lightbox Modal */}
+            {lightboxOpen && (
+                <div style={{
+                    position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+                    backgroundColor: 'rgba(0,0,0,0.95)', zIndex: 30000,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
+                    <button onClick={closeLightbox} style={{
+                        position: 'absolute', top: 20, right: 20, background: 'rgba(255,255,255,0.2)',
+                        border: 'none', color: 'white', fontSize: 32, cursor: 'pointer',
+                        width: 50, height: 50, borderRadius: '50%', display: 'flex',
+                        alignItems: 'center', justifyContent: 'center'
+                    }}>×</button>
+
+                    <button onClick={goToPrevImage} style={{
+                        position: 'absolute', left: 20, background: 'rgba(255,255,255,0.2)',
+                        border: 'none', color: 'white', fontSize: 32, cursor: 'pointer',
+                        width: 50, height: 50, borderRadius: '50%', display: 'flex',
+                        alignItems: 'center', justifyContent: 'center'
+                    }}>‹</button>
+
+                    <img src={lightboxImages[lightboxIndex]} alt="fullscreen" style={{
+                        maxWidth: '90%', maxHeight: '90%', objectFit: 'contain'
+                    }} onError={(e) => { e.target.src = 'https://placehold.co/800x600?text=Image'; }} />
+
+                    <button onClick={goToNextImage} style={{
+                        position: 'absolute', right: 20, background: 'rgba(255,255,255,0.2)',
+                        border: 'none', color: 'white', fontSize: 32, cursor: 'pointer',
+                        width: 50, height: 50, borderRadius: '50%', display: 'flex',
+                        alignItems: 'center', justifyContent: 'center'
+                    }}>›</button>
+
+                    <div style={{
+                        position: 'absolute', bottom: 20, color: 'white', fontSize: 14
+                    }}>{lightboxIndex + 1} / {lightboxImages.length}</div>
+                </div>
+            )}
 
             {/* --- PHẦN 1: CỐ ĐỊNH Ở TRÊN (Header + Tabs) --- */}
             <div className="rd-fixed-top">

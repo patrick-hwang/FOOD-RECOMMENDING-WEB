@@ -115,6 +115,22 @@ class HistoryRequest(BaseModel):
 class BookmarkRequest(BaseModel):
     restaurant_id: str
 
+class NewReview(BaseModel):
+    comment: str
+    rating: Optional[int] = None
+    user_name: Optional[str] = None
+    user_phone: Optional[str] = None
+
+class QuestionModeRequest(BaseModel):
+    yes_tags: List[str] = []
+    no_tags: List[str] = []
+    asked_ids: List[int] = []
+
+class SpecialityVNUpdate(BaseModel):
+    ids: Optional[List[str]] = None
+    names_contains: Optional[List[str]] = None
+    value: bool = True
+
 # ==============================================================================
 # 4. API ENDPOINTS
 # ==============================================================================
@@ -336,11 +352,60 @@ async def filter_random(payload: FilterRandomRequest):
 
         # --- MAPPING FRONTEND KEYS TO DATABASE KEYS ---
         # Maps the UI category to the list of possible fields in result.json
+        # HIERARCHICAL STRUCTURE: main_dishes is split into 3 sub-categories
         key_map = {
             "price_range": ["tags.giá tiền"],
-            "cuisine_origin": ["tags.miền Bắc", "tags.miền Trung", "tags.miền Tây", "tags.miền Nam", "tags.Tây Nguyên", "tags.nước ngoài"],
-            "main_dishes": ["tags.món ăn nước", "tags.món khô", "tags.sợi", "tags.món rời", "tags.bánh bột gạo", "tags.bánh bột mì", "tags.hải sản", "tags.thịt gia súc", "tags.thịt gia cầm", "tags.món chay"],
-            "place": ["tags.không gian", "tags.vật chất", "tags.âm thanh"], # New "Place" Category
+            "cuisine_origin": ["tags.Bắc", "tags.Trung", "tags.Tây", "tags.Nam", "tags.Tây Nguyên", "tags.nước ngoài", "tags.miền Bắc", "tags.miền Trung", "tags.miền Tây", "tags.miền Nam"],
+            
+            # CATEGORY 1: Đặc điểm (Characteristics)
+            "đặc điểm": ["tags.đặc điểm"],
+            "nhiệt độ": ["tags.nhiệt độ"],
+            "độ ngọt": ["tags.độ ngọt"],
+            "độ cay": ["tags.độ cay"],
+            "độ béo": ["tags.độ béo"],
+            "độ mặn": ["tags.độ mặn"],
+            "độ chua": ["tags.độ chua"],
+            "thảo mộc": ["tags.thảo mộc"],
+            
+            # CATEGORY 2: Món ăn/uống (Dishes & Drinks)
+            "món ăn/uống": ["tags.món ăn/uống"],
+            "sợi": ["tags.sợi"],
+            "món rời": ["tags.món rời"],
+            "món nếp": ["tags.món nếp"],
+            "bánh bột gạo": ["tags.bánh bột gạo"],
+            "bánh bột mì": ["tags.bánh bột mì"],
+            "món ăn nước": ["tags.món ăn nước"],
+            "món khô": ["tags.món khô"],
+            "đồ ăn ngọt": ["tags.đồ ăn ngọt"],
+            "thức uống": ["tags.thức uống"],
+            
+            # CATEGORY 3: Nguyên liệu (Ingredients)
+            "nguyên liệu": ["tags.nguyên liệu"],
+            "tinh bột": ["tags.tinh bột"],
+            "thịt gia súc": ["tags.thịt gia súc"],
+            "thịt gia cầm": ["tags.thịt gia cầm"],
+            "hải sản": ["tags.hải sản"],
+            "món chay": ["tags.món chay"],
+            "trái cây": ["tags.trái cây"],
+            "sữa": ["tags.sữa"],
+            "trứng": ["tags.trứng"],
+            "dừa": ["tags.dừa"],
+            "đậu - hạt": ["tags.đậu - hạt"],
+            "không phải trái cây": ["tags.không phải trái cây"],
+            
+            # Legacy support: main_dishes maps to all sub-categories
+            "main_dishes": [
+                "tags.đặc điểm", "tags.nhiệt độ", "tags.độ ngọt", "tags.độ cay", "tags.độ béo", "tags.độ mặn", "tags.độ chua", "tags.thảo mộc",
+                "tags.món ăn/uống", "tags.sợi", "tags.món rời", "tags.món nếp", "tags.bánh bột gạo", "tags.bánh bột mì", 
+                "tags.món ăn nước", "tags.món khô", "tags.thức uống", "tags.đồ ăn ngọt",
+                "tags.nguyên liệu", "tags.tinh bột", "tags.thịt gia súc", "tags.thịt gia cầm", 
+                "tags.hải sản", "tags.món chay", "tags.trái cây", "tags.sữa", "tags.trứng", 
+                "tags.dừa", "tags.đậu - hạt", "tags.không phải trái cây"
+            ],
+            
+            "atmosphere": ["tags.không gian", "tags.vật chất", "tags.âm thanh"],
+            "occasion": ["tags.thời điểm/dịp"],
+            "distance": ["distance"],
             "speciality_vn": ["tags.speciality_vn"]
         }
 
@@ -490,14 +555,6 @@ def has_tag(restaurant, tag):
         elif isinstance(v, str): all_tags.append(v)
     
     return tag in all_tags
-
-# --- NEW API MODELS ---
-class QuestionModeRequest(BaseModel):
-    yes_tags: List[str] = []
-    no_tags: List[str] = []
-    asked_ids: List[int] = []
-
-# ... (Keep imports and configurations at the top)
 
 # --- 1. ADD THIS HELPER FUNCTION (Algorithm Logic) ---
 def get_restaurant_tags(restaurant):

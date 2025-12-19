@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import './TasteMode.css'; 
+import './TasteMode.css';
 import logo from './assets/images/logo.png';
 import RestaurantDetail from './RestaurantDetail';
 // import MapNavigationPage from './MapNavigationPage'; // Import map navigation if needed
 
 const Icons = {
-    Back: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>,
+    Back: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" /></svg>,
     ThumbUp: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>,
     Close: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
 };
 
-export default function TasteMode({ onBack }) {
+export default function TasteMode({ onBack, onDetailViewChange }) {
     // --- STATE ---
     const [yesTags, setYesTags] = useState([]);
     const [noTags, setNoTags] = useState([]);
@@ -21,13 +21,17 @@ export default function TasteMode({ onBack }) {
     const [currentQuestion, setCurrentQuestion] = useState(null);
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [viewState, setViewState] = useState('question'); 
-    
+    const [viewState, setViewState] = useState('question');
+
     // Popup & Nav State
-    const [detailItem, setDetailItem] = useState(null); 
+    const [detailItem, setDetailItem] = useState(null);
     const [isNavigating, setIsNavigating] = useState(false);
 
     const [selectedOption, setSelectedOption] = useState(null);
+
+    useEffect(() => {
+        if (onDetailViewChange) onDetailViewChange(!!detailItem);
+    }, [detailItem, onDetailViewChange]);
 
     // --- INITIAL LOAD ---
     useEffect(() => {
@@ -44,7 +48,7 @@ export default function TasteMode({ onBack }) {
                 body: JSON.stringify({ yes_tags: cYes, no_tags: cNo, asked_ids: cAsked })
             });
             const data = await res.json();
-            
+
             if (data.next_question) {
                 setCurrentQuestion(data.next_question);
                 setViewState('question');
@@ -71,7 +75,7 @@ export default function TasteMode({ onBack }) {
                 const normalizedResults = data.results.map(item => {
                     const menuImages = Array.isArray(item.menu_images) ? item.menu_images : [];
                     const viewImages = Array.isArray(item.places_images) ? item.places_images : [];
-                    
+
                     // Determine main image
                     let thumb = 'https://placehold.co/300x200/eee/ccc?text=No+Image';
                     if (item.thumbnail) thumb = item.thumbnail;
@@ -81,8 +85,8 @@ export default function TasteMode({ onBack }) {
                     // Normalize coordinates
                     let coords = null;
                     if (item.coordinates && item.coordinates.lat && item.coordinates.long) {
-                        coords = { 
-                            lat: parseFloat(item.coordinates.lat), 
+                        coords = {
+                            lat: parseFloat(item.coordinates.lat),
                             lng: parseFloat(item.coordinates.long)
                         };
                     }
@@ -133,7 +137,7 @@ export default function TasteMode({ onBack }) {
 
         if (answer === 'yes') {
             const tagsToAdd = currentQuestion.yes?.yes_tag || [];
-            const noTagsToAdd = currentQuestion.yes?.no_tag || []; 
+            const noTagsToAdd = currentQuestion.yes?.no_tag || [];
             newYes = [...new Set([...newYes, ...tagsToAdd])];
             newNo = [...new Set([...newNo, ...noTagsToAdd])];
         } else if (answer === 'no') {
@@ -146,7 +150,7 @@ export default function TasteMode({ onBack }) {
         setYesTags(newYes);
         setNoTags(newNo);
         setAskedIds(newAsked);
-        
+
         const nextCount = questionCount + 1;
         setQuestionCount(nextCount);
 
@@ -179,9 +183,9 @@ export default function TasteMode({ onBack }) {
 
     // --- RENDER ---
     if (loading) return (
-        <div className="tm-container" style={{justifyContent:'center', alignItems:'center'}}>
+        <div className="tm-container" style={{ justifyContent: 'center', alignItems: 'center' }}>
             <div className="spinner"></div>
-            <p style={{marginTop:'10px', color:'#666'}}>Thinking...</p>
+            <p style={{ marginTop: '10px', color: '#666' }}>Thinking...</p>
         </div>
     );
 
@@ -194,11 +198,11 @@ export default function TasteMode({ onBack }) {
     const DetailPopup = () => (
         <div className="tm-popup-overlay">
             <div className="tm-popup-content">
-                <button className="tm-popup-close" onClick={() => setDetailItem(null)}><Icons.Close/></button>
-                <div style={{height: '100%', overflowY: 'auto'}}>
-                    <RestaurantDetail 
-                        item={detailItem} 
-                        onBack={() => setDetailItem(null)} 
+                <button className="tm-popup-close" onClick={() => setDetailItem(null)}><Icons.Close /></button>
+                <div style={{ height: '100%', overflowY: 'auto' }}>
+                    <RestaurantDetail
+                        item={detailItem}
+                        onBack={() => setDetailItem(null)}
                         onShuffleAgain={() => { setDetailItem(null); handleAskMore(); }}
                         onGetDirection={() => setIsNavigating(true)}
                     />
@@ -211,20 +215,20 @@ export default function TasteMode({ onBack }) {
     if (viewState === 'results') {
         return (
             <div className="tm-container">
-                {detailItem && <DetailPopup />} 
-                
+                {detailItem && <DetailPopup />}
+
                 <div className="tm-bg-bubble bubble-1"></div>
                 <div className="tm-bg-bubble bubble-3"></div>
 
-                <div className="tm-header-section" style={{display:'flex', alignItems:'center', justifyContent:'center', position:'relative'}}>
-                    <div style={{position:'absolute', left:'20px', cursor:'pointer'}} onClick={onBack}>
-                       <Icons.Back />
+                <div className="tm-header-section" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                    <div style={{ position: 'absolute', left: '20px', cursor: 'pointer' }} onClick={onBack}>
+                        <Icons.Back />
                     </div>
                     <div>
                         <h1 className="tm-title">LET'S GO</h1>
                         <p className="tm-subtitle">with your matchings</p>
                     </div>
-                    <img src={logo} alt="logo" style={{height:'40px', position:'absolute', right:'20px'}}/>
+                    <img src={logo} alt="logo" style={{ height: '40px', position: 'absolute', right: '20px' }} />
                 </div>
 
                 <div className="tm-result-area">
@@ -233,19 +237,19 @@ export default function TasteMode({ onBack }) {
                             <div key={idx} className="tm-result-card" onClick={() => setDetailItem(item)}>
                                 <div className="tm-match-badge">Restaurant Match</div>
                                 <div className="tm-card-img-container">
-                                    <img 
-                                        src={item.imageUrl} 
-                                        alt={item.name} 
-                                        className="tm-card-img" 
-                                        referrerPolicy="no-referrer" 
-                                        onError={(e)=>{e.target.src='https://placehold.co/300x200?text=No+Image'}}
+                                    <img
+                                        src={item.imageUrl}
+                                        alt={item.name}
+                                        className="tm-card-img"
+                                        referrerPolicy="no-referrer"
+                                        onError={(e) => { e.target.src = 'https://placehold.co/300x200?text=No+Image' }}
                                     />
                                     <div className="tm-seal-badge"><Icons.ThumbUp /></div>
                                 </div>
                                 <div className="tm-card-content">
                                     <h3 className="tm-res-name">{item.name}</h3>
                                     <div className="tm-stars">
-                                        {[1,2,3,4,5].map(s => <span key={s} style={{color: s <= (item.rating || 4.5) ? '#FFC107' : '#eee'}}>★</span>)} 
+                                        {[1, 2, 3, 4, 5].map(s => <span key={s} style={{ color: s <= (item.rating || 4.5) ? '#FFC107' : '#eee' }}>★</span>)}
                                         {item.rating || 4.5}
                                     </div>
                                     <button className="tm-view-btn">View Details</button>
@@ -266,9 +270,9 @@ export default function TasteMode({ onBack }) {
 
     if (viewState === 'empty') {
         return (
-             <div className="tm-container" style={{justifyContent:'center', alignItems:'center', padding:'20px', textAlign:'center'}}>
-                <h2 style={{color:'#333'}}>No matches found.</h2>
-                <button className="tm-continue-btn" onClick={onBack} style={{maxWidth:'200px'}}>Back to Home</button>
+            <div className="tm-container" style={{ justifyContent: 'center', alignItems: 'center', padding: '20px', textAlign: 'center' }}>
+                <h2 style={{ color: '#333' }}>No matches found.</h2>
+                <button className="tm-continue-btn" onClick={onBack} style={{ maxWidth: '200px' }}>Back to Home</button>
             </div>
         );
     }
@@ -279,38 +283,38 @@ export default function TasteMode({ onBack }) {
             <div className="tm-bg-bubble bubble-1"></div>
             <div className="tm-bg-bubble bubble-2"></div>
 
-            <div className="tm-header-section" style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-                <div onClick={onBack} style={{cursor:'pointer'}}><Icons.Back /></div>
-                <div style={{textAlign:'center'}}>
-                     <h1 className="tm-title">Test Your Taste</h1>
-                     <p className="tm-subtitle">Tell us your preferences</p>
+            <div className="tm-header-section" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div onClick={onBack} style={{ cursor: 'pointer' }}><Icons.Back /></div>
+                <div style={{ textAlign: 'center' }}>
+                    <h1 className="tm-title">Test Your Taste</h1>
+                    <p className="tm-subtitle">Tell us your preferences</p>
                 </div>
-                <img src={logo} alt="logo" style={{height:'40px'}}/>
+                <img src={logo} alt="logo" style={{ height: '40px' }} />
             </div>
 
             <div className="tm-question-area">
                 <div className="tm-card">
                     <span className="tm-progress-text">Question: {questionCount + 1}/5</span>
-                    
+
                     {currentQuestion && (
                         <>
                             <h2 className="tm-question-text">{currentQuestion.question}</h2>
-                            
+
                             <div className="tm-btn-group">
-                                <button 
-                                    className={`tm-btn-option btn-outline ${selectedOption === 'yes' ? 'selected' : ''}`} 
+                                <button
+                                    className={`tm-btn-option btn-outline ${selectedOption === 'yes' ? 'selected' : ''}`}
                                     onClick={() => handleOptionSelect('yes')}
                                 >
                                     Yes
                                 </button>
-                                <button 
-                                    className={`tm-btn-option btn-outline ${selectedOption === 'no' ? 'selected' : ''}`} 
+                                <button
+                                    className={`tm-btn-option btn-outline ${selectedOption === 'no' ? 'selected' : ''}`}
                                     onClick={() => handleOptionSelect('no')}
                                 >
                                     No
                                 </button>
-                                <button 
-                                    className={`tm-btn-option btn-outline ${selectedOption === 'idk' ? 'selected' : ''}`} 
+                                <button
+                                    className={`tm-btn-option btn-outline ${selectedOption === 'idk' ? 'selected' : ''}`}
                                     onClick={() => handleOptionSelect('idk')}
                                 >
                                     Don't know

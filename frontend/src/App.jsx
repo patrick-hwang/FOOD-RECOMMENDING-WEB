@@ -94,14 +94,14 @@ function AppChooseMode({ onRandom, onTaste, onLogout }) {
         <div className="options-grid">
           <div className="option-card random-card" onClick={onRandom}>
             <div className="card-icon">
-              <img src={diceIMG} alt="Dice" style={{ width: '201px', height: '274px' }} />
+              <img src={diceIMG} alt="Dice" className="dice-icon" />
             </div>
             <h2 className="card-title">Quick & Random</h2>
             <p className="card-description">Filters & random 3 spots</p>
           </div>
           <div className="option-card taste-card" onClick={onTaste}>
             <div className="card-icon">
-              <img src={compassIMG} alt="Compass" style={{ width: '493px', height: '200px' }} />
+              <img src={compassIMG} alt="Compass" className="compass-icon" />
             </div>
             <h2 className="card-title">Test your Taste</h2>
             <p className="card-description">Quizzes for personalized recommendations</p>
@@ -134,6 +134,7 @@ function IntroSequence() {
 // --- 3. APP MAIN ---
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
+  const [isDetailViewOpen, setIsDetailViewOpen] = useState(false);
   const GOOGLE_CLIENT_ID = '975848353478-mguhticg531ok092j9krom4mhb25j6at.apps.googleusercontent.com';
   const navigate = useNavigate();
 
@@ -174,16 +175,16 @@ function App() {
           {/* URL: /random */}
           <Route path="/random" element={
             <>
-              <RandomModeCard onBack={() => navigate('/home')} currentUser={currentUser} />
-              <BottomNavigation activeTab="home" onTabChange={(tab) => navigate(`/${tab}`)} />
+              <RandomModeCard onBack={() => navigate('/home')} currentUser={currentUser} onDetailViewChange={setIsDetailViewOpen} />
+              {!isDetailViewOpen && <BottomNavigation activeTab="home" onTabChange={(tab) => navigate(`/${tab}`)} />}
             </>
           } />
 
           {/* URL: /taste */}
           <Route path="/taste" element={
             <>
-              <TasteMode onBack={() => navigate('/home')} currentUser={currentUser} />
-              <BottomNavigation activeTab="home" onTabChange={(tab) => navigate(`/${tab}`)} />
+              <TasteMode onBack={() => navigate('/home')} currentUser={currentUser} onDetailViewChange={setIsDetailViewOpen} />
+              {!isDetailViewOpen && <BottomNavigation activeTab="home" onTabChange={(tab) => navigate(`/${tab}`)} />}
             </>
           } />
 

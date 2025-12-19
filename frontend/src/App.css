@@ -10,14 +10,15 @@ body {
   background: linear-gradient(90deg, #F3F5F4 0%, #9AAE9C 80%) no-repeat fixed;
   min-height: 100vh;
   /* Ensure no white bars on scroll */
-  background-size: cover; 
+  background-size: cover;
 }
 
 #root {
   width: 100%;
   min-height: 100vh;
   display: flex;
-  justify-content: center; /* Center the App horizontally */
+  justify-content: center;
+  /* Center the App horizontally */
   margin: 0;
   padding: 0;
 }
@@ -34,19 +35,21 @@ body {
 .EntranceEffect {
   flex-direction: column;
 }
+
 .entrance-slide-rect {
   position: absolute;
   left: 50%;
   height: 50vh;
   width: 100vw;
   transform: translate(-50%, 0);
-  transition: transform 700ms cubic-bezier(.22,.9,.35,1), opacity 400ms ease;
+  transition: transform 700ms cubic-bezier(.22, .9, .35, 1), opacity 400ms ease;
   z-index: 40;
   pointer-events: none;
   font-family: Old Standard TT;
   font-size: 2rem;
   font-weight: 500;
 }
+
 .entrance-slide-rect.top {
   top: 0;
   transform: translate(-50%, -100%);
@@ -57,6 +60,7 @@ body {
   justify-content: center;
   text-align: center;
 }
+
 .entrance-slide-rect.bottom {
   bottom: 0;
   transform: translate(-50%, 100%);
@@ -66,30 +70,41 @@ body {
   justify-content: center;
   text-align: center;
 }
+
 .entrance-slide-rect.in.top {
   transform: translate(-50%, 0);
   background: #D9D9D933;
 }
+
 .entrance-slide-rect.in.bottom {
   transform: translate(-50%, 0);
   background: #668D4C82;
 }
+
 .entrance-slide-rect.in {
   opacity: 1;
 }
+
 .entrance-text {
   display: inline-block;
   opacity: 0;
   transform: translateY(8px) scale(0.6);
-  transition: transform 420ms cubic-bezier(.22,.9,.35,1), opacity 320ms ease;
+  transition: transform 420ms cubic-bezier(.22, .9, .35, 1), opacity 320ms ease;
   color: inherit;
 }
+
 .entrance-text.in {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
-.entrance-slide-rect.top .entrance-text { transform-origin: center bottom; }
-.entrance-slide-rect.bottom .entrance-text { transform-origin: center top; }
+
+.entrance-slide-rect.top .entrance-text {
+  transform-origin: center bottom;
+}
+
+.entrance-slide-rect.bottom .entrance-text {
+  transform-origin: center top;
+}
 
 
 /* --- 2. HOME SCREEN CARD FIX --- */
@@ -98,16 +113,19 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  
+
   /* Dimensions & Centering */
   width: 100%;
-  max-width: 480px; /* Keep it mobile-sized */
-  min-height: 100vh; /* Fill height */
+  max-width: 480px;
+  /* Keep it mobile-sized */
+  min-height: 100vh;
+  /* Fill height */
   margin: 0 auto;
-  
+
   /* Card Look */
-  background: linear-gradient(180deg, #f8fffb, #f4f4f4, #9aae9c);
-  box-shadow: 0 0 40px rgba(0,0,0,0.1); /* Shadow to separate from sides */
+  background: white;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+  /* Shadow to separate from sides */
   position: relative;
   box-sizing: border-box;
 }
@@ -118,6 +136,7 @@ body {
   flex-shrink: 0;
   padding-top: 20px;
 }
+
 .logo-container {
   display: flex;
   align-items: center;
@@ -125,6 +144,7 @@ body {
   font-size: 1.5em;
   font-weight: bold;
 }
+
 .logo {
   margin-right: 1rem;
   margin-left: 1rem;
@@ -132,6 +152,7 @@ body {
   color: #4CAF50;
   height: 3rem;
 }
+
 .logo-text {
   margin-right: 1rem;
   margin-top: 1rem;
@@ -142,7 +163,7 @@ body {
 .choose-mode-content-container {
   text-align: center;
   width: 100%;
-  flex-grow: 1; 
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -219,9 +240,9 @@ body {
   margin-bottom: 90px;
 }
 
-.Quick-pick-container h1{
+.Quick-pick-container h1 {
   position: absolute;
-  color: black ;
+  color: black;
   font-size: 1.5rem;
   padding-top: 5px;
   font-weight: bold;
@@ -242,13 +263,13 @@ body {
 
 .Keyword {
   flex: 0 0 auto;
-  background-color: #ccc;   
-  border-radius: 10px;      
-  padding: 0px 15px;          
-  white-space: nowrap;       
-  font-weight: 600;          
-  cursor: pointer;           
-  user-select: none; 
+  background-color: #ccc;
+  border-radius: 10px;
+  padding: 0px 15px;
+  white-space: nowrap;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
 }
 
 /* Grid Options */
@@ -260,6 +281,7 @@ body {
   width: 100%;
   padding-bottom: 0px;
 }
+
 @media (max-width: 499px) {
   .options-grid {
     grid-template-columns: 1fr;
@@ -275,7 +297,7 @@ body {
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  min-height: 20px; 
+  min-height: 12px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -285,59 +307,73 @@ body {
   margin-bottom: 0px;
   padding-bottom: -50px;
 }
+
 .option-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
+
 .card-title {
   font-size: 1.2em;
   font-weight: bold;
   margin-bottom: 10px;
 }
+
 .card-icon {
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translate(-50%, -50%); 
-  font-size: 3em; 
+  transform: translate(-50%, -50%);
+  font-size: 3em;
   margin: 0px 0;
 }
+
+.dice-icon {
+  max-width: 100%;
+  height: auto;
+  max-height: 25vh;
+}
+
+.compass-icon {
+  max-width: 100%;
+  height: auto;
+  max-height: 20vh;
+}
+
 .card-description {
   font-size: 0.85em;
-  color: #555;
 }
 
 .random-card {
-  background: radial-gradient(farthest-corner at 0px 0px, #f8ff6f 0%, #a6d577 100%); 
+  background: linear-gradient(90deg, #01a651 0%, #8cc640 100%);
   border: 1px solid #d9f99d;
 }
+
+.random-card .card-description,
+.random-card .card-title {
+  color: white;
+}
+
 .taste-card {
-  background: radial-gradient(farthest-corner at 0px 0px, #fcffc1 0%, #98b6e7 100%); 
-  color: #3b82f6; 
+  background: radial-gradient(farthest-corner at 0px 0px, #f8ff6f 0%, #a6d577 100%);
+  color: #3b82f6;
   border: 1px solid #93c5fd;
 }
 
-.random-card {
-  background: radial-gradient(farthest-corner at 100% 50%,  #8cc640 100%, #01a651 0%); 
+
+.taste-card .card-description,
+.taste-card .card-title {
   color: white;
-}
-.taste-card {
-  background: radial-gradient(farthest-corner at 0px 0px, #f8ff6f 0%, #a6d577 100%); 
-  color: white; 
-}
-
-
-.taste-card .card-description, .taste-card .card-title {
-    color: #1e3a8a;
 }
 
 /* Footer */
 .footer {
   width: 100%;
   text-align: center;
-  flex-shrink: 0; 
+  flex-shrink: 0;
   padding-bottom: 20px;
 }
+
 .choose-mode-footer {
   position: relative;
   width: 100%;
@@ -346,17 +382,19 @@ body {
   padding: 10px 0;
   background: transparent;
 }
+
 .help-link {
   padding: 0.5rem 1rem;
   border-radius: 20px;
-  background: rgba(255,255,255,0.8);
-  border: 1px solid rgba(0,0,0,0.05);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   color: #666;
   text-decoration: none;
   font-size: 0.9em;
   font-weight: 500;
 }
+
 .help-link:hover {
   color: #333;
   background: white;
@@ -375,11 +413,12 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
-  z-index: 50; 
+  z-index: 50;
   color: #ef4444;
 }
+
 .logout-btn-absolute:hover {
   transform: scale(1.05);
   background-color: #fef2f2;
