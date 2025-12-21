@@ -4,6 +4,7 @@ import logo from './assets/images/logo.png';
 import RestaurantDetail from './RestaurantDetail';
 import { useLanguage } from './Context/LanguageContext';
 import { useTheme } from './Context/ThemeContext';
+import axios from 'axios';
 
 // --- ICONS SVG (Thêm Search, Chevron, Check) ---
 const Icons = {
@@ -68,21 +69,29 @@ const HIERARCHICAL_TAGS = {
     ]
 };
 
-const PlaceCard = ({ item, onClick, onSave }) => (
-    <div className="place-card" onClick={onClick}>
-        <div className="place-image-wrapper">
-                         <img src={item.imageUrl} alt={item.name} onError={(e) => { e.target.src = 'https://placehold.co/400x300?text=No+Image'; }} />
-                         <div className="place-bookmark" onClick={(e) => { e.stopPropagation(); onSave && onSave(item); }}><Icons.Bookmark /></div>
-        </div>
-        <div className="place-info-overlay">
-            <h3 className="place-name">{item.name}</h3>
-            <div className="place-rating">
-                 {[1,2,3,4,5].map(s => <Icons.Star key={s} fill={s <= (item.rating||4.5) ? "#FFC107" : "none"} />)}
-                 <span style={{marginLeft:4, color:'white', fontWeight:'bold'}}>{item.rating || 4.5}</span>
+const PlaceCard = ({ item, onClick, onSave }) => {
+    const imageSrc = item?.imageUrl
+        || item?.thumbnail
+        || (Array.isArray(item?.places_images) && item.places_images[0])
+        || (Array.isArray(item?.menu_images) && item.menu_images[0])
+        || 'https://placehold.co/400x300?text=No+Image';
+    const rating = item?.rating || 4.5;
+    return (
+        <div className="place-card" onClick={onClick}>
+            <div className="place-image-wrapper">
+                <img src={imageSrc} alt={item?.name || 'Restaurant'} onError={(e) => { e.target.src = 'https://placehold.co/400x300?text=No+Image'; }} />
+                <div className="place-bookmark" onClick={(e) => { e.stopPropagation(); onSave && onSave(item); }}><Icons.Bookmark /></div>
+            </div>
+            <div className="place-info-overlay">
+                <h3 className="place-name">{item?.name || 'Restaurant'}</h3>
+                <div className="place-rating">
+                    {[1,2,3,4,5].map(s => <Icons.Star key={s} fill={s <= rating ? "#FFC107" : "none"} />)}
+                    <span style={{marginLeft:4, color:'white', fontWeight:'bold'}}>{rating}</span>
+                </div>
             </div>
         </div>
-    </div>
-);
+    );
+};
 
 export default function RandomModeCard({ onBack, currentUser, onLogout }) {
         const { lang, switchLanguage, t } = useLanguage();
@@ -126,22 +135,22 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
         return list;
     }, [selectedFilters]);
 
-    // Mock Data Init
+    // Init fetch
     useEffect(() => { handleShuffle(); }, []);
 
     async function handleShuffle() {
         setLoading(true);
         setRecommendations([]);
-        setTimeout(() => {
-            const mockData = [
-                { id: 1, name: "Phở Thìn Lò Đúc", imageUrl: "https://vcdn-dulich.vnecdn.net/2021/03/17/pho-thin-1-1615970222.jpg", rating: 4.8, address: "13 Lò Đúc, Hà Nội", tags: ["#LocalSpecility", "#BanhMi", "#Takeaway"] },
-                { id: 2, name: "Bún Chả Hương Liên", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Bun_Cha_Huong_Lien.jpg/1200px-Bun_Cha_Huong_Lien.jpg", rating: 4.5, address: "24 Lê Văn Hưu" },
-                { id: 3, name: "Cà phê Giảng", imageUrl: "https://cafegiang.vn/wp-content/uploads/2019/07/cafe-trung-hanoi-1.jpg", rating: 4.7, address: "39 Nguyễn Hữu Huân" },
-                { id: 4, name: "Bánh Mì Dân Tổ", imageUrl: "https://cdn.tgdd.vn/Files/2020/09/24/1293345/banh-mi-dan-to-la-gi-o-dau-ma-khien-gioi-tre-xep-hang-luc-3-gio-sang-de-mua-202201131014197368.jpg", rating: 4.2, address: "Ngã 3 Cao Thắng" },
-            ];
-            setRecommendations(mockData);
+        try {
+            const body = { tags: selectedFilters, count: 4 };
+            const res = await axios.post('http://127.0.0.1:8000/api/filter-random', body);
+            const data = Array.isArray(res.data) ? res.data : [];
+            setRecommendations(data);
+        } catch (e) {
+            console.error('Fetch random failed:', e);
+        } finally {
             setLoading(false);
-        }, 800);
+        }
     }
 
     // --- CAROUSEL NAVIGATION ---
@@ -244,7 +253,23 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
     };
 
     if (detailItem) {
-        return <RestaurantDetail item={detailItem} onBack={() => setDetailItem(null)} onShuffleAgain={() => { setDetailItem(null); handleShuffle(); }} activeTags={allSelectedTagValues} onToggleTag={handleDetailTagToggle} />;
+        // record history for logged-in user
+        if (currentUser && !currentUser.isGuest && detailItem?.id) {
+            const phone = currentUser.phone || currentUser.email || currentUser.facebook_id;
+            if (phone) {
+                axios.post(`http://127.0.0.1:8000/api/user/${phone}/history`, { restaurant_id: detailItem.id }).catch(() => {});
+            }
+        }
+        return (
+            <RestaurantDetail 
+                item={detailItem} 
+                onBack={() => setDetailItem(null)} 
+                onShuffleAgain={() => { setDetailItem(null); handleShuffle(); }} 
+                activeTags={allSelectedTagValues} 
+                onToggleTag={handleDetailTagToggle}
+                currentUser={currentUser}
+            />
+        );
     }
 
     const visibleTags = allSelectedTagsWithKey.slice(0, 3);

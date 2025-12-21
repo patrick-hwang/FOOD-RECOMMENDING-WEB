@@ -29,19 +29,42 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
   const API_URL = "http://127.0.0.1:8000/api/user";
   const userId = currentUser?.isGuest ? null : (currentUser?.phone || currentUser?.email || currentUser?.facebook_id);
 
-  // Dữ liệu mẫu (Tags)
-  const defaultTags = ["#Localspecility", "#Open24/7", "#Takeaway", "#BanhMi", "#Vietnamese", "#<100.000VND", "#Take away"];
-  const displayTags = item?.tags || defaultTags;
+  // Xử lý tags từ backend: tags là object { category: [...], ... } hoặc mảng
+  const getDisplayTags = () => {
+    if (!item?.tags) {
+      return ["#Localspecility", "#Open24/7", "#Takeaway", "#BanhMi", "#Vietnamese"];
+    }
+    const tags = item.tags;
+    if (Array.isArray(tags)) {
+      return tags.map(t => (typeof t === 'string' && !t.startsWith('#')) ? `#${t}` : t);
+    }
+    if (typeof tags === 'object') {
+      const result = [];
+      Object.values(tags).forEach(val => {
+        if (Array.isArray(val)) {
+          val.forEach(t => result.push(typeof t === 'string' && !t.startsWith('#') ? `#${t}` : t));
+        } else if (typeof val === 'string') {
+          result.push(val.startsWith('#') ? val : `#${val}`);
+        }
+      });
+      return result.length > 0 ? result : ["#Restaurant"];
+    }
+    return ["#Restaurant"];
+  };
+  
+  const displayTags = getDisplayTags();
 
   // Dữ liệu mẫu (Views - Ảnh)
-  const mockViews = [
-    "https://placehold.co/300x300?text=View+1",
-    "https://placehold.co/300x300?text=View+2",
-    "https://placehold.co/300x300?text=Food+1",
-    "https://placehold.co/300x300?text=Food+2",
-    "https://placehold.co/300x300?text=Atmosphere",
-    "https://placehold.co/300x300?text=Menu",
-  ];
+  const getViewImages = () => {
+    if (Array.isArray(item?.places_images) && item.places_images.length > 0) {
+      return item.places_images.slice(0, 6);
+    }
+    if (Array.isArray(item?.menu_images) && item.menu_images.length > 0) {
+      return item.menu_images.slice(0, 6);
+    }
+    return Array.from({length: 6}, (_, i) => `https://placehold.co/300x300?text=View+${i+1}`);
+  };
+  const mockViews = getViewImages();
 
   // Dữ liệu mẫu (Reviews)
   const mockReviews = [
@@ -57,14 +80,15 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
       try {
         const res = await axios.get(`${API_URL}/${userId}`);
         const bookmarks = res.data.bookmark_items || [];
-        const found = bookmarks.some(b => b.id === item.id);
+        // Match by MongoDB ObjectId string
+        const found = bookmarks.some(b => b.id === item.id || b._id === item.id);
         setIsSaved(found);
       } catch (e) {
         console.error("Check bookmark error:", e);
       }
     };
     checkBookmarkStatus();
-  }, [userId, item?.id]);
+  }, [userId, item?.id, API_URL]);
 
   // --- HANDLE BOOKMARK CLICK ---
   const handleBookmarkClick = async () => {
@@ -99,10 +123,16 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
             {/* Image Slider */}
             <div className="rd-image-card">
               <img 
-                src={item?.imageUrl || "https://placehold.co/600x400/png"} 
+                src={
+                  item?.imageUrl 
+                  || item?.thumbnail 
+                  || (Array.isArray(item?.places_images) && item.places_images[0])
+                  || (Array.isArray(item?.menu_images) && item.menu_images[0])
+                  || "https://placehold.co/600x400?text=Restaurant"
+                } 
                 alt="Food" 
                 className="rd-main-img"
-                onError={(e) => { e.target.src = 'https://placehold.co/600x400?text=Image'; }}
+                onError={(e) => { e.target.src = 'https://placehold.co/600x400?text=Restaurant'; }}
               />
               <div className="rd-dots-indicator">
                   <span className="dot active"></span>
@@ -122,19 +152,18 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
                 </div>
 
                 <div className="rd-rating-row">
-                    {[1,2,3,4].map(star => <DetailIcons.Star key={star} fill="#FFC107" />)}
-                    <DetailIcons.Star fill="#E0E0E0" />
-                    <span className="rd-rating-num">{item?.rating || 4.0}</span>
+                    {[1,2,3,4,5].map(star => <DetailIcons.Star key={star} fill={star <= Math.min(5, (item?.rating || 4)) ? "#FFC107" : "none"} />)}
+                    <span className="rd-rating-num">{(item?.rating || 4).toFixed(1)}</span>
                 </div>
 
                 <div className="rd-address-row">
                     <div className="rd-icon-col"><DetailIcons.Pin /></div>
-                    <span className="rd-text-info">{t('address')}: {item?.address || "197A Nguyễn Trãi, District 1, HCMC"}</span>
+                    <span className="rd-text-info">{t('address')}: {item?.address || item?.location || "Địa chỉ không xác định"}</span>
                 </div>
                 
                 <div className="rd-address-row">
                     <div className="rd-icon-col"><DetailIcons.Clock /></div>
-                    <span className="rd-text-info">{t('open')}: {item?.openTime || "07:00 AM - 11:00 PM"}</span>
+                    <span className="rd-text-info">{t('open')}: {item?.openTime || item?.operating_hours || "Giờ mở cửa không xác định"}</span>
                 </div>
             </div>
 

@@ -158,7 +158,10 @@ function App() {
                         onRandom={() => navigate('/random')} 
                         onTaste={() => navigate('/taste')} 
                       />
-                      <BottomNavigation />
+                      <BottomNavigation 
+                        activeTab="home" 
+                        onTabChange={(tab) => navigate(tab === 'profile' ? '/profile' : '/home')} 
+                      />
                     </>
                   } 
                 />
@@ -172,7 +175,10 @@ function App() {
                         onBack={() => navigate('/home')} 
                         currentUser={currentUser}
                       />
-                      <BottomNavigation />
+                      <BottomNavigation 
+                        activeTab="home" 
+                        onTabChange={(tab) => navigate(tab === 'profile' ? '/profile' : '/home')} 
+                      />
                     </>
                   } 
                 />
@@ -186,7 +192,10 @@ function App() {
                         onBack={() => navigate('/home')}
                         currentUser={currentUser}
                       />
-                      <BottomNavigation />
+                      <BottomNavigation 
+                        activeTab="home" 
+                        onTabChange={(tab) => navigate(tab === 'profile' ? '/profile' : '/home')} 
+                      />
                     </>
                   } 
                 />
@@ -200,7 +209,10 @@ function App() {
                         currentUser={currentUser} 
                         onLogout={handleLogout}
                       />
-                      <BottomNavigation />
+                      <BottomNavigation 
+                        activeTab="profile" 
+                        onTabChange={(tab) => navigate(tab === 'profile' ? '/profile' : '/home')} 
+                      />
                     </>
                   } 
                 />
