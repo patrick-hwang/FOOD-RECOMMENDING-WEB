@@ -4,21 +4,25 @@
 /* CONTAINER CHÍNH */
 .rd-screen {
     display: flex;
-    flex-direction: column; /* Xếp dọc: Trên -> Giữa -> Dưới */
-    height: 100vh;          /* Chiều cao bằng 100% màn hình */
+    flex-direction: column;
+    height: 100vh;
     width: 100%;
-    background-color: white;
-    overflow: hidden;       /* Cấm body cuộn, chỉ cuộn phần con */
+    background-color: var(--bg-primary, white);
+    overflow: hidden;
     position: relative;
     font-family: 'Montserrat', sans-serif;
+    z-index: 20000 !important;
+    animation: slideInRight 0.3s ease-out;
 }
+
+@keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
 /* --- HEADER --- */
 .rd-fixed-top {
-    flex-shrink: 0;        /* Giữ nguyên kích thước, không bị ép nhỏ */
-    background: white;
-    z-index: 10;           /* Nổi lên trên */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Bóng đổ nhẹ ngăn cách */
+    flex-shrink: 0;
+    background: var(--bg-primary, white);
+    z-index: 10;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     padding-bottom: 5px;
 }
 
@@ -27,7 +31,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 10px 15px;
-    background: white;
+    background: var(--bg-primary, white);
 }
 .rd-header-left { cursor: pointer; display: flex; align-items: center; }
 .rd-header-right { display: flex; align-items: center; }
@@ -38,15 +42,13 @@
 .rd-header-text {
     font-weight: 850;
     font-size: 25px;
-    color: #000;
+    color: var(--text-primary, #000);
 }
 
 .rd-custom-logo {
-  width: 30px;        /* Chỉnh độ rộng mong muốn */
-  height: 30px;       /* Chỉnh chiều cao mong muốn */
-  object-fit: contain; /* Giữ tỷ lệ ảnh không bị méo */
-  /* Nếu muốn bo tròn thì thêm dòng dưới */
-  /* border-radius: 50%; */ 
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
 }
 
 /* --- TABS --- */
@@ -58,7 +60,7 @@
     padding: 0 10px;
 }
 .rd-tab {
-    background: white;
+    background: var(--bg-card, white);
     border: 1.5px solid #00AA55;
     color: #00AA55;
     border-radius: 20px;
@@ -66,22 +68,19 @@
     font-size: 13px;
     font-weight: 700;
     cursor: pointer;
+    transition: all 0.2s;
 }
 .rd-tab.active {
     background: #00AA55;
     color: white;
 }
 
-/* --- SCROLL AREA (Chứa ảnh, info, tags) --- */
+/* --- SCROLL AREA --- */
 .rd-scroll-view {
-    flex: 1;               /* Chiếm toàn bộ khoảng trống còn lại */
-    overflow-y: auto;      /* Cho phép cuộn dọc nội dung bên trong */
-    
-    /* Padding để nội dung không bị dính sát mép */
+    flex: 1;
+    overflow-y: auto;
     padding-top: 10px;
     padding-bottom: 20px;
-    
-    /* Ẩn thanh cuộn (cho đẹp) */
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
@@ -90,12 +89,11 @@
     display: none;
 }
 
-
 /* --- IMAGE CARD --- */
 .rd-image-card {
     width: 90%;
     height: 200px;
-    background: #EFEFEF;
+    background: var(--bg-secondary, #EFEFEF);
     margin: 5px auto 15px auto;
     border-radius: 12px;
     overflow: hidden;
@@ -126,9 +124,10 @@
 }
 .rd-item-name {
     margin: 0; font-size: 20px; font-weight: 800; flex: 1;
+    color: var(--text-primary, #000);
 }
 .rd-bookmark-icon {
-    margin-left: 10px; margin-top: -5px;
+    margin-left: 10px; margin-top: -5px; cursor: pointer;
 }
 
 .rd-rating-row {
@@ -136,7 +135,8 @@
     margin: 5px 0 10px 0;
 }
 .rd-rating-num {
-    font-weight: 600; font-size: 14px; margin-left: 5px; color: #555;
+    font-weight: 600; font-size: 14px; margin-left: 5px;
+    color: var(--text-secondary, #555);
 }
 
 .rd-address-row {
@@ -147,13 +147,15 @@
     width: 20px; display: flex; justify-content: center; margin-top: 2px;
 }
 .rd-text-info {
-    font-size: 14px; font-weight: 500; color: #333; line-height: 1.4;
+    font-size: 14px; font-weight: 500;
+    color: var(--text-secondary, #333);
+    line-height: 1.4;
 }
 
-/* --- TAGS WRAPPER (Box xám) --- */
+/* --- TAGS WRAPPER --- */
 .rd-tags-wrapper {
     margin: 20px 20px;
-    background: #D9D9D9;
+    background: var(--bg-secondary, #D9D9D9);
     border-radius: 16px;
     overflow: hidden;
 }
@@ -171,12 +173,13 @@
 .rd-tags-note {
     text-align: center; font-style: italic; font-size: 13px;
     margin: 0 0 12px 0;
+    color: var(--text-secondary, #666);
 }
 .rd-tags-list {
     display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
 }
 .rd-tag-btn {
-    background: white;
+    background: var(--bg-card, white);
     border: 1.5px solid #00AA55;
     color: #00AA55;
     padding: 6px 14px;
@@ -191,18 +194,14 @@
 
 /* --- FOOTER FIXED --- */
 .rd-footer-bar {
-    flex-shrink: 0;        /* Giữ nguyên kích thước */
-    background: white;
+    flex-shrink: 0;
+    background: var(--bg-card, white);
     padding: 15px 25px 25px 25px;
-    
     display: flex;
     align-items: center;
     justify-content: space-between;
-    
     z-index: 10;
-    box-shadow: 0 -4px 15px rgba(0,0,0,0.08); /* Bóng đổ ngược lên */
-    
-    /* Bo góc trên giống RandomModeCard */
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.08);
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
 }
@@ -219,6 +218,7 @@
     cursor: pointer;
     margin-right: 15px;
     box-shadow: 0 4px 8px rgba(0,170,85,0.3);
+    transition: transform 0.1s;
 }
 .rd-btn-direction:active { transform: scale(0.98); }
 
@@ -226,7 +226,8 @@
     display: flex; align-items: center; gap: 8px; cursor: pointer;
 }
 .rd-shuffle-label {
-    font-weight: 800; font-size: 15px; color: black;
+    font-weight: 800; font-size: 15px;
+    color: var(--text-primary, black);
 }
 .rd-spin-icon {
     display: flex; align-items: center;
@@ -235,31 +236,27 @@
     width: 32px; height: 32px;
 }
 
-/* ... GIỮ NGUYÊN CSS CŨ TỪ PHẦN TRƯỚC ... */
-
-/* --- THÊM MỚI CSS CHO PHẦN VIEWS & REVIEWS --- */
-
-/* Tiêu đề chung cho section */
+/* --- SECTION TITLE --- */
 .rd-section-title {
   font-size: 18px;
   font-weight: 800;
   margin: 15px 20px 10px 20px;
-  color: #333;
+  color: var(--text-primary, #333);
 }
 
-/* === STYLE CHO TAB: VIEW === */
+/* === TAB: VIEW === */
 .rd-view-container {
   padding-bottom: 20px;
 }
 .rd-view-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 Cột */
+  grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   padding: 0 20px;
 }
 .rd-view-item {
   width: 100%;
-  aspect-ratio: 1 / 1; /* Hình vuông */
+  aspect-ratio: 1 / 1;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -274,7 +271,7 @@
   transform: scale(1.05);
 }
 
-/* === STYLE CHO TAB: REVIEW === *//* Container chính của tab Review */
+/* === TAB: REVIEW === */
 .rd-review-container {
   padding: 10px 20px 20px 20px;
 }
@@ -282,68 +279,66 @@
 .rd-review-list {
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Khoảng cách giữa các card */
+  gap: 15px;
 }
 
-/* CARD REVIEW MỚI (Viền xanh) */
 .rd-review-card-green {
-  border: 1.5px solid #00AA55; /* Viền xanh lá đậm */
-  border-radius: 16px;         /* Bo góc tròn trịa */
+  border: 1.5px solid #00AA55;
+  border-radius: 16px;
   padding: 15px;
-  background: white;
-  
-  display: flex; /* Xếp ngang Avatar và Nội dung */
-  gap: 15px;     /* Khoảng cách giữa Avatar và Cột bên phải */
-  align-items: flex-start; /* Căn hàng bắt đầu từ trên cùng */
+  background: var(--bg-card, white);
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
 }
 
-/* Cột Trái: Ảnh Avatar */
 .rd-review-left {
-  flex-shrink: 0; /* Không cho ảnh bị bóp méo */
+  flex-shrink: 0;
 }
 
 .rd-review-avatar-img {
   width: 50px;
   height: 50px;
-  border-radius: 50%; /* Hình tròn */
+  border-radius: 50%;
   object-fit: cover;
-  background-color: #f0f0f0; /* Màu nền nhẹ nếu ảnh lỗi */
-  border: 1px solid #eee;
+  background-color: var(--bg-secondary, #f0f0f0);
+  border: 1px solid var(--border-color, #eee);
 }
 
-/* Cột Phải: Nội dung */
 .rd-review-right {
   display: flex;
   flex-direction: column;
-  gap: 4px; /* Khoảng cách giữa các dòng Tên - Sao - Text */
+  gap: 4px;
   flex: 1;
 }
 
-/* Tên User */
 .rd-review-name {
-  font-weight: 800; /* Chữ đậm */
+  font-weight: 800;
   font-size: 18px;
-  color: #000;
+  color: var(--text-primary, #000);
   line-height: 1.2;
 }
 
-/* Hàng Sao */
 .rd-review-stars {
   display: flex;
   gap: 2px;
-  margin-bottom: 4px; /* Cách đoạn text bên dưới một chút */
+  margin-bottom: 4px;
 }
-/* Chỉnh lại size sao cho vừa mắt giống hình */
 .rd-review-stars svg {
   width: 14px;
   height: 14px;
 }
 
-/* Nội dung Comment */
 .rd-review-content {
   margin: 0;
   font-size: 14px;
   line-height: 1.4;
-  color: #333;
+  color: var(--text-secondary, #333);
   font-weight: 500;
+}
+
+/* --- FIX CHO DARK MODE --- */
+body.dark-mode .rd-header-left svg,
+body.dark-mode .rd-back-btn svg {
+    stroke: #ffffff !important;
 }

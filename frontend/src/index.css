@@ -1,68 +1,44 @@
+/* src/index.css */
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* --- MÀU CHẾ ĐỘ SÁNG (LIGHT MODE) --- */
+  --bg-primary: #fcfdfc;       /* Nền chính */
+  --bg-secondary: #f0f0f0;     /* Nền phụ (input, placeholder) */
+  --bg-card: #ffffff;          /* Nền thẻ */
+  --text-primary: #333333;     /* Chữ chính */
+  --text-secondary: #888888;   /* Chữ phụ */
+  --border-color: #eeeeee;     /* Đường viền */
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --header-text: #333333;      /* Màu chữ header (trừ header xanh) */
+  --nav-bg: #ffffff;           /* Nền thanh điều hướng */
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+/* --- MÀU CHẾ ĐỘ TỐI (DARK MODE) --- */
+body.dark-mode {
+  --bg-primary: #121212;
+  --bg-secondary: #2c2c2c;
+  --bg-card: #1e1e1e;
+  --text-primary: #e0e0e0;
+  --text-secondary: #aaaaaa;
+  --border-color: #333333;
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --header-text: #ffffff;
+  --nav-bg: #1e1e1e;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  /* Sử dụng biến màu nền và màu chữ toàn cục */
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  transition: background-color 0.3s, color 0.3s; /* Hiệu ứng chuyển màu mượt */
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
+/* Các css mặc định khác giữ nguyên */
+a { font-weight: 500; color: #646cff; text-decoration: inherit; }
+a:hover { color: #535bf2; }
+h1 { font-size: 3.2em; line-height: 1.1; }
+button { cursor: pointer; }

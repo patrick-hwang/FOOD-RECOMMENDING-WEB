@@ -1,12 +1,16 @@
-/* =========================================
-   1. BASE CONTAINER & CONFIG
-   ========================================= */
+/* --- RESET CƠ BẢN --- */
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* CONTAINER CHÍNH: NỀN BONG BÓNG XANH */
 .rm-container {
     display: flex;
     flex-direction: column;
     height: 100vh;
     width: 100vw;
-    background: #f8fcf8; /* Nền xanh rất nhạt */
+    background: var(--bg-primary, #f8fcf8); /* Nền xanh rất nhạt */
     position: relative;
     font-family: 'Montserrat', sans-serif;
     overflow: hidden;
@@ -17,17 +21,33 @@
    2. STICKY HEADER (PHẦN TRÊN CÙNG)
    ========================================= */
 .rm-sticky-header {
-    background: #f8fcf8;
+    background: var(--bg-primary, #f8fcf8);
     z-index: 50;
     flex-shrink: 0;
     padding-bottom: 5px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    box-shadow: 0 4px 10px var(--shadow-color, rgba(0,0,0,0.03));
     position: relative;
 }
 
 /* Header Top (Back btn & Logo) */
 .rm-header-top {
     padding: 15px 20px;
+
+    /* Dùng biến màu nền */
+    background-color: var(--bg-primary); 
+    
+    /* Gradient bong bóng (giữ nguyên nhưng làm mờ đi chút ở dark mode) */
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(76, 175, 80, 0.08) 0%, transparent 20%),
+        radial-gradient(circle at 90% -5%, rgba(76, 175, 80, 0.1) 0%, transparent 25%),
+        radial-gradient(circle at 85% 40%, rgba(76, 175, 80, 0.05) 0%, transparent 15%),
+        radial-gradient(circle at 0% 50%, rgba(76, 175, 80, 0.06) 0%, transparent 15%);
+    background-attachment: fixed;
+    transition: background-color 0.3s;
+}
+
+/* --- 1. LOGO BAR --- */
+.rm-brand-bar {
     display: flex;
     align-items: center;
 }
@@ -45,12 +65,13 @@
 .rm-titles h1 {
     font-size: 40px;
     font-weight: 800;
-    color: #2F3E37;
+    color: var(--text-primary);
     margin: 0;
 }
+
 .rm-titles p {
     font-size: 14px;
-    color: #666;
+    color: var(--text-secondary, #666);
     margin: 2px 0 0 0;
 }
 
@@ -61,7 +82,7 @@
 .rm-tags-label {
     font-size: 18px;
     font-weight: 800;
-    color: #000;
+    color: var(--text-primary, #000);
     display: block;
     margin-bottom: -2px;
 }
@@ -107,7 +128,7 @@
 }
 
 .rm-more-btn {
-    background: white;
+    background: var(--bg-card, white);
     color: #00AA55;
     border: 1.5px solid #00AA55;
     padding: 7px 14px;
@@ -142,7 +163,7 @@
     border-radius: 16px;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 15px var(--shadow-color, rgba(0,0,0,0.1));
     flex-shrink: 0;
     cursor: pointer;
 }
@@ -177,7 +198,9 @@
 .place-rating { display: flex; align-items: center; gap: 2px; }
 
 .rm-empty-state {
-    text-align: center; color: #888; margin-top: 50px;
+    text-align: center; 
+    color: var(--text-secondary, #888); 
+    margin-top: 50px;
 }
 
 /* =========================================
@@ -193,9 +216,9 @@
     margin: 0 10px;
     height: 60vh; /* Cao hơn xíu để hiện nhiều tag */
     
-    background: white;
+    background: var(--bg-card, white);
     border-radius: 20px;
-    box-shadow: 0 -5px 40px rgba(0,0,0,0.15);
+    box-shadow: 0 -5px 40px var(--shadow-color, rgba(0,0,0,0.15));
     z-index: 150;
     
     display: flex; flex-direction: column;
@@ -212,23 +235,23 @@
 .rm-sel-header {
     padding: 15px 20px;
     display: flex; justify-content: space-between; align-items: center;
-    border-bottom: 1px solid #f0f0f0;
-    background: white;
+    border-bottom: 1px solid var(--border-color, #f0f0f0);
+    background: var(--bg-card, white);
 }
-.rm-sel-header h3 { margin: 0; font-size: 18px; font-weight: 800; color: #333; }
-.rm-sel-close { cursor: pointer; color: #999; padding: 5px; }
+.rm-sel-header h3 { margin: 0; font-size: 18px; font-weight: 800; color: var(--text-primary, #333); }
+.rm-sel-close { cursor: pointer; color: var(--text-secondary, #999); padding: 5px; }
 
 /* Ô Search */
 .rm-search-box {
     margin: 15px 20px 10px 20px;
     padding: 10px 15px;
-    background: #f5f5f5;
+    background: var(--bg-secondary, #f5f5f5);
     border-radius: 12px;
     display: flex; align-items: center; gap: 10px;
 }
 .rm-search-box input {
     border: none; background: transparent; outline: none;
-    width: 100%; font-size: 15px; color: #333;
+    width: 100%; font-size: 15px; color: var(--text-primary, #333);
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -243,7 +266,7 @@
 
 .rm-tag-group {
     margin-bottom: 15px;
-    border-bottom: 1px dashed #eee;
+    border-bottom: 1px dashed var(--border-color, #eee);
     padding-bottom: 15px;
 }
 .rm-tag-group:last-child { border-bottom: none; }
@@ -263,15 +286,15 @@
     display: flex; align-items: center; justify-content: center;
     cursor: pointer;
     transition: transform 0.3s;
-    color: #666;
+    color: var(--text-secondary, #666);
     border-radius: 50%;
 }
-.rm-expand-arrow:hover { background: #f0f0f0; }
+.rm-expand-arrow:hover { background: var(--bg-secondary, #f0f0f0); }
 .rm-expand-arrow.rotated { transform: rotate(180deg); }
 
 /* Button Pill Chung (Cho cả Cha và Con) */
 .rm-pill-btn {
-    background: white;
+    background: var(--bg-card, white);
     border: 1.5px solid #00AA55;
     color: #00AA55;
     font-family: 'Montserrat', sans-serif;
@@ -326,17 +349,16 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-
 /* =========================================
    5. BOTTOM BAR & NAVIGATION (CAROUSEL)
    ========================================= */
 .rm-bottom-bar {
     position: fixed;
     bottom: 0; left: 0; right: 0;
-    background: white;
+    background: var(--nav-bg, white);
     border-top-left-radius: 25px;
     border-top-right-radius: 25px;
-    box-shadow: 0 -5px 30px rgba(0,0,0,0.1);
+    box-shadow: 0 -5px 30px var(--shadow-color, rgba(0,0,0,0.1));
     padding: 15px 0 70px 0;
     z-index: 100;
     display: flex; flex-direction: column; align-items: center;
@@ -388,12 +410,14 @@
     width: 50px; height: 50px;
     border-radius: 50%;
     display: flex; justify-content: center; align-items: center;
-    background: white;
+    background: var(--bg-card, white);
     transition: all 0.3s;
 }
 .rm-carousel-item span {
     font-size: 11px; margin-top: 5px;
-    white-space: nowrap; transition: all 0.3s;
+    white-space: nowrap; 
+    transition: all 0.3s;
+    color: var(--text-secondary, #888);
 }
 
 /* -- Positions -- */
@@ -421,15 +445,15 @@
 
 .rm-carousel-item.pos-left-1 .rm-icon-circle,
 .rm-carousel-item.pos-right-1 .rm-icon-circle {
-    border: 2px solid #ddd;
+    border: 2px solid var(--border-color, #ddd);
 }
 .rm-carousel-item.pos-left-1 svg,
 .rm-carousel-item.pos-right-1 svg {
-    stroke: #aaa; stroke-width: 2px;
+    stroke: var(--text-secondary, #aaa); stroke-width: 2px;
 }
 .rm-carousel-item.pos-left-1 span,
 .rm-carousel-item.pos-right-1 span {
-    color: #aaa; font-weight: 600;
+    color: var(--text-secondary, #aaa); font-weight: 600;
 }
 
 /* Left 2 / Right 2 */
@@ -438,12 +462,17 @@
 
 .rm-carousel-item.pos-left-2 .rm-icon-circle,
 .rm-carousel-item.pos-right-2 .rm-icon-circle {
-    border: 2px solid #ddd; background: #fdfdfd;
+    border: 2px solid var(--border-color, #ddd); 
+    background: var(--bg-secondary, #fdfdfd);
 }
 .rm-carousel-item.pos-left-2 svg,
-.rm-carousel-item.pos-right-2 svg { stroke: #bbb; }
+.rm-carousel-item.pos-right-2 svg { 
+    stroke: var(--text-secondary, #bbb); 
+}
 .rm-carousel-item.pos-left-2 span,
-.rm-carousel-item.pos-right-2 span { color: #bbb; }
+.rm-carousel-item.pos-right-2 span { 
+    color: var(--text-secondary, #bbb); 
+}
 
 /* Hidden */
 .rm-carousel-item.pos-hidden {
@@ -475,15 +504,45 @@
     display: flex; align-items: flex-end;
 }
 .rm-modal-sheet {
-    background: white; width: 100%;
+    background: var(--bg-card, white); width: 100%;
     border-top-left-radius: 20px; border-top-right-radius: 20px;
     padding: 20px;
     animation: slideUpSheet 0.3s ease-out;
 }
 @keyframes slideUpSheet { from { transform: translateY(100%); } to { transform: translateY(0); }}
 
-.rm-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.rm-modal-body { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; max-height: 40vh; overflow-y: auto; }
+.rm-modal-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 20px; 
+}
+.rm-modal-body { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 10px; 
+    margin-bottom: 20px; 
+    max-height: 40vh; 
+    overflow-y: auto; 
+}
 .rm-modal-footer { text-align: center; }
-.rm-clear-btn { background: none; border: none; color: #F44336; font-weight: 700; font-size: 16px; cursor: pointer; }
+.rm-clear-btn { 
+    background: none; 
+    border: none; 
+    color: #F44336; 
+    font-weight: 700; 
+    font-size: 16px; 
+    cursor: pointer; 
+}
 .rm-tag-pill.large { font-size: 14px; padding: 8px 14px; }
+
+/* --- FIX CHO DARK MODE --- */
+/* Khi ở chế độ tối, các icon SVG sẽ chuyển sang màu trắng */
+body.dark-mode .rm-back-btn svg,
+body.dark-mode .rm-nav-arrow svg {
+    stroke: #ffffff !important;
+}
+/* Icon trong carousel item khi active giữ màu xanh */
+body.dark-mode .rm-carousel-item.pos-center svg {
+    stroke: #00AA55 !important;
+}

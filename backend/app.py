@@ -2,14 +2,13 @@ import uvicorn
 import certifi
 import time
 import requests 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request, Body
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 from bson import ObjectId
 from pydantic import BaseModel
 from typing import Any, Dict, List, Optional
-# from passlib.context import CryptContext
 import bcrypt
 import json
 import random
@@ -20,34 +19,21 @@ import os
 # 1. CẤU HÌNH (CONFIGURATION)
 # ==============================================================================
 
-# Connection String MongoDB của bạn
 CONNECTION_STRING = "mongodb+srv://lequocvi2412_db_user:123456789#@cluster0.ujbl7hs.mongodb.net/?appName=Cluster0"
 DATABASE_NAME = "du_lich_am_thuc"
 COLLECTION_NAME = "restaurants"
 
-# Cấu hình mã hóa mật khẩu
-# pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-# def verify_password(plain_password, hashed_password):
-#     return pwd_context.verify(plain_password, hashed_password)
-
-# def get_password_hash(password):
-#     return pwd_context.hash(password)
-
 def get_password_hash(password):
-    # Convert string to bytes, generate salt, and hash
     pwd_bytes = password.encode('utf-8')
     salt = bcrypt.gensalt()
     return bcrypt.hashpw(pwd_bytes, salt).decode('utf-8')
 
 def verify_password(plain_password, hashed_password):
-    # Convert both to bytes and check
     plain_bytes = plain_password.encode('utf-8')
     hashed_bytes = hashed_password.encode('utf-8')
     return bcrypt.checkpw(plain_bytes, hashed_bytes)
 
 def convert_document(document):
-    """Chuyển đổi ObjectId thành string để trả về JSON"""
     if document and "_id" in document:
         document["id"] = str(document["_id"])
         del document["_id"]
@@ -76,7 +62,6 @@ def startup_db_client():
     except Exception as e:
         print(f"❌ LỖI KẾT NỐI MONGODB: {e}")
 
-# Cấu hình CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -112,28 +97,39 @@ class FacebookAuthRequest(BaseModel):
     name: Optional[str] = None
     picture: Optional[str] = None
 
-class NewReview(BaseModel):
-    comment: str
-
 class FilterRandomRequest(BaseModel):
     tags: Dict[str, Any] | None = None
     count: int = 3
     geo: Dict[str, Any] | None = None
 
+class UpdateProfileRequest(BaseModel):
+    username: Optional[str] = None
+    email: Optional[str] = None
+    age: Optional[str] = None
+    gender: Optional[str] = None
+    avatar: Optional[str] = None
+
+class HistoryRequest(BaseModel):
+    restaurant_id: str
+
+class BookmarkRequest(BaseModel):
+    restaurant_id: str
+
+class NewReview(BaseModel):
+    comment: str
+
 class SpecialityVNUpdate(BaseModel):
-    ids: List[str] | None = None
-    names_contains: List[str] | None = None
+    ids: Optional[List[str]] = None
+    names_contains: Optional[List[str]] = None
     value: bool = True
 
 # ==============================================================================
-# 4. API ENDPOINTS - AUTHENTICATION (Đăng nhập/Đăng ký)
+# 4. API ENDPOINTS
 # ==============================================================================
 
 @app.post("/api/auth/register")
 async def register(user: UserSignup):
-    if collection_users is None:
-        raise HTTPException (status_code=503, detail = "Database chưa kết nối")
-    
+    if collection_users is None: raise HTTPException (status_code=503)
     if collection_users.find_one({"phone": user.phone}):
         raise HTTPException(status_code=400, detail="Số điện thoại đã được đăng ký")
     
@@ -142,114 +138,149 @@ async def register(user: UserSignup):
         "phone": user.phone,
         "password": get_password_hash(user.password),
         "created_at": time.time(),
-        "login_type": "local"
+        "login_type": "local",
+        "avatar": "", 
+        "history": [],
+        "bookmarks": []
     }
     collection_users.insert_one(new_user)
     return {"message": "Đăng ký thành công", "user": {"username": user.username}}
 
+@app.post("/api/auth/login")
+async def login(user: UserLogin):
+    if collection_users is None: raise HTTPException(status_code=503)
+    found_user = collection_users.find_one({"phone": user.phone})
+    if not found_user: raise HTTPException(status_code=400, detail="SĐT chưa đăng ký")
+    if "password" not in found_user or not verify_password(user.password, found_user["password"]):
+        raise HTTPException(status_code=400, detail="Sai mật khẩu")
+    return {"message": "Đăng nhập thành công", "user": convert_document(found_user)}
+
 @app.post("/api/auth/google")
 async def google_login(payload: GoogleAuthRequest):
-    """
-    Sử dụng access_token từ Frontend để gọi Google API lấy thông tin User
-    """
-    if collection_users is None:
-        raise HTTPException (status_code=503, detail = "Database chưa kết nối")
-    
+    if collection_users is None: raise HTTPException(status_code=503)
     try:
-        # Gọi API Google để lấy thông tin user từ token
         response = requests.get(f"https://www.googleapis.com/oauth2/v3/userinfo?access_token={payload.token}")
-        
-        if response.status_code != 200:
-            raise HTTPException(status_code=401, detail="Token Google không hợp lệ hoặc đã hết hạn")
+        if response.status_code != 200: raise HTTPException(status_code=401)
         
         user_info = response.json()
-        
         email = user_info.get("email")
-        name = user_info.get("name")
+        # Lấy tên từ Google, nếu không có thì lấy phần đầu email
+        name = user_info.get("name") or email.split("@")[0]
         picture = user_info.get("picture")
-        google_id = user_info.get("sub")
         
         existing_user = collection_users.find_one({"email": email})
         
         if not existing_user:
             new_user = {
-                "google_id": google_id,
-                "email": email,
-                "username": name,
-                "avatar": picture,
-                "created_at": time.time(),
-                "login_type": "google"
+                "email": email, 
+                "username": name, # Lưu vào field username
+                "avatar": picture, 
+                "phone": email,
+                "created_at": time.time(), 
+                "login_type": "google", 
+                "history": [], 
+                "bookmarks": []
             }
             collection_users.insert_one(new_user)
-            return {"message": "Đăng ký Google thành công", "user": {"name": name, "avatar": picture}}
+            return {"message": "Google Login", "user": convert_document(new_user)}
         else:
-            return {"message": "Đăng nhập Google thành công", "user": {"name": existing_user.get("username"), "avatar": existing_user.get("avatar")}}
-        
+            return {"message": "Google Login", "user": convert_document(existing_user)}
     except Exception as e:
-        print(f"Google Login Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
-@app.post("/api/auth/login")
-async def login(user: UserLogin):
-    if collection_users is None:
-         raise HTTPException(status_code=503, detail="Lỗi kết nối DB")
-
-    found_user = collection_users.find_one({"phone": user.phone})
-
-    if not found_user:
-        raise HTTPException(status_code=400, detail="Số điện thoại chưa đăng ký")
-
-    if "password" not in found_user or not verify_password(user.password, found_user["password"]):
-        raise HTTPException(status_code=400, detail="Sai mật khẩu")
-    
-    return {"message": "Đăng nhập thành công", "user": {"name": found_user.get("username")}}
 
 @app.post("/api/auth/facebook")
 async def facebook_login(payload: FacebookAuthRequest):
-    if collection_users is None:
-         raise HTTPException(status_code=503, detail="Lỗi kết nối DB")
-    
+    if collection_users is None: raise HTTPException(status_code=503)
     existing_user = collection_users.find_one({"facebook_id": payload.userID})
-
+    user_key = payload.email if payload.email else payload.userID
+    
     if not existing_user:
         new_user = {
-            "facebook_id": payload.userID,
-            "username": payload.name,
+            "facebook_id": payload.userID, 
+            "username": payload.name, 
             "email": payload.email, 
-            "avatar": payload.picture,
+            "avatar": payload.picture, 
+            "phone": user_key, 
             "created_at": time.time(),
-            "login_type": "facebook"
+            "login_type": "facebook", 
+            "history": [], 
+            "bookmarks": []
         }
         collection_users.insert_one(new_user)
-        return {"message": "Đăng ký FB thành công", "user": {"name": payload.name, "avatar": payload.picture}}
+        return {"message": "FB Login", "user": convert_document(new_user)}
     else:
-        return {"message": "Đăng nhập FB thành công", "user": {"name": existing_user.get("username"), "avatar": existing_user.get("avatar")}}
+        return {"message": "FB Login", "user": convert_document(existing_user)}
 
 @app.post("/api/auth/reset-password")
 async def reset_password(payload: UserResetPassword):
-    if collection_users is None:
-         raise HTTPException(status_code=503, detail="Lỗi kết nối DB")
-    
+    if collection_users is None: raise HTTPException(status_code=503)
     user = collection_users.find_one({"phone": payload.phone})
-    if not user:
-        raise HTTPException(status_code=404, detail="Số điện thoại chưa đăng ký")
-    
+    if not user: raise HTTPException(status_code=404, detail="SĐT chưa đăng ký")
     hashed_password = get_password_hash(payload.new_password)
-    
-    collection_users.update_one(
-        {"phone": payload.phone},
-        {"$set": {"password": hashed_password}}
-    )
+    collection_users.update_one({"phone": payload.phone}, {"$set": {"password": hashed_password}})
     return {"message": "Đặt lại mật khẩu thành công"}
 
-# ==============================================================================
-# 5. API ENDPOINTS - RESTAURANT & FILTER (Chức năng chính)
-# ==============================================================================
+# --- USER FEATURES ---
+
+@app.get("/api/user/{phone}")
+async def get_user_profile(phone: str):
+    if collection_users is None: raise HTTPException(status_code=503)
+    user = collection_users.find_one({"phone": phone})
+    if not user: raise HTTPException(status_code=404, detail="User not found")
+    
+    history_ids = [ObjectId(hid) for hid in user.get("history", []) if ObjectId.is_valid(hid)]
+    history_docs = list(collection_quan_an.find({"_id": {"$in": history_ids}}))
+    
+    bookmark_ids = [ObjectId(bid) for bid in user.get("bookmarks", []) if ObjectId.is_valid(bid)]
+    bookmark_docs = list(collection_quan_an.find({"_id": {"$in": bookmark_ids}}))
+
+    user_data = convert_document(user)
+    user_data["history_items"] = [convert_document(d) for d in history_docs]
+    user_data["bookmark_items"] = [convert_document(d) for d in bookmark_docs]
+    return user_data
+
+@app.put("/api/user/{phone}/update")
+async def update_user_profile(phone: str, payload: UpdateProfileRequest):
+    if collection_users is None: raise HTTPException(status_code=503)
+    update_data = {k: v for k, v in payload.dict().items() if v is not None}
+    if "username" in update_data and not update_data["username"]: del update_data["username"]
+    if not update_data: return {"message": "No data"}
+    collection_users.update_one({"phone": phone}, {"$set": update_data})
+    return {"message": "Update success"}
+
+@app.post("/api/user/{phone}/history")
+async def add_history(phone: str, payload: HistoryRequest):
+    if collection_users is None: raise HTTPException(status_code=503)
+    collection_users.update_one({"phone": phone}, {"$addToSet": {"history": payload.restaurant_id}})
+    return {"message": "Added history"}
+
+@app.delete("/api/user/{phone}/history")
+async def delete_history(phone: str, restaurant_id: Optional[str] = None):
+    if collection_users is None: raise HTTPException(status_code=503)
+    if restaurant_id:
+         collection_users.update_one({"phone": phone}, {"$pull": {"history": restaurant_id}})
+         return {"message": "Removed item from history"}
+    else:
+         collection_users.update_one({"phone": phone}, {"$set": {"history": []}})
+         return {"message": "Cleared all history"}
+
+@app.post("/api/user/{phone}/bookmark")
+async def toggle_bookmark(phone: str, payload: BookmarkRequest):
+    if collection_users is None: raise HTTPException(status_code=503)
+    user = collection_users.find_one({"phone": phone})
+    if not user: raise HTTPException(status_code=404)
+    
+    bookmarks = user.get("bookmarks", [])
+    if payload.restaurant_id in bookmarks:
+        collection_users.update_one({"phone": phone}, {"$pull": {"bookmarks": payload.restaurant_id}})
+        return {"status": "removed"}
+    else:
+        collection_users.update_one({"phone": phone}, {"$addToSet": {"bookmarks": payload.restaurant_id}})
+        return {"status": "added"}
 
 @app.get("/api/restaurant/{restaurant_id}")
 async def get_restaurant_details(restaurant_id: str):
-    if collection_quan_an is None:
-        raise HTTPException(status_code=503, detail="Lỗi server DB")
+    if collection_quan_an is None: raise HTTPException(status_code=503)
     try:
         obj_id = ObjectId(restaurant_id)
         restaurant = collection_quan_an.find_one({"_id": obj_id})
@@ -480,47 +511,46 @@ def get_restaurant_tags(restaurant):
 def filter_restaurants_algo(all_places, yes_tags, no_tags):
     """
     Implementation of the specific filtering logic requested.
+    Fixed: Only require categories where user has selected YES tags.
     """
     yes_set = set(yes_tags)
     no_set = set(no_tags)
     result_quan = []
 
+    # Build a map of which categories have user selections
+    categories_with_yes = {}
+    for idx, criterion in enumerate(DETERMINING_CRITERIA):
+        relevant_yes_tags = [t for t in criterion if t in yes_set]
+        if relevant_yes_tags:
+            categories_with_yes[idx] = relevant_yes_tags
+
     for quan_an in all_places:
         place_tags = get_restaurant_tags(quan_an)
         select_this = True
         
-        for criterion in DETERMINING_CRITERIA:
+        # Only check categories where user has made selections
+        for idx, criterion in enumerate(DETERMINING_CRITERIA):
             criterion_set = set(criterion)
             selected_tags = []
-
-            # Check if there are any YES tags relevant to this specific criterion
-            # This corresponds to "if yes_tags.size() > 0" in the context of the criterion
             relevant_yes_tags = [t for t in criterion if t in yes_set]
 
             # --- YES LOGIC ---
             if len(relevant_yes_tags) > 0:
                 # User has preferences in this category, enforce them strict
-                for tag in criterion:
-                    if tag in yes_set:
-                        if tag in place_tags:
-                            selected_tags.append(tag)
-                        else:
-                            # User wanted this tag, but place doesn't have it -> Fail
-                            select_this = False
-            else:
-                # User has no preference in this category, keep all valid tags
-                for tag in criterion:
+                for tag in relevant_yes_tags:  # Only check YES tags user selected
                     if tag in place_tags:
                         selected_tags.append(tag)
+                    else:
+                        # User wanted this tag, but place doesn't have it -> Fail
+                        select_this = False
             
             # --- NO LOGIC ---
             # Remove tags that are in the NO set
-            # "for tag in selected_tags: if tag in no_tags: erase"
             selected_tags = [t for t in selected_tags if t not in no_set]
             
             # --- EMPTY CHECK ---
-            # "if selected_tags.empty(): select_this = False"
-            if not selected_tags:
+            # Only fail if user made a selection in this category
+            if len(relevant_yes_tags) > 0 and not selected_tags:
                 select_this = False
                 
             # Optimization: Break early if failed
@@ -673,5 +703,4 @@ async def get_results_batch(payload: QuestionModeRequest):
     }
 
 if __name__ == "__main__":
-    print("Khởi chạy API server tại http://127.0.0.1:8000")
     uvicorn.run("app:app", host="127.0.0.1", port=8000, reload=True)
