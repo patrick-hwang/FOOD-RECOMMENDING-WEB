@@ -15,7 +15,7 @@ const Icons = {
   Occasion: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="3 2 21 2 21 22 3 22"></polygon><line x1="12" y1="6" x2="12" y2="10"></line><line x1="12" y1="14" x2="12" y2="18"></line></svg>,
   Distance: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>,
   Star: ({ fill = "none" }) => (<svg width="14" height="14" viewBox="0 0 24 24" fill={fill} stroke="#FFC107" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>),
-  Bookmark: () => (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#333" strokeWidth="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>),
+    Bookmark: ({ color = "#333" }) => (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>),
   Back: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>,
   Close: () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>,
   ArrowLeft: () => <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>,
@@ -69,18 +69,19 @@ const HIERARCHICAL_TAGS = {
     ]
 };
 
-const PlaceCard = ({ item, onClick, onSave }) => {
+const PlaceCard = ({ item, onClick, onSave, isSaved }) => {
     const imageSrc = item?.imageUrl
         || item?.thumbnail
         || (Array.isArray(item?.places_images) && item.places_images[0])
         || (Array.isArray(item?.menu_images) && item.menu_images[0])
         || 'https://placehold.co/400x300?text=No+Image';
     const rating = item?.rating || 4.5;
+    const bookmarkColor = isSaved ? '#FFC107' : '#333';
     return (
         <div className="place-card" onClick={onClick}>
             <div className="place-image-wrapper">
                 <img src={imageSrc} alt={item?.name || 'Restaurant'} onError={(e) => { e.target.src = 'https://placehold.co/400x300?text=No+Image'; }} />
-                <div className="place-bookmark" onClick={(e) => { e.stopPropagation(); onSave && onSave(item); }}><Icons.Bookmark /></div>
+                <div className="place-bookmark" onClick={(e) => { e.stopPropagation(); onSave && onSave(item); }}><Icons.Bookmark color={bookmarkColor} /></div>
             </div>
             <div className="place-info-overlay">
                 <h3 className="place-name">{item?.name || 'Restaurant'}</h3>
@@ -101,6 +102,7 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
     const [detailItem, setDetailItem] = useState(null);
     const [loading, setLoading] = useState(false);
         const [savedIds, setSavedIds] = useState([]);
+    const [detailSelectedTags, setDetailSelectedTags] = useState([]);
     
     // Carousel State
     const [centerIndex, setCenterIndex] = useState(2); 
@@ -216,8 +218,24 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
 
     const handleDetailTagToggle = (tagWithHash) => {
         const rawTag = tagWithHash.replace(/^#/, '');
-        // Logic tìm category (giữ nguyên logic cũ của bạn hoặc cập nhật theo HIERARCHICAL_TAGS)
-        // ... (Giữ nguyên logic cũ cho ngắn gọn vì bạn nói phần khác đã OK)
+        setDetailSelectedTags(prev => prev.includes(rawTag)
+            ? prev.filter(t => t !== rawTag)
+            : [...prev, rawTag]
+        );
+
+        // Also sync into main filter set so Random Mode sees it
+        setSelectedFilters(prev => {
+            const key = 'main_dishes';
+            const current = prev[key] || [];
+            const exists = current.includes(rawTag);
+            const updated = exists ? current.filter(t => t !== rawTag) : [...current, rawTag];
+            if (updated.length === 0) {
+                const next = { ...prev };
+                delete next[key];
+                return next;
+            }
+            return { ...prev, [key]: updated };
+        });
     };
 
     // --- FILTER SEARCH LOGIC ---
@@ -265,7 +283,7 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
                 item={detailItem} 
                 onBack={() => setDetailItem(null)} 
                 onShuffleAgain={() => { setDetailItem(null); handleShuffle(); }} 
-                activeTags={allSelectedTagValues} 
+                activeTags={[...allSelectedTagValues, ...detailSelectedTags]} 
                 onToggleTag={handleDetailTagToggle}
                 currentUser={currentUser}
             />
@@ -284,8 +302,27 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
             if (confirmLogin && typeof onLogout === 'function') onLogout();
             return;
         }
-        const isSaved = savedIds.includes(item.id);
-        setSavedIds(prev => isSaved ? prev.filter(id => id !== item.id) : [...prev, item.id]);
+        const phone = currentUser.phone || currentUser.email || currentUser.facebook_id;
+        const restaurantId = item.id || item._id;
+        if (!phone || !restaurantId) return;
+
+        const isSaved = savedIds.includes(restaurantId);
+        setSavedIds(prev => isSaved ? prev.filter(id => id !== restaurantId) : [...prev, restaurantId]);
+
+        axios.post(`http://127.0.0.1:8000/api/user/${phone}/bookmark`, { restaurant_id: restaurantId })
+            .then((res) => {
+                // Sync state with server response
+                if (res.data?.status === 'added') {
+                    setSavedIds(prev => prev.includes(restaurantId) ? prev : [...prev, restaurantId]);
+                } else if (res.data?.status === 'removed') {
+                    setSavedIds(prev => prev.filter(id => id !== restaurantId));
+                }
+            })
+            .catch((err) => {
+                console.error('Bookmark toggle failed', err);
+                // revert local toggle on error
+                setSavedIds(prev => isSaved ? [...prev, restaurantId] : prev.filter(id => id !== restaurantId));
+            });
     };
 
     return (
@@ -323,9 +360,19 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
 
             {/* --- CARDS --- */}
             <div className="rm-cards-container">
-                {recommendations.length > 0 ? recommendations.map((item, idx) => (
-                    <PlaceCard key={idx} item={item} onClick={() => setDetailItem(item)} onSave={handleQuickSave} />
-                )) : <div className="rm-empty-state">{loading ? "Finding best matches..." : "Press 'Find my match' to start!"}</div>}
+                {recommendations.length > 0 ? recommendations.map((item, idx) => {
+                    const restaurantId = item.id || item._id;
+                    const isSaved = restaurantId ? savedIds.includes(restaurantId) : false;
+                    return (
+                        <PlaceCard 
+                            key={restaurantId || idx} 
+                            item={item} 
+                            onClick={() => setDetailItem(item)} 
+                            onSave={handleQuickSave}
+                            isSaved={isSaved}
+                        />
+                    );
+                }) : <div className="rm-empty-state">{loading ? "Finding best matches..." : "Press 'Find my match' to start!"}</div>}
             </div>
 
             {/* --- BOTTOM BAR --- */}
