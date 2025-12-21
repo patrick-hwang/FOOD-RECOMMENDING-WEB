@@ -550,6 +550,8 @@ class QuestionModeRequest(BaseModel):
     maybe_no_tags: List[str] = []  # NEW
     asked_ids: List[int] = []
 
+QUESTIONS_MAP = {q['id']: q for q in QUESTIONS_DB}
+
 # --- UPDATED ENDPOINT ---
 @app.post("/api/question-mode/next")
 async def get_next_question(payload: QuestionModeRequest):
@@ -562,6 +564,9 @@ async def get_next_question(payload: QuestionModeRequest):
 
     if not all_places:
         return {"next_question": None, "remaining_count": 0}
+
+    # [CHANGE 1] Shuffle to randomize tie-breaking order
+    random.shuffle(all_places) 
 
     # 2. Calculate Score for ALL places
     scored_places = []
@@ -581,46 +586,58 @@ async def get_next_question(payload: QuestionModeRequest):
 
     # --- LOGIC: FIXED SEQUENCE FOR Q1 & Q2 ---
     turn = len(payload.asked_ids)
-    
-    # Mapping: Turn Index -> Criteria Index
-    # Turn 0 (Question 1) -> Index 1 (Món ăn/uống)
-    # Turn 1 (Question 2) -> Index 5 (Giá tiền)
-    fixed_order_map = {0: 1, 1: 5}
+    fixed_order_map = {0: 1, 1: 5} # Turn 0->Food, Turn 1->Price
 
     if turn in fixed_order_map:
         target_idx = fixed_order_map[turn]
         candidates = [q for q in available_questions if get_question_category_index(q) == target_idx]
-        
         if candidates:
             return {
                 "remaining_count": len(all_places),
                 "next_question": random.choice(candidates)
             }
 
+    # --- [CHANGE 2] CHECK IF PRICE WAS ALREADY ASKED ---
+    # We check the history (payload.asked_ids). If a category 5 (Price) question exists,
+    # we set a flag to SKIP future price questions.
+    price_already_asked = False
+    for pid in payload.asked_ids:
+        prev_q = QUESTIONS_MAP.get(pid)
+        if prev_q and get_question_category_index(prev_q) == 5:
+            price_already_asked = True
+            break
+
     # --- LOGIC: MAX IMPACT ALGORITHM ---
     best_question = None
     max_affect = -1.0
     
     for q in available_questions:
+        q_cat_index = get_question_category_index(q)
+
+        # [CHANGE 2 implementation] Skip Price questions if we already asked one
+        if price_already_asked and q_cat_index == 5:
+            continue
+
         q_tags = get_question_tags(q)
         total_affect = 0.0
         
-        # Calculate affect: Sum(|score|) for each place in top 100 that has the tag
+        # Calculate affect: Sum(|score|) for each place in top 100
         for place in top_100_places:
             place_tags = get_restaurant_tags(place)
             for tag in q_tags:
                 if tag in place_tags:
                     total_affect += get_tag_score(tag)
         
-        if get_question_category_index(q) == 5:  # Price
-            total_affect *= 0.3  # Reduce impact for price questions
-
+        # Determine best
         if total_affect > max_affect:
             max_affect = total_affect
             best_question = q
     
-    # FALLBACK: If algorithm fails to pick (e.g. all 0 impact), pick random
+    # FALLBACK: If algorithm filtered everything out (or all 0 impact)
     if best_question is None:
+        # If we filtered out price and that's all that was left, allow them back in random
+        if not available_questions:
+             return {"next_question": None, "remaining_count": 0}
         best_question = random.choice(available_questions)
             
     return {
@@ -628,6 +645,8 @@ async def get_next_question(payload: QuestionModeRequest):
         "next_question": best_question
     }
 
+
+# --- UPDATED: get_results_batch ---
 @app.post("/api/question-mode/results")
 async def get_results_batch(payload: QuestionModeRequest):
     if collection_quan_an is None:
@@ -638,29 +657,41 @@ async def get_results_batch(payload: QuestionModeRequest):
     if not all_places_simple:
         return {"results": [], "remaining_count": 0}
 
+    # [CHANGE 1] Randomize initial order before scoring
+    random.shuffle(all_places_simple)
+
     # Calculate Score
     scored_places = []
     for place in all_places_simple:
         s = calculate_place_score(place, payload)
         scored_places.append((place, s))
         
-    # Sort Descending
+    # Sort Descending by Score
     scored_places.sort(key=lambda x: x[1], reverse=True)
     
-    # Take Top 4
-    top_4_simple = [x[0] for x in scored_places[:4]]
-    top_ids = [d["_id"] for d in top_4_simple]
+    # [CHANGE 3] Take Top 10, then Randomly select 4
+    top_10_candidates = [x[0] for x in scored_places[:10]]
+    
+    # Pick 4 random from the top 10 (or fewer if less than 10 exist)
+    sample_size = min(len(top_10_candidates), 4)
+    final_selection = random.sample(top_10_candidates, sample_size)
+    
+    top_ids = [d["_id"] for d in final_selection]
 
+    # Fetch full details for the selected IDs
     full_docs_map = {d["_id"]: d for d in collection_quan_an.find({"_id": {"$in": top_ids}})}
     
     results = []
-    for simple_doc in top_4_simple:
+    for simple_doc in final_selection:
         if simple_doc["_id"] in full_docs_map:
             d = convert_document(full_docs_map[simple_doc["_id"]])
+            
+            # Handle Thumbnail Logic
             if "thumbnail" not in d and "places_images" in d and d["places_images"]:
                 d["thumbnail"] = d["places_images"][0]
             elif "thumbnail" not in d:
                 d["thumbnail"] = "https://placehold.co/150x150"
+            
             results.append(d)
 
     return {

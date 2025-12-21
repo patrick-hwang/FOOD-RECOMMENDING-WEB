@@ -1,21 +1,6 @@
 [
   {
     "id": 1,
-    "question": "Bạn đang muốn dùng một món lạnh như băng phải không?",
-    "yes": {
-      "yes_tag": [
-        "lạnh như băng"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "lạnh như băng"
-      ]
-    },
-    "priority": 0
-  },
-  {
-    "id": 2,
     "question": "Bạn đang muốn dùng một món lạnh phải không?",
     "yes": {
       "yes_tag": [
@@ -42,7 +27,7 @@
       ]
     },
     "priority": 0,
-    "id": 3
+    "id": 2
   },
   {
     "question": "Bạn đang muốn dùng một món nguội phải không?",
@@ -57,7 +42,7 @@
       ]
     },
     "priority": 0,
-    "id": 4
+    "id": 3
   },
   {
     "question": "Bạn đang muốn dùng một món ấm phải không?",
@@ -72,7 +57,7 @@
       ]
     },
     "priority": 0,
-    "id": 5
+    "id": 4
   },
   {
     "question": "Bạn đang muốn dùng một món nóng phải không?",
@@ -87,7 +72,7 @@
       ]
     },
     "priority": 0,
-    "id": 6
+    "id": 5
   },
   {
     "question": "Bạn đang muốn dùng một món sôi/rất nóng phải không?",
@@ -102,7 +87,7 @@
       ]
     },
     "priority": 0,
-    "id": 7
+    "id": 6
   },
   {
     "question": "Bạn có muốn dùng đồ có nước cốt dừa không?",
@@ -117,7 +102,7 @@
       ]
     },
     "priority": 0,
-    "id": 8
+    "id": 7
   },
   {
     "question": "Bạn có muốn dùng đồ có sữa không?",
@@ -132,7 +117,7 @@
       ]
     },
     "priority": 0,
-    "id": 9
+    "id": 8
   },
   {
     "question": "Bạn có muốn dùng đồ có trứng gà không?",
@@ -147,7 +132,7 @@
       ]
     },
     "priority": 0,
-    "id": 10
+    "id": 9
   },
   {
     "question": "Bạn có muốn dùng đồ có trứng cút không?",
@@ -162,112 +147,7 @@
       ]
     },
     "priority": 0,
-    "id": 11
-  },
-  {
-    "question": "Bạn có muốn dùng đồ có xoài không?",
-    "yes": {
-      "yes_tag": [
-        "xoài"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "xoài"
-      ]
-    },
-    "priority": 0,
-    "id": 12
-  },
-  {
-    "question": "Bạn có muốn dùng đồ có cóc không?",
-    "yes": {
-      "yes_tag": [
-        "cóc"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "cóc"
-      ]
-    },
-    "priority": 0,
-    "id": 13
-  },
-  {
-    "question": "Bạn có muốn dùng đồ có bơ không?",
-    "yes": {
-      "yes_tag": [
-        "bơ"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "bơ"
-      ]
-    },
-    "priority": 0,
-    "id": 14
-  },
-  {
-    "question": "Bạn có muốn dùng đồ có dâu không?",
-    "yes": {
-      "yes_tag": [
-        "dâu"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "dâu"
-      ]
-    },
-    "priority": 0,
-    "id": 15
-  },
-  {
-    "question": "Bạn có muốn dùng đồ có táo không?",
-    "yes": {
-      "yes_tag": [
-        "táo"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "táo"
-      ]
-    },
-    "priority": 0,
-    "id": 16
-  },
-  {
-    "question": "Bạn có muốn dùng đồ có mít không?",
-    "yes": {
-      "yes_tag": [
-        "mít"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "mít"
-      ]
-    },
-    "priority": 0,
-    "id": 17
-  },
-  {
-    "question": "Bạn có muốn dùng đồ có sầu riêng không?",
-    "yes": {
-      "yes_tag": [
-        "sầu riêng"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "sầu riêng"
-      ]
-    },
-    "priority": 0,
-    "id": 18
+    "id": 10
   },
   {
     "question": "Bạn có muốn dùng đồ có đậu phộng không?",
@@ -282,7 +162,7 @@
       ]
     },
     "priority": 0,
-    "id": 19
+    "id": 11
   },
   {
     "question": "Bạn có muốn dùng đồ có đậu đen không?",
@@ -297,7 +177,7 @@
       ]
     },
     "priority": 0,
-    "id": 20
+    "id": 12
   },
   {
     "question": "Bạn có muốn dùng đồ có đậu đỏ không?",
@@ -312,7 +192,7 @@
       ]
     },
     "priority": 0,
-    "id": 21
+    "id": 13
   },
   {
     "question": "Bạn có muốn dùng đồ có đậu ván không?",
@@ -327,7 +207,7 @@
       ]
     },
     "priority": 0,
-    "id": 22
+    "id": 14
   },
   {
     "question": "Bạn có muốn dùng đồ có ca cao không?",
@@ -342,7 +222,7 @@
       ]
     },
     "priority": 0,
-    "id": 23
+    "id": 15
   },
   {
     "question": "Bạn có muốn dùng đồ có hạt sen không?",
@@ -357,7 +237,7 @@
       ]
     },
     "priority": 0,
-    "id": 24
+    "id": 16
   },
   {
     "question": "Bạn có muốn dùng đồ có sả không?",
@@ -372,7 +252,7 @@
       ]
     },
     "priority": 0,
-    "id": 25
+    "id": 17
   },
   {
     "question": "Bạn có muốn dùng đồ có hồi không?",
@@ -387,7 +267,7 @@
       ]
     },
     "priority": 0,
-    "id": 26
+    "id": 18
   },
   {
     "question": "Bạn có muốn dùng đồ có quế không?",
@@ -402,7 +282,7 @@
       ]
     },
     "priority": 0,
-    "id": 27
+    "id": 19
   },
   {
     "question": "Bạn có muốn dùng đồ có gừng không?",
@@ -417,7 +297,7 @@
       ]
     },
     "priority": 0,
-    "id": 28
+    "id": 20
   },
   {
     "question": "Bạn có muốn dùng đồ có lá dứa không?",
@@ -432,7 +312,7 @@
       ]
     },
     "priority": 0,
-    "id": 29
+    "id": 21
   },
   {
     "question": "Bạn có muốn dùng đồ có vani không?",
@@ -447,7 +327,7 @@
       ]
     },
     "priority": 0,
-    "id": 30
+    "id": 22
   },
   {
     "question": "Bạn đang muốn tìm món để nạp năng lượng cho bữa sáng phải không?",
@@ -462,7 +342,7 @@
       ]
     },
     "priority": 0,
-    "id": 31
+    "id": 23
   },
   {
     "question": "Bạn đang muốn tìm món để ăn vặt / lai rai phải không?",
@@ -477,7 +357,7 @@
       ]
     },
     "priority": 0,
-    "id": 32
+    "id": 24
   },
   {
     "question": "Bạn đang muốn tìm món tráng miệng ngọt ngào phải không?",
@@ -492,7 +372,7 @@
       ]
     },
     "priority": 0,
-    "id": 33
+    "id": 25
   },
   {
     "question": "Bạn đang muốn tìm món cho buổi đêm (ăn khuya) phải không?",
@@ -507,7 +387,7 @@
       ]
     },
     "priority": 0,
-    "id": 34
+    "id": 26
   },
   {
     "question": "Bạn đang muốn tìm món cho buổi trưa phải không?",
@@ -522,7 +402,7 @@
       ]
     },
     "priority": 0,
-    "id": 35
+    "id": 27
   },
   {
     "question": "Bạn có muốn thưởng thức món đặc trưng của Hà Nội không?",
@@ -537,7 +417,7 @@
       ]
     },
     "priority": 0,
-    "id": 36
+    "id": 28
   },
   {
     "question": "Bạn có muốn thưởng thức món đặc trưng của Hải Phòng không?",
@@ -552,22 +432,7 @@
       ]
     },
     "priority": 0,
-    "id": 37
-  },
-  {
-    "question": "Bạn có muốn thưởng thức món đặc trưng của vùng Tây Bắc không?",
-    "yes": {
-      "yes_tag": [
-        "Tây Bắc"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "Tây Bắc"
-      ]
-    },
-    "priority": 0,
-    "id": 38
+    "id": 29
   },
   {
     "question": "Bạn có muốn thưởng thức món đặc trưng của Phú Yên không?",
@@ -582,7 +447,7 @@
       ]
     },
     "priority": 0,
-    "id": 39
+    "id": 30
   },
   {
     "question": "Bạn có muốn thưởng thức món đặc trưng của Huế không?",
@@ -597,7 +462,7 @@
       ]
     },
     "priority": 0,
-    "id": 40
+    "id": 31
   },
   {
     "question": "Bạn có muốn thưởng thức món đặc trưng của Quảng Ngãi không?",
@@ -612,7 +477,7 @@
       ]
     },
     "priority": 0,
-    "id": 41
+    "id": 32
   },
   {
     "question": "Bạn có muốn thưởng thức món đặc trưng của Đà Nẵng không?",
@@ -627,7 +492,7 @@
       ]
     },
     "priority": 0,
-    "id": 42
+    "id": 33
   },
   {
     "question": "Bạn có muốn thưởng thức món đặc trưng của Quảng Nam không?",
@@ -642,7 +507,7 @@
       ]
     },
     "priority": 0,
-    "id": 43
+    "id": 34
   },
   {
     "question": "Bạn có muốn thưởng thức món đặc trưng của Khánh Hòa không?",
@@ -657,7 +522,7 @@
       ]
     },
     "priority": 0,
-    "id": 44
+    "id": 35
   },
   {
     "question": "Bạn có muốn thưởng thức món đặc trưng của Phan Rang không?",
@@ -672,7 +537,7 @@
       ]
     },
     "priority": 0,
-    "id": 45
+    "id": 36
   },
   {
     "question": "Bạn có muốn thưởng thức món đặc trưng của Bình Định không?",
@@ -687,7 +552,7 @@
       ]
     },
     "priority": 0,
-    "id": 46
+    "id": 37
   },
   {
     "question": "Bạn có muốn thưởng thức món đặc trưng của Nghệ An không?",
@@ -702,7 +567,7 @@
       ]
     },
     "priority": 0,
-    "id": 47
+    "id": 38
   },
   {
     "question": "Bạn có muốn thưởng thức món đặc trưng của Hà Tĩnh không?",
@@ -717,7 +582,7 @@
       ]
     },
     "priority": 0,
-    "id": 48
+    "id": 39
   },
   {
     "question": "Bạn có muốn thưởng thức món đặc trưng của Tiền Giang không?",
@@ -732,7 +597,7 @@
       ]
     },
     "priority": 0,
-    "id": 49
+    "id": 40
   },
   {
     "question": "Bạn có muốn thưởng thức món đặc trưng của Đồng Tháp không?",
@@ -747,7 +612,7 @@
       ]
     },
     "priority": 0,
-    "id": 50
+    "id": 41
   },
   {
     "question": "Bạn có muốn thưởng thức món đặc trưng của Cà Mau không?",
@@ -762,7 +627,7 @@
       ]
     },
     "priority": 0,
-    "id": 51
+    "id": 42
   },
   {
     "question": "Bạn có muốn thưởng thức món đặc trưng của Sóc Trăng không?",
@@ -777,7 +642,7 @@
       ]
     },
     "priority": 0,
-    "id": 52
+    "id": 43
   },
   {
     "question": "Bạn có muốn thưởng thức món đặc trưng của An Giang không?",
@@ -792,7 +657,7 @@
       ]
     },
     "priority": 0,
-    "id": 53
+    "id": 44
   },
   {
     "question": "Bạn có muốn thưởng thức món đặc trưng của Sài Gòn không?",
@@ -807,7 +672,7 @@
       ]
     },
     "priority": 0,
-    "id": 54
+    "id": 45
   },
   {
     "question": "Bạn có muốn thưởng thức món đặc trưng của Bà Rịa – Vũng Tàu không?",
@@ -822,37 +687,7 @@
       ]
     },
     "priority": 0,
-    "id": 55
-  },
-  {
-    "question": "Bạn có muốn thưởng thức món đặc trưng của Đắk Lắk không?",
-    "yes": {
-      "yes_tag": [
-        "Đắk Lắk"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "Đắk Lắk"
-      ]
-    },
-    "priority": 0,
-    "id": 56
-  },
-  {
-    "question": "Bạn có muốn thưởng thức món đặc trưng của Kon Tum không?",
-    "yes": {
-      "yes_tag": [
-        "Kon Tum"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "Kon Tum"
-      ]
-    },
-    "priority": 0,
-    "id": 57
+    "id": 46
   },
   {
     "question": "Bạn có muốn thưởng thức món đặc trưng của Lâm Đồng không?",
@@ -867,67 +702,7 @@
       ]
     },
     "priority": 0,
-    "id": 58
-  },
-  {
-    "question": "Bạn có muốn thưởng thức món đặc trưng của Pleiku không?",
-    "yes": {
-      "yes_tag": [
-        "Pleiku"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "Pleiku"
-      ]
-    },
-    "priority": 0,
-    "id": 59
-  },
-  {
-    "question": "Bạn có muốn thưởng thức món đặc trưng của Đắk Nông không?",
-    "yes": {
-      "yes_tag": [
-        "Đắk Nông"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "Đắk Nông"
-      ]
-    },
-    "priority": 0,
-    "id": 60
-  },
-  {
-    "question": "Bạn có muốn thưởng thức món đặc trưng của Gia Lai không?",
-    "yes": {
-      "yes_tag": [
-        "Gia Lai"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "Gia Lai"
-      ]
-    },
-    "priority": 0,
-    "id": 61
-  },
-  {
-    "question": "Bạn có muốn thưởng thức món ăn của Anh không?",
-    "yes": {
-      "yes_tag": [
-        "Anh"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "Anh"
-      ]
-    },
-    "priority": 0,
-    "id": 62
+    "id": 47
   },
   {
     "question": "Bạn có muốn thưởng thức ẩm thực Pháp không?",
@@ -942,7 +717,7 @@
       ]
     },
     "priority": 0,
-    "id": 63
+    "id": 48
   },
   {
     "question": "Bạn có muốn thưởng thức món kiểu Mỹ không?",
@@ -957,7 +732,7 @@
       ]
     },
     "priority": 0,
-    "id": 64
+    "id": 49
   },
   {
     "question": "Bạn có muốn thưởng thức ẩm thực Ý không?",
@@ -972,7 +747,7 @@
       ]
     },
     "priority": 0,
-    "id": 65
+    "id": 50
   },
   {
     "question": "Bạn có muốn thưởng thức món ăn của Đức không?",
@@ -987,22 +762,7 @@
       ]
     },
     "priority": 0,
-    "id": 66
-  },
-  {
-    "question": "Bạn có muốn thưởng thức món thuộc ẩm thực Hy Lạp không?",
-    "yes": {
-      "yes_tag": [
-        "Hy Lạp"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "Hy Lạp"
-      ]
-    },
-    "priority": 0,
-    "id": 67
+    "id": 51
   },
   {
     "question": "Bạn có muốn thưởng thức món Nhật Bản không?",
@@ -1017,7 +777,7 @@
       ]
     },
     "priority": 0,
-    "id": 68
+    "id": 52
   },
   {
     "question": "Bạn có muốn thưởng thức món Hàn Quốc không?",
@@ -1032,7 +792,7 @@
       ]
     },
     "priority": 0,
-    "id": 69
+    "id": 53
   },
   {
     "question": "Bạn có muốn thưởng thức món Trung Quốc không?",
@@ -1047,7 +807,7 @@
       ]
     },
     "priority": 0,
-    "id": 70
+    "id": 54
   },
   {
     "question": "Bạn có muốn ăn sợi bún không?",
@@ -1062,7 +822,7 @@
       ]
     },
     "priority": 0,
-    "id": 71
+    "id": 55
   },
   {
     "question": "Bạn có muốn ăn sợi phở không?",
@@ -1077,7 +837,7 @@
       ]
     },
     "priority": 0,
-    "id": 72
+    "id": 56
   },
   {
     "question": "Bạn có muốn ăn sợi hủ tiếu không?",
@@ -1092,7 +852,7 @@
       ]
     },
     "priority": 0,
-    "id": 73
+    "id": 57
   },
   {
     "question": "Bạn có muốn ăn sợi mì sợi không?",
@@ -1107,7 +867,7 @@
       ]
     },
     "priority": 0,
-    "id": 74
+    "id": 58
   },
   {
     "question": "Bạn có muốn ăn sợi bánh canh bột gạo không?",
@@ -1122,7 +882,7 @@
       ]
     },
     "priority": 0,
-    "id": 75
+    "id": 59
   },
   {
     "question": "Bạn có muốn ăn sợi bánh đa không?",
@@ -1137,7 +897,7 @@
       ]
     },
     "priority": 0,
-    "id": 76
+    "id": 60
   },
   {
     "question": "Bạn có muốn ăn sợi miến dong không?",
@@ -1152,7 +912,7 @@
       ]
     },
     "priority": 0,
-    "id": 77
+    "id": 61
   },
   {
     "question": "Bạn có muốn ăn sợi miến/bún tàu không?",
@@ -1167,7 +927,7 @@
       ]
     },
     "priority": 0,
-    "id": 78
+    "id": 62
   },
   {
     "question": "Bạn có muốn dùng món ăn dạng súp không?",
@@ -1182,7 +942,7 @@
       ]
     },
     "priority": 0,
-    "id": 79
+    "id": 63
   },
   {
     "question": "Bạn có muốn dùng món ăn dạng lẩu không?",
@@ -1197,7 +957,7 @@
       ]
     },
     "priority": 0,
-    "id": 80
+    "id": 64
   },
   {
     "question": "Bạn có muốn dùng món ăn dạng cháo không?",
@@ -1212,7 +972,7 @@
       ]
     },
     "priority": 0,
-    "id": 81
+    "id": 65
   },
   {
     "question": "Bạn có muốn dùng món ăn dạng cà ri không?",
@@ -1227,7 +987,7 @@
       ]
     },
     "priority": 0,
-    "id": 82
+    "id": 66
   },
   {
     "question": "Bạn có muốn dùng món ăn dạng hầm không?",
@@ -1242,7 +1002,7 @@
       ]
     },
     "priority": 0,
-    "id": 83
+    "id": 67
   },
   {
     "question": "Bạn có muốn dùng món ăn dạng xào không?",
@@ -1257,7 +1017,7 @@
       ]
     },
     "priority": 0,
-    "id": 84
+    "id": 68
   },
   {
     "question": "Bạn có muốn dùng món ăn dạng chiên không?",
@@ -1272,7 +1032,7 @@
       ]
     },
     "priority": 0,
-    "id": 85
+    "id": 69
   },
   {
     "question": "Bạn có muốn dùng món ăn dạng nướng không?",
@@ -1287,7 +1047,7 @@
       ]
     },
     "priority": 0,
-    "id": 86
+    "id": 70
   },
   {
     "question": "Bạn có muốn dùng món ăn dạng trộn không?",
@@ -1302,7 +1062,7 @@
       ]
     },
     "priority": 0,
-    "id": 87
+    "id": 71
   },
   {
     "question": "Bạn có muốn dùng món ăn dạng hấp không?",
@@ -1317,7 +1077,7 @@
       ]
     },
     "priority": 0,
-    "id": 88
+    "id": 72
   },
   {
     "question": "Bạn có muốn dùng món ăn dạng kho không?",
@@ -1332,7 +1092,7 @@
       ]
     },
     "priority": 0,
-    "id": 89
+    "id": 73
   },
   {
     "question": "Bạn có muốn dùng món ăn dạng rang không?",
@@ -1347,7 +1107,7 @@
       ]
     },
     "priority": 0,
-    "id": 90
+    "id": 74
   },
   {
     "question": "Bạn có muốn dùng món ăn dạng quay không?",
@@ -1362,7 +1122,7 @@
       ]
     },
     "priority": 0,
-    "id": 91
+    "id": 75
   },
   {
     "question": "Bạn có muốn dùng món ăn dạng luộc không?",
@@ -1377,7 +1137,7 @@
       ]
     },
     "priority": 0,
-    "id": 92
+    "id": 76
   },
   {
     "question": "Bạn có muốn dùng cơm không?",
@@ -1392,7 +1152,7 @@
       ]
     },
     "priority": 0,
-    "id": 93
+    "id": 77
   },
   {
     "question": "Bạn có muốn dùng bắp không?",
@@ -1407,7 +1167,7 @@
       ]
     },
     "priority": 0,
-    "id": 94
+    "id": 78
   },
   {
     "question": "Bạn có muốn dùng xôi không?",
@@ -1422,7 +1182,7 @@
       ]
     },
     "priority": 0,
-    "id": 95
+    "id": 79
   },
   {
     "question": "Bạn có muốn dùng bánh nếp không?",
@@ -1437,7 +1197,7 @@
       ]
     },
     "priority": 0,
-    "id": 96
+    "id": 80
   },
   {
     "question": "Bạn có muốn dùng cốm không?",
@@ -1452,7 +1212,7 @@
       ]
     },
     "priority": 0,
-    "id": 97
+    "id": 81
   },
   {
     "question": "Bạn có muốn dùng chè nếp không?",
@@ -1467,7 +1227,7 @@
       ]
     },
     "priority": 0,
-    "id": 98
+    "id": 82
   },
   {
     "question": "Bạn có muốn dùng nếp hấp không?",
@@ -1482,7 +1242,7 @@
       ]
     },
     "priority": 0,
-    "id": 99
+    "id": 83
   },
   {
     "question": "Bạn có muốn ăn bánh xèo không?",
@@ -1497,7 +1257,7 @@
       ]
     },
     "priority": 0,
-    "id": 100
+    "id": 84
   },
   {
     "question": "Bạn có muốn ăn bánh bèo không?",
@@ -1512,7 +1272,7 @@
       ]
     },
     "priority": 0,
-    "id": 101
+    "id": 85
   },
   {
     "question": "Bạn có muốn ăn bánh căn không?",
@@ -1527,7 +1287,7 @@
       ]
     },
     "priority": 0,
-    "id": 102
+    "id": 86
   },
   {
     "question": "Bạn có muốn ăn bánh cuốn không?",
@@ -1542,7 +1302,7 @@
       ]
     },
     "priority": 0,
-    "id": 103
+    "id": 87
   },
   {
     "question": "Bạn có muốn ăn bánh ướt không?",
@@ -1557,7 +1317,7 @@
       ]
     },
     "priority": 0,
-    "id": 104
+    "id": 88
   },
   {
     "question": "Bạn có muốn ăn bánh hỏi không?",
@@ -1572,7 +1332,7 @@
       ]
     },
     "priority": 0,
-    "id": 105
+    "id": 89
   },
   {
     "question": "Bạn có muốn ăn bánh bò không?",
@@ -1587,7 +1347,7 @@
       ]
     },
     "priority": 0,
-    "id": 106
+    "id": 90
   },
   {
     "question": "Bạn có muốn ăn bánh đúc không?",
@@ -1602,7 +1362,7 @@
       ]
     },
     "priority": 0,
-    "id": 107
+    "id": 91
   },
   {
     "question": "Bạn có muốn ăn bánh mì không?",
@@ -1617,7 +1377,7 @@
       ]
     },
     "priority": 0,
-    "id": 108
+    "id": 92
   },
   {
     "question": "Bạn có muốn ăn bánh bao không?",
@@ -1632,7 +1392,7 @@
       ]
     },
     "priority": 0,
-    "id": 109
+    "id": 93
   },
   {
     "question": "Bạn có muốn ăn bánh quẩy không?",
@@ -1647,7 +1407,7 @@
       ]
     },
     "priority": 0,
-    "id": 110
+    "id": 94
   },
   {
     "question": "Bạn có muốn ăn bánh tiêu không?",
@@ -1662,7 +1422,7 @@
       ]
     },
     "priority": 0,
-    "id": 111
+    "id": 95
   },
   {
     "question": "Bạn có muốn ăn bánh su kem không?",
@@ -1677,7 +1437,7 @@
       ]
     },
     "priority": 0,
-    "id": 112
+    "id": 96
   },
   {
     "question": "Bạn có muốn ăn bánh bông lan không?",
@@ -1692,7 +1452,7 @@
       ]
     },
     "priority": 0,
-    "id": 113
+    "id": 97
   },
   {
     "question": "Bạn có muốn ăn donut không?",
@@ -1707,7 +1467,7 @@
       ]
     },
     "priority": 0,
-    "id": 114
+    "id": 98
   },
   {
     "question": "Bạn có muốn ăn thịt bò không?",
@@ -1722,7 +1482,7 @@
       ]
     },
     "priority": 0,
-    "id": 115
+    "id": 99
   },
   {
     "question": "Bạn có muốn ăn thịt heo không?",
@@ -1737,7 +1497,7 @@
       ]
     },
     "priority": 0,
-    "id": 116
+    "id": 100
   },
   {
     "question": "Bạn có muốn ăn thịt trâu không?",
@@ -1752,7 +1512,7 @@
       ]
     },
     "priority": 0,
-    "id": 117
+    "id": 101
   },
   {
     "question": "Bạn có muốn ăn thịt dê không?",
@@ -1767,7 +1527,7 @@
       ]
     },
     "priority": 0,
-    "id": 118
+    "id": 102
   },
   {
     "question": "Bạn có muốn ăn thịt cừu không?",
@@ -1782,7 +1542,7 @@
       ]
     },
     "priority": 0,
-    "id": 119
+    "id": 103
   },
   {
     "question": "Bạn có muốn ăn thịt gà không?",
@@ -1797,7 +1557,7 @@
       ]
     },
     "priority": 0,
-    "id": 120
+    "id": 104
   },
   {
     "question": "Bạn có muốn ăn thịt vịt không?",
@@ -1812,7 +1572,7 @@
       ]
     },
     "priority": 0,
-    "id": 121
+    "id": 105
   },
   {
     "question": "Bạn có muốn ăn thịt ngan không?",
@@ -1827,7 +1587,7 @@
       ]
     },
     "priority": 0,
-    "id": 122
+    "id": 106
   },
   {
     "question": "Bạn có muốn ăn thịt ngỗng không?",
@@ -1842,7 +1602,7 @@
       ]
     },
     "priority": 0,
-    "id": 123
+    "id": 107
   },
   {
     "question": "Bạn có muốn ăn thịt chim cút không?",
@@ -1857,7 +1617,7 @@
       ]
     },
     "priority": 0,
-    "id": 124
+    "id": 108
   },
   {
     "question": "Bạn có muốn ăn tôm không?",
@@ -1872,7 +1632,7 @@
       ]
     },
     "priority": 0,
-    "id": 125
+    "id": 109
   },
   {
     "question": "Bạn có muốn ăn mực không?",
@@ -1887,7 +1647,7 @@
       ]
     },
     "priority": 0,
-    "id": 126
+    "id": 110
   },
   {
     "question": "Bạn có muốn ăn cá không?",
@@ -1902,7 +1662,7 @@
       ]
     },
     "priority": 0,
-    "id": 127
+    "id": 111
   },
   {
     "question": "Bạn có muốn ăn nghêu không?",
@@ -1917,7 +1677,7 @@
       ]
     },
     "priority": 0,
-    "id": 128
+    "id": 112
   },
   {
     "question": "Bạn có muốn ăn sò không?",
@@ -1932,7 +1692,7 @@
       ]
     },
     "priority": 0,
-    "id": 129
+    "id": 113
   },
   {
     "question": "Bạn có muốn ăn ốc không?",
@@ -1947,7 +1707,7 @@
       ]
     },
     "priority": 0,
-    "id": 130
+    "id": 114
   },
   {
     "question": "Bạn có muốn ăn cua không?",
@@ -1962,22 +1722,7 @@
       ]
     },
     "priority": 0,
-    "id": 131
-  },
-  {
-    "question": "Bạn có muốn ăn trứng cá không?",
-    "yes": {
-      "yes_tag": [
-        "trứng cá"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "trứng cá"
-      ]
-    },
-    "priority": 0,
-    "id": 132
+    "id": 115
   },
   {
     "question": "Bạn có muốn ăn rau củ không?",
@@ -1992,7 +1737,7 @@
       ]
     },
     "priority": 0,
-    "id": 133
+    "id": 116
   },
   {
     "question": "Bạn có muốn ăn đậu hũ không?",
@@ -2007,7 +1752,7 @@
       ]
     },
     "priority": 0,
-    "id": 134
+    "id": 117
   },
   {
     "question": "Bạn có muốn ăn nấm không?",
@@ -2022,7 +1767,7 @@
       ]
     },
     "priority": 0,
-    "id": 135
+    "id": 118
   },
   {
     "question": "Bạn có muốn ăn chả chay không?",
@@ -2037,7 +1782,7 @@
       ]
     },
     "priority": 0,
-    "id": 136
+    "id": 119
   },
   {
     "question": "Bạn có muốn ăn mì chay không?",
@@ -2052,7 +1797,7 @@
       ]
     },
     "priority": 0,
-    "id": 137
+    "id": 120
   },
   {
     "question": "Bạn có muốn ăn cơm chay không?",
@@ -2067,7 +1812,7 @@
       ]
     },
     "priority": 0,
-    "id": 138
+    "id": 121
   },
   {
     "question": "Bạn có muốn món ăn không ngọt không?",
@@ -2082,7 +1827,7 @@
       ]
     },
     "priority": 0,
-    "id": 139
+    "id": 122
   },
   {
     "question": "Bạn có muốn món ăn ít ngọt không?",
@@ -2097,7 +1842,7 @@
       ]
     },
     "priority": 0,
-    "id": 140
+    "id": 123
   },
   {
     "question": "Bạn có muốn món ăn vừa ngọt không?",
@@ -2112,7 +1857,7 @@
       ]
     },
     "priority": 0,
-    "id": 141
+    "id": 124
   },
   {
     "question": "Bạn có muốn món ăn ngọt đậm không?",
@@ -2127,7 +1872,7 @@
       ]
     },
     "priority": 0,
-    "id": 142
+    "id": 125
   },
   {
     "question": "Bạn có muốn món ăn rất ngọt không?",
@@ -2142,7 +1887,7 @@
       ]
     },
     "priority": 0,
-    "id": 143
+    "id": 126
   },
   {
     "question": "Bạn có muốn món ăn không cay không?",
@@ -2157,7 +1902,7 @@
       ]
     },
     "priority": 0,
-    "id": 144
+    "id": 127
   },
   {
     "question": "Bạn có muốn món ăn cay nhẹ không?",
@@ -2172,7 +1917,7 @@
       ]
     },
     "priority": 0,
-    "id": 145
+    "id": 128
   },
   {
     "question": "Bạn có muốn món ăn cay vừa không?",
@@ -2187,7 +1932,7 @@
       ]
     },
     "priority": 0,
-    "id": 146
+    "id": 129
   },
   {
     "question": "Bạn có muốn món ăn cay nhiều không?",
@@ -2202,7 +1947,7 @@
       ]
     },
     "priority": 0,
-    "id": 147
+    "id": 130
   },
   {
     "question": "Bạn có muốn món ăn rất cay không?",
@@ -2217,7 +1962,7 @@
       ]
     },
     "priority": 0,
-    "id": 148
+    "id": 131
   },
   {
     "question": "Bạn có muốn món ăn không béo không?",
@@ -2232,7 +1977,7 @@
       ]
     },
     "priority": 0,
-    "id": 149
+    "id": 132
   },
   {
     "question": "Bạn có muốn món ăn béo nhẹ không?",
@@ -2247,7 +1992,7 @@
       ]
     },
     "priority": 0,
-    "id": 150
+    "id": 133
   },
   {
     "question": "Bạn có muốn món ăn béo vừa không?",
@@ -2262,7 +2007,7 @@
       ]
     },
     "priority": 0,
-    "id": 151
+    "id": 134
   },
   {
     "question": "Bạn có muốn món ăn béo đậm không?",
@@ -2277,7 +2022,7 @@
       ]
     },
     "priority": 0,
-    "id": 152
+    "id": 135
   },
   {
     "question": "Bạn có muốn món ăn nhạt không?",
@@ -2292,7 +2037,7 @@
       ]
     },
     "priority": 0,
-    "id": 153
+    "id": 136
   },
   {
     "question": "Bạn có muốn món ăn hơi mặn không?",
@@ -2307,7 +2052,7 @@
       ]
     },
     "priority": 0,
-    "id": 154
+    "id": 137
   },
   {
     "question": "Bạn có muốn món ăn mặn vừa không?",
@@ -2322,7 +2067,7 @@
       ]
     },
     "priority": 0,
-    "id": 155
+    "id": 138
   },
   {
     "question": "Bạn có muốn món ăn mặn đậm không?",
@@ -2337,7 +2082,7 @@
       ]
     },
     "priority": 0,
-    "id": 156
+    "id": 139
   },
   {
     "question": "Bạn có muốn món ăn không chua không?",
@@ -2352,7 +2097,7 @@
       ]
     },
     "priority": 0,
-    "id": 157
+    "id": 140
   },
   {
     "question": "Bạn có muốn món ăn chua nhẹ không?",
@@ -2367,7 +2112,7 @@
       ]
     },
     "priority": 0,
-    "id": 158
+    "id": 141
   },
   {
     "question": "Bạn có muốn món ăn chua vừa không?",
@@ -2382,7 +2127,7 @@
       ]
     },
     "priority": 0,
-    "id": 159
+    "id": 142
   },
   {
     "question": "Bạn có muốn món ăn chua đậm không?",
@@ -2397,7 +2142,7 @@
       ]
     },
     "priority": 0,
-    "id": 160
+    "id": 143
   },
   {
     "question": "Bạn có muốn uống một ly cà phê tỉnh táo không?",
@@ -2412,7 +2157,7 @@
       ]
     },
     "priority": 0,
-    "id": 161
+    "id": 144
   },
   {
     "question": "Bạn có muốn uống trà sữa không?",
@@ -2427,7 +2172,7 @@
       ]
     },
     "priority": 0,
-    "id": 162
+    "id": 145
   },
   {
     "question": "Bạn có muốn uống nước ép hoặc sinh tố trái cây không?",
@@ -2442,7 +2187,7 @@
       ]
     },
     "priority": 0,
-    "id": 163
+    "id": 146
   },
   {
     "question": "Bạn có muốn làm vài ly có cồn (bia/rượu) không?",
@@ -2457,7 +2202,7 @@
       ]
     },
     "priority": 0,
-    "id": 164
+    "id": 147
   },
   {
     "question": "Bạn có muốn uống nước giải khát có gas không?",
@@ -2472,7 +2217,7 @@
       ]
     },
     "priority": 0,
-    "id": 165
+    "id": 148
   },
   {
     "question": "Bạn có muốn ăn một ly chè ngọt ngào không?",
@@ -2487,7 +2232,7 @@
       ]
     },
     "priority": 0,
-    "id": 166
+    "id": 149
   },
   {
     "question": "Bạn có muốn ăn kem tươi mát lạnh không?",
@@ -2502,7 +2247,7 @@
       ]
     },
     "priority": 0,
-    "id": 167
+    "id": 150
   },
   {
     "question": "Bạn có muốn ăn sữa chua tốt cho tiêu hóa không?",
@@ -2517,7 +2262,7 @@
       ]
     },
     "priority": 0,
-    "id": 168
+    "id": 151
   },
   {
     "question": "Bạn có muốn loại nước có trân châu dai dai để nhai không?",
@@ -2532,7 +2277,7 @@
       ]
     },
     "priority": 0,
-    "id": 169
+    "id": 152
   },
   {
     "question": "Bạn có muốn loại nước có các loại thạch (jelly) giòn giòn không?",
@@ -2547,7 +2292,7 @@
       ]
     },
     "priority": 0,
-    "id": 170
+    "id": 153
   },
   {
     "question": "Bạn có muốn lớp kem cheese / bọt kem béo ngậy bên trên không?",
@@ -2562,7 +2307,7 @@
       ]
     },
     "priority": 0,
-    "id": 171
+    "id": 154
   },
   {
     "question": "Bạn có muốn gọi thêm bánh flan ăn kèm không?",
@@ -2577,7 +2322,7 @@
       ]
     },
     "priority": 0,
-    "id": 172
+    "id": 155
   },
   {
     "question": "Bạn có muốn thử món có trứng đánh bông (kem trứng) béo ngậy không?",
@@ -2592,7 +2337,7 @@
       ]
     },
     "priority": 0,
-    "id": 173
+    "id": 156
   },
   {
     "question": "Bạn có muốn uống nước rau má tươi mát không?",
@@ -2607,7 +2352,7 @@
       ]
     },
     "priority": 0,
-    "id": 174
+    "id": 157
   },
   {
     "question": "Bạn có muốn hương vị trà xanh / matcha Nhật Bản không?",
@@ -2622,7 +2367,7 @@
       ]
     },
     "priority": 0,
-    "id": 175
+    "id": 158
   },
   {
     "question": "Bạn có muốn hương vị đậm đà của cacao hoặc socola không?",
@@ -2637,7 +2382,7 @@
       ]
     },
     "priority": 0,
-    "id": 176
+    "id": 159
   },
   {
     "question": "Bạn có muốn thưởng thức món được đựng trong trái dừa không?",
@@ -2652,322 +2397,7 @@
       ]
     },
     "priority": 0,
-    "id": 177
-  },
-  {
-    "question": "Bạn có muốn vị ngọt thanh của vải hoặc nhãn không?",
-    "yes": {
-      "yes_tag": [
-        "vải/nhãn"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "vải/nhãn"
-      ]
-    },
-    "priority": 0,
-    "id": 178
-  },
-  {
-    "question": "Bạn có muốn vị chua thơm của cam, chanh hoặc tắc không?",
-    "yes": {
-      "yes_tag": [
-        "họ cam"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "họ cam"
-      ]
-    },
-    "priority": 0,
-    "id": 179
-  },
-  {
-    "question": "Bạn có muốn vị chua ngọt của dâu hoặc phúc bồn tử không?",
-    "yes": {
-      "yes_tag": [
-        "dâu/phúc bồn tử"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "dâu/phúc bồn tử"
-      ]
-    },
-    "priority": 0,
-    "id": 180
-  },
-  {
-    "question": "Bạn có muốn hương thơm của đào không?",
-    "yes": {
-      "yes_tag": [
-        "đào"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "đào"
-      ]
-    },
-    "priority": 0,
-    "id": 181
-  },
-  {
-    "question": "Bạn có thích ánh đèn vàng dịu để tạo cảm giác thân mật không?",
-    "yes": {
-      "yes_tag": [
-        "đèn vàng"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "đèn vàng"
-      ]
-    },
-    "priority": 0,
-    "id": 182
-  },
-  {
-    "question": "Bạn có muốn chọn bàn gần cửa sổ để ngắm dòng người trôi không?",
-    "yes": {
-      "yes_tag": [
-        "cửa sổ"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "cửa sổ"
-      ]
-    },
-    "priority": 0,
-    "id": 183
-  },
-  {
-    "question": "Bạn có thích một chiếc ghế êm ái để ngồi thật lâu mà không mệt không?",
-    "yes": {
-      "yes_tag": [
-        "ghế êm"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "ghế êm"
-      ]
-    },
-    "priority": 0,
-    "id": 184
-  },
-  {
-    "question": "Bạn có thích không gian được điểm xuyết vài chậu hoa tươi không?",
-    "yes": {
-      "yes_tag": [
-        "chậu hoa"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "chậu hoa"
-      ]
-    },
-    "priority": 0,
-    "id": 185
-  },
-  {
-    "question": "Bạn có muốn ngồi đối diện nhau ở chiếc bàn hai người xinh xắn không?",
-    "yes": {
-      "yes_tag": [
-        "bàn hai người"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "bàn hai người"
-      ]
-    },
-    "priority": 0,
-    "id": 186
-  },
-  {
-    "question": "Bạn có thích ngồi ở nơi trang trí bằng nến hoặc ánh sáng hắt mềm không?",
-    "yes": {
-      "yes_tag": [
-        "nến"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "nến"
-      ]
-    },
-    "priority": 0,
-    "id": 187
-  },
-  {
-    "question": "Bạn có muốn chọn bàn gần hồ nước hoặc tiểu cảnh mềm mại không?",
-    "yes": {
-      "yes_tag": [
-        "tiểu cảnh"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "tiểu cảnh"
-      ]
-    },
-    "priority": 0,
-    "id": 188
-  },
-  {
-    "question": "Bạn có muốn ngồi ở góc có bức rèm nhẹ nhàng đung đưa không?",
-    "yes": {
-      "yes_tag": [
-        "rèm"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "rèm"
-      ]
-    },
-    "priority": 0,
-    "id": 189
-  },
-  {
-    "question": "Bạn có muốn ngồi ở nơi có gió nhẹ và không khí thoáng đãng không?",
-    "yes": {
-      "yes_tag": [
-        "thoáng đãng"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "thoáng đãng"
-      ]
-    },
-    "priority": 0,
-    "id": 190
-  },
-  {
-    "question": "Bạn có muốn ngồi trong một không gian ấm áp và nhẹ nhàng không?",
-    "yes": {
-      "yes_tag": [
-        "ấm áp"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "ấm áp"
-      ]
-    },
-    "priority": 0,
-    "id": 191
-  },
-  {
-    "question": "Bạn có muốn một góc nhỏ thật riêng tư cho cuộc trò chuyện hôm nay không?",
-    "yes": {
-      "yes_tag": [
-        "riêng tư"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "riêng tư"
-      ]
-    },
-    "priority": 0,
-    "id": 192
-  },
-  {
-    "question": "Bạn có thích một góc quán mang phong cách lãng mạn châu Âu không?",
-    "yes": {
-      "yes_tag": [
-        "lãng mạn"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "lãng mạn"
-      ]
-    },
-    "priority": 0,
-    "id": 193
-  },
-  {
-    "question": "Bạn có muốn không gian có chút hương tinh dầu thơm thoang thoảng không?",
-    "yes": {
-      "yes_tag": [
-        "hương tinh dầu"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "hương tinh dầu"
-      ]
-    },
-    "priority": 0,
-    "id": 194
-  },
-  {
-    "question": "Bạn có muốn một không gian tạo cảm giác gần gũi và kết nối hơn không?",
-    "yes": {
-      "yes_tag": [
-        "kết nối"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "kết nối"
-      ]
-    },
-    "priority": 0,
-    "id": 195
-  },
-  {
-    "question": "Bạn có muốn chọn chỗ có nhạc để tăng thêm cảm xúc không?",
-    "yes": {
-      "yes_tag": [
-        "nhạc"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "nhạc"
-      ]
-    },
-    "priority": 0,
-    "id": 196
-  },
-  {
-    "question": "Bạn muốn một không gian yên tĩnh đủ để nghe từng hơi thở phải không?",
-    "yes": {
-      "yes_tag": [
-        "yên tĩnh"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "yên tĩnh"
-      ]
-    },
-    "priority": 0,
-    "id": 197
-  },
-  {
-    "question": "Bạn có thích không gian với tiếng gió hoặc nước chảy rất khẽ không?",
-    "yes": {
-      "yes_tag": [
-        "âm thanh nền"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "âm thanh nền"
-      ]
-    },
-    "priority": 0,
-    "id": 198
+    "id": 160
   },
   {
     "question": "Bạn có muốn ăn giá siêu rẻ (0 - 20,000 VNĐ) hoặc rẻ hơn?",
@@ -2977,9 +2407,7 @@
         "bình dân",
         "sang",
         "nhà hàng",
-        "cao cấp",
-        "thượng lưu",
-        "đại gia"
+        "cao cấp"
       ]
     },
     "no": {
@@ -2988,7 +2416,7 @@
       ]
     },
     "priority": 0,
-    "id": 199
+    "id": 161
   },
   {
     "question": "Bạn có muốn ăn giá rẻ (20,000 - 40,000 VNĐ) hoặc rẻ hơn?",
@@ -2997,9 +2425,7 @@
         "bình dân",
         "sang",
         "nhà hàng",
-        "cao cấp",
-        "thượng lưu",
-        "đại gia"
+        "cao cấp"
       ]
     },
     "no": {
@@ -3009,7 +2435,7 @@
       ]
     },
     "priority": 0,
-    "id": 200
+    "id": 162
   },
   {
     "question": "Bạn có muốn ăn giá bình dân (40,000 - 80,000 VNĐ) hoặc rẻ hơn?",
@@ -3017,9 +2443,7 @@
       "no_tag": [
         "sang",
         "nhà hàng",
-        "cao cấp",
-        "thượng lưu",
-        "đại gia"
+        "cao cấp"
       ]
     },
     "no": {
@@ -3030,16 +2454,14 @@
       ]
     },
     "priority": 0,
-    "id": 201
+    "id": 163
   },
   {
     "question": "Bạn có muốn ăn giá sang (80,000 - 150,000 VNĐ) hoặc rẻ hơn?",
     "yes": {
       "no_tag": [
         "nhà hàng",
-        "cao cấp",
-        "thượng lưu",
-        "đại gia"
+        "cao cấp"
       ]
     },
     "no": {
@@ -3051,7 +2473,7 @@
       ]
     },
     "priority": 0,
-    "id": 202
+    "id": 164
   },
   {
     "question": "Bạn có muốn ăn giá nhà hàng (150,000 - 300,000 VNĐ) hoặc mắc hơn?",
@@ -3066,13 +2488,11 @@
     "no": {
       "no_tag": [
         "nhà hàng",
-        "cao cấp",
-        "thượng lưu",
-        "đại gia"
+        "cao cấp"
       ]
     },
     "priority": 0,
-    "id": 203
+    "id": 165
   },
   {
     "question": "Bạn có muốn ăn giá cao cấp (300,000 - 500,000 VNĐ) hoặc mắc hơn?",
@@ -3087,54 +2507,10 @@
     },
     "no": {
       "no_tag": [
-        "cao cấp",
-        "thượng lưu",
-        "đại gia"
-      ]
-    },
-    "priority": 0,
-    "id": 204
-  },
-  {
-    "question": "Bạn có muốn ăn giá thượng lưu (500,000 - 1,000,000 VNĐ) hoặc mắc hơn?",
-    "yes": {
-      "no_tag": [
-        "siêu rẻ",
-        "rẻ",
-        "bình dân",
-        "sang",
-        "nhà hàng",
         "cao cấp"
       ]
     },
-    "no": {
-      "no_tag": [
-        "thượng lưu",
-        "đại gia"
-      ]
-    },
     "priority": 0,
-    "id": 205
-  },
-  {
-    "question": "Bạn có muốn ăn giá đại gia (> 1,000,000 VNĐ)?",
-    "yes": {
-      "no_tag": [
-        "siêu rẻ",
-        "rẻ",
-        "bình dân",
-        "sang",
-        "nhà hàng",
-        "cao cấp",
-        "thượng lưu"
-      ]
-    },
-    "no": {
-      "no_tag": [
-        "đại gia"
-      ]
-    },
-    "priority": 0,
-    "id": 206
+    "id": 166
   }
 ]
