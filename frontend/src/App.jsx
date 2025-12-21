@@ -7,16 +7,19 @@ import logo from './assets/images/logo.png';
 import LoginPage from './LoginPage';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import TasteMode from './TasteMode';
-
-// --- IMPORT FILE MỚI TẠI ĐÂY ---
 import RandomModeCard from './RandomModeCard'; 
+import BottomNavigation from './Components/BottomNavigation'; 
+import ProfilePage from './ProfilePage'; 
+import Toast from './Components/Toast';
+import defaultAvatar from './assets/images/logo.png';
+import { LanguageProvider } from './Context/LanguageContext';
+import { ThemeProvider } from './Context/ThemeContext';
+import { NotificationProvider } from './Context/NotificationContext';
 
-// --- 1. HIỆU ỨNG MỞ MÀN (Giữ nguyên) ---
 function AppEntranceEffect({ onDone }) {
   const [entered, setEntered] = useState(false);
   const [showText, setShowText] = useState(false);
   const [hideRects, setHideRects] = useState(false);
-
   useEffect(() => {
     const enterTimer = setTimeout(() => setEntered(true), 50);
     const textTimer = setTimeout(() => setShowText(true), 500);
@@ -25,9 +28,7 @@ function AppEntranceEffect({ onDone }) {
     const hideTimer = setTimeout(() => setHideRects(true), exitStart + 1000);
     return () => { clearTimeout(enterTimer); clearTimeout(textTimer); clearTimeout(exitTimer); clearTimeout(hideTimer); };
   }, []);
-
   useEffect(() => { if (hideRects && typeof onDone === 'function') onDone(); }, [hideRects, onDone]);
-
   return (
     <div className="EntranceEffect">
       {!hideRects && (
@@ -40,33 +41,18 @@ function AppEntranceEffect({ onDone }) {
   );
 }
 
-const LogoutIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-    <polyline points="16 17 21 12 16 7"></polyline>
-    <line x1="21" y1="12" x2="9" y2="12"></line>
-  </svg>
-);
-
-// --- 2. MÀN HÌNH CHỌN CHẾ ĐỘ (Giữ nguyên) ---
-function AppChooseMode({ onRandom, onTaste, onLogout }) {
+function AppChooseMode({ onRandom, onTaste }) {
   return (
     <div className="choose-mode-container" style={{position: 'relative'}}>
-      <button className="logout-btn-absolute" onClick={onLogout} title="Logout">
-        <LogoutIcon />
-      </button>
-
       <header className="header">
         <div className="logo-container">
           <img src={logo} className="logo" alt="Logo" />
           <span className="logo-text">FoodRec</span>
         </div>
       </header>
-
       <main className="choose-mode-content-container">
         <h1 className="choose-mode-title">How do you want to search for food?</h1>
         <h2 className="choose-mode-subtitle">Choose your option</h2>
-
         <div className="options-grid">
           <div className="option-card random-card" onClick={onRandom}>
             <h2 className="card-title">Quick & Random</h2>
@@ -80,7 +66,6 @@ function AppChooseMode({ onRandom, onTaste, onLogout }) {
           </div>
         </div>
       </main>
-
       <footer className="footer">
         <div className="choose-mode-footer">
           <a href="#help" className="help-link">Help?</a>
@@ -103,45 +88,139 @@ function IntroSequence() {
   );
 }
 
-// --- 3. APP MAIN (Đã xóa RandomModeCard cũ) ---
+// --- APP MAIN (Tích hợp Guest Mode, Language, Theme) ---
 function App() {
-  // const [mode, setMode] = useState('splash'); 
   const GOOGLE_CLIENT_ID = '975848353478-mguhticg531ok092j9krom4mhb25j6at.apps.googleusercontent.com'; 
-  const navigate = useNavigate(); // Hook to change URL
+  const navigate = useNavigate();
+  const [currentUser, setCurrentUser] = useState(null);
 
-  // Helper function to handle Logout
+  // Xử lý đăng nhập thành công (User thật)
+  const handleLoginSuccess = (user) => {
+    const userObj = user || { phone: "0123456789", username: "Demo User" }; 
+    setCurrentUser(userObj);
+    navigate('/home');
+  };
+
+  // Xử lý đăng nhập Guest
+  const handleGuestLogin = () => {
+    const guestUser = {
+      isGuest: true,
+      username: "Guest",
+      avatar: defaultAvatar
+    };
+    setCurrentUser(guestUser);
+    navigate('/home');
+  };
+
+  // Xử lý đăng xuất
   const handleLogout = () => {
-    if (window.confirm("Bạn có chắc muốn đăng xuất?")) { 
+    if (currentUser?.isGuest) {
+      // Guest logout không cần confirm
+      setCurrentUser(null);
+      navigate('/login');
+    } else {
+      if (window.confirm("Bạn có chắc muốn đăng xuất?")) { 
+        setCurrentUser(null);
         navigate('/login'); 
+      }
     }
   };
   
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-      <div className="App">
-        <Routes>
-          {/* URL: / (Intro Flow) */}
-          <Route path="/" element={<IntroSequence />} />
+      <NotificationProvider>
+        <LanguageProvider>
+          <ThemeProvider>
+            <div className="App">
+              <Toast /> 
 
-          {/* URL: /login */}
-          <Route path="/login" element={<LoginPage onLoginSuccess={() => navigate('/home')} />} />
+              <Routes>
+                {/* URL: / (Intro Flow) */}
+                <Route path="/" element={<IntroSequence />} />
 
-          {/* URL: /home */}
-          <Route path="/home" element={
-             <AppChooseMode 
-                onRandom={() => navigate('/random')} 
-                onTaste={() => navigate('/taste')} 
-                onLogout={handleLogout} 
-             />
-          } />
+                {/* URL: /login */}
+                <Route 
+                  path="/login" 
+                  element={
+                    <LoginPage 
+                      onLoginSuccess={handleLoginSuccess}
+                      onGuestLogin={handleGuestLogin}
+                    />
+                  } 
+                />
 
-          {/* URL: /random */}
-          <Route path="/random" element={<RandomModeCard onBack={() => navigate('/home')} />} />
+                {/* URL: /home */}
+                <Route 
+                  path="/home" 
+                  element={
+                    <>
+                      <AppChooseMode 
+                        onRandom={() => navigate('/random')} 
+                        onTaste={() => navigate('/taste')} 
+                      />
+                      <BottomNavigation 
+                        activeTab="home" 
+                        onTabChange={(tab) => navigate(tab === 'profile' ? '/profile' : '/home')} 
+                      />
+                    </>
+                  } 
+                />
 
-          {/* URL: /taste */}
-          <Route path="/taste" element={<TasteMode onBack={() => navigate('/home')} />} />
-        </Routes>
-      </div>
+                {/* URL: /random */}
+                <Route 
+                  path="/random" 
+                  element={
+                    <>
+                      <RandomModeCard 
+                        onBack={() => navigate('/home')} 
+                        currentUser={currentUser}
+                      />
+                      <BottomNavigation 
+                        activeTab="home" 
+                        onTabChange={(tab) => navigate(tab === 'profile' ? '/profile' : '/home')} 
+                      />
+                    </>
+                  } 
+                />
+
+                {/* URL: /taste */}
+                <Route 
+                  path="/taste" 
+                  element={
+                    <>
+                      <TasteMode 
+                        onBack={() => navigate('/home')}
+                        currentUser={currentUser}
+                      />
+                      <BottomNavigation 
+                        activeTab="home" 
+                        onTabChange={(tab) => navigate(tab === 'profile' ? '/profile' : '/home')} 
+                      />
+                    </>
+                  } 
+                />
+
+                {/* URL: /profile */}
+                <Route 
+                  path="/profile" 
+                  element={
+                    <>
+                      <ProfilePage 
+                        currentUser={currentUser} 
+                        onLogout={handleLogout}
+                      />
+                      <BottomNavigation 
+                        activeTab="profile" 
+                        onTabChange={(tab) => navigate(tab === 'profile' ? '/profile' : '/home')} 
+                      />
+                    </>
+                  } 
+                />
+              </Routes>
+            </div>
+          </ThemeProvider>
+        </LanguageProvider>
+      </NotificationProvider>
     </GoogleOAuthProvider>
   );
 }
