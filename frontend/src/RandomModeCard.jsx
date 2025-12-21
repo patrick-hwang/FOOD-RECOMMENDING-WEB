@@ -134,6 +134,12 @@ export default function RandomModeCard({ onBack, currentUser }) {
   }
 
   const handleQuickSave = async (item) => {
+      if (currentUser?.isGuest) {
+        if(window.confirm("Feature requires Login. Go to Login?")) {
+             if(onLogout) onLogout(); // Gọi hàm logout để về login
+        }
+        return;
+      }
       if (!userId) return alert("Please login to save!");
       const isCurrentlySaved = savedIds.includes(item.id);
       if (isCurrentlySaved) setSavedIds(prev => prev.filter(id => id !== item.id));

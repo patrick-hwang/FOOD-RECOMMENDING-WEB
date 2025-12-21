@@ -134,7 +134,35 @@ export const translations = {
         "đại gia": "Elite",
 
         "yes": "Yes",
-        "no": "No"
+        "no": "No",
+
+        // --- NOTIFICATION MESSAGES ---
+
+        notif_title_1: "🥗 Hungry yet?",
+        notif_body_1: "It's time to eat! Open FoodRec to find delicious places nearby.",
+        notif_title_2: "🌟 Saved Places",
+        notif_body_2: "You have saved places you haven't visited yet. Check them out this weekend!",
+        notif_title_3: "💸 Budget Friendly",
+        notif_body_3: "Found 5 amazing places under 50k nearby. Don't miss out!",
+        notif_title_4: "🍜 What to eat?",
+        notif_body_4: "Can't decide? Let Random Mode pick a spot for you.",
+        notif_on_title: "✅ Notifications On",
+        notif_on_body: "You will receive food recommendations inside the app.",
+
+        // --- GUEST MODE ---
+        continue_guest: "Continue as Guest",
+        guest_warning_title: "Enter Guest Mode?",
+        guest_warning_body: "As a guest, your History and Saved places will NOT be stored. You can only use Random Pick and Search.",
+        guest_confirm: "Continue",
+        cancel: "Cancel",
+        
+        // Profile Guest State
+        login_req_title: "Login Required",
+        login_req_desc: "Please login to view your History and Saved places.",
+        login_now: "Login Now",
+        
+        // Alerts
+        guest_action_alert: "This feature requires an account. Do you want to login now?"
     },
     vi: {
         // --- AUTH ---
@@ -268,6 +296,34 @@ export const translations = {
         "đại gia": "Đại gia",
 
         "yes": "Có",
-        "no": "Không"
+        "no": "Không",
+
+        // --- NOTIFICATION MESSAGES ---
+        notif_title_1: "🥗 Đói chưa bạn ơi?",
+        notif_body_1: "Đến giờ ăn rồi, mở FoodRec tìm quán ngon quanh đây nhé!",
+        notif_title_2: "🌟 Quán bạn đã lưu",
+        notif_body_2: "Bạn có các quán trong danh sách Saved chưa đi. Cuối tuần này thử ngay!",
+        notif_title_3: "💸 Ăn ngon bổ rẻ",
+        notif_body_3: "Tìm thấy 5 quán ăn dưới 50k gần bạn. Xem ngay kẻo lỡ!",
+        notif_title_4: "🍜 Hôm nay ăn gì?",
+        notif_body_4: "Nếu chưa biết ăn gì, hãy để chế độ Random gợi ý cho bạn nhé.",
+        notif_on_title: "✅ Đã bật thông báo",
+        notif_on_body: "Bạn sẽ nhận được gợi ý quán ăn ngay trong ứng dụng.",
+
+        // --- GUEST MODE ---
+        continue_guest: "Tiếp tục với chế độ Khách",
+        guest_warning_title: "Vào chế độ Khách?",
+        guest_warning_body: "Ở chế độ khách, Lịch sử và Danh sách lưu sẽ KHÔNG được lưu lại. Bạn chỉ có thể dùng Random và Tìm kiếm.",
+        guest_confirm: "Tiếp tục",
+        cancel: "Hủy",
+
+        // Profile Guest State
+        login_req_title: "Yêu cầu đăng nhập",
+        login_req_desc: "Vui lòng đăng nhập để xem Lịch sử và Quán đã lưu.",
+        login_now: "Đăng nhập ngay",
+
+        // Alerts
+        guest_action_alert: "Tính năng này cần tài khoản. Bạn có muốn đăng nhập ngay không?"
     }
+
 };

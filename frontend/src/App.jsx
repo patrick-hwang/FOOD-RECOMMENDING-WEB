@@ -8,14 +8,13 @@ import LoginPage from './LoginPage';
 import RandomModeCard from './RandomModeCard'; 
 import BottomNavigation from './Components/BottomNavigation'; 
 import ProfilePage from './ProfilePage'; 
-import axios from 'axios';
+import Toast from './Components/Toast';
+import defaultAvatar from './assets/images/logo.png'; // Import ảnh avatar mặc định
 
-// --- 1. HIỆU ỨNG MỞ MÀN ---
 function AppEntranceEffect({ onDone }) {
   const [entered, setEntered] = useState(false);
   const [showText, setShowText] = useState(false);
   const [hideRects, setHideRects] = useState(false);
-
   useEffect(() => {
     const enterTimer = setTimeout(() => setEntered(true), 50);
     const textTimer = setTimeout(() => setShowText(true), 500);
@@ -24,9 +23,7 @@ function AppEntranceEffect({ onDone }) {
     const hideTimer = setTimeout(() => setHideRects(true), exitStart + 1000);
     return () => { clearTimeout(enterTimer); clearTimeout(textTimer); clearTimeout(exitTimer); clearTimeout(hideTimer); };
   }, []);
-
   useEffect(() => { if (hideRects && typeof onDone === 'function') onDone(); }, [hideRects, onDone]);
-
   return (
     <div className="EntranceEffect">
       {!hideRects && (
@@ -39,23 +36,18 @@ function AppEntranceEffect({ onDone }) {
   );
 }
 
-// --- 2. MÀN HÌNH CHỌN CHẾ ĐỘ (ĐÃ XÓA LOGOUT) ---
 function AppChooseMode({ onRandom, onTaste }) {
   return (
     <div className="choose-mode-container" style={{position: 'relative'}}>
-      {/* Đã xóa nút logout ở đây */}
-
       <header className="header">
         <div className="logo-container">
           <img src={logo} className="logo" alt="Logo" />
           <span className="logo-text">FoodRec</span>
         </div>
       </header>
-
       <main className="choose-mode-content-container">
         <h1 className="choose-mode-title">How do you want to search for food?</h1>
         <h2 className="choose-mode-subtitle">Choose your option</h2>
-
         <div className="options-grid">
           <div className="option-card random-card" onClick={onRandom}>
             <h2 className="card-title">Quick & Random</h2>
@@ -69,7 +61,6 @@ function AppChooseMode({ onRandom, onTaste }) {
           </div>
         </div>
       </main>
-
       <footer className="footer">
         <div className="choose-mode-footer">
           <a href="#help" className="help-link">Help?</a>
@@ -79,7 +70,7 @@ function AppChooseMode({ onRandom, onTaste }) {
   );
 }
 
-// --- 3. APP MAIN ---
+// --- APP MAIN ---
 function App() {
   const [mode, setMode] = useState('splash'); 
   const [mainTab, setMainTab] = useState('home');
@@ -93,22 +84,48 @@ function App() {
       setMode('main_app'); 
   }
 
+  // --- HÀM XỬ LÝ CHẾ ĐỘ KHÁCH ---
+  function handleGuestLogin() {
+      const guestUser = {
+          isGuest: true,
+          username: "Guest",
+          avatar: defaultAvatar
+      };
+      setCurrentUser(guestUser);
+      setMode('main_app');
+  }
+
   function handleLogout() {
-    if (window.confirm("Log out?")) { 
+    if (currentUser?.isGuest) {
+        // Guest logout không cần confirm
         setMode('login'); 
         setCurrentUser(null);
-        setMainTab('home'); // Reset tab về home
+        setMainTab('home'); 
+    } else {
+        if (window.confirm("Log out?")) { 
+            setMode('login'); 
+            setCurrentUser(null);
+            setMainTab('home'); 
+        }
     }
   }
   
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <div className="App">
+        <Toast /> 
+
         {mode === 'splash' && <SplashScreen onFinish={() => setMode('entrance')} />}
         {mode === 'entrance' && <AppEntranceEffect onDone={() => setMode('onboarding')} />} 
         {mode === 'onboarding' && <OnboardingPage onFinish={() => setMode('login')} />}
         
-        {mode === 'login' && <LoginPage onLoginSuccess={handleLoginSuccess} />}
+        {/* --- FIX LỖI TẠI ĐÂY: Truyền thêm onGuestLogin --- */}
+        {mode === 'login' && (
+            <LoginPage 
+                onLoginSuccess={handleLoginSuccess} 
+                onGuestLogin={handleGuestLogin} 
+            />
+        )}
 
         {mode === 'main_app' && (
             <>
@@ -132,7 +149,6 @@ function App() {
   );
 }
 
-// Wrapper cho trang Random
 function RandomModeWrapper({ currentUser }) {
     const [subMode, setSubMode] = useState('choosing'); 
 

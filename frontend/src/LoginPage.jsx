@@ -3,9 +3,9 @@ import { useGoogleLogin } from '@react-oauth/google';
 import FacebookLogin from '@greatsumini/react-facebook-login';
 import axios from 'axios';
 import './Login.css';
-import { useLanguage } from './Context/LanguageContext'; // Import Context
+import { useLanguage } from './Context/LanguageContext';
 
-// --- ICONS (Giữ nguyên) ---
+// --- ICONS ---
 const UserIcon = () => <span>👤</span>;
 const PhoneIcon = () => <span>📞</span>;
 const LockIcon = () => <span>🔒</span>;
@@ -15,13 +15,15 @@ const GmailIcon = () => <span style={{color: '#DB4437', fontSize: '1.4rem', font
 const EyeOpen = () => <span style={{fontSize: '1.2rem'}}>👁️</span>;
 const EyeClosed = () => <span style={{fontSize: '1.2rem'}}>🙈</span>;
 
-function LoginPage({ onLoginSuccess }) {
-  const { t } = useLanguage(); // Lấy hàm dịch
-  const [view, setView] = useState('welcome');
+function LoginPage({ onLoginSuccess, onGuestLogin }) {
+  const { t } = useLanguage();
+  const [view, setView] = useState('welcome'); // welcome | login | signup | forgot
   const [formData, setFormData] = useState({ username: '', phone: '', password: '', confirmPassword: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showGuestModal, setShowGuestModal] = useState(false);
+
   const API_URL = "http://127.0.0.1:8000/api/auth";
 
   const handleChange = (e) => {
@@ -29,6 +31,7 @@ function LoginPage({ onLoginSuccess }) {
     setErrorMsg(''); 
   };
 
+  // --- GOOGLE LOGIN ---
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       setLoading(true);
@@ -40,6 +43,7 @@ function LoginPage({ onLoginSuccess }) {
     onError: () => setErrorMsg("Google Login Failed"),
   });
 
+  // --- FACEBOOK LOGIN ---
   const responseFacebook = async (response) => {
     if (response.accessToken) {
       setLoading(true);
@@ -53,6 +57,7 @@ function LoginPage({ onLoginSuccess }) {
     }
   };
 
+  // --- MANUAL LOGIN ---
   const handleLoginSubmit = async () => {
     if (!formData.phone || !formData.password) return setErrorMsg("Missing info");
     setLoading(true);
@@ -62,6 +67,7 @@ function LoginPage({ onLoginSuccess }) {
     } catch (err) { setErrorMsg(err.response?.data?.detail || "Login Failed"); } finally { setLoading(false); }
   };
 
+  // --- SIGNUP ---
   const handleSignupSubmit = async () => {
     if (!formData.username || !formData.phone || !formData.password) return setErrorMsg("Missing info");
     setLoading(true);
@@ -71,6 +77,7 @@ function LoginPage({ onLoginSuccess }) {
     } catch (err) { setErrorMsg(err.response?.data?.detail || "Signup Failed"); } finally { setLoading(false); }
   };
 
+  // --- RESET PASSWORD ---
   const handleResetSubmit = async () => {
       if (!formData.phone || !formData.password || !formData.confirmPassword) return setErrorMsg("Missing info");
       if (formData.password !== formData.confirmPassword) return setErrorMsg("Passwords do not match");
@@ -91,17 +98,43 @@ function LoginPage({ onLoginSuccess }) {
     </div>
   );
 
+  // --- RENDER VIEWS ---
+
   if (view === 'welcome') {
     return (
       <div className="login-container">
         <div className="login-illustration"><img src="https://placehold.co/200x200/e2e8f0/10b981?text=FoodRec" style={{borderRadius:'50%'}} alt=""/></div>
         <h1 className="login-title">{t('lets_in')}</h1>
+        
         <FacebookLogin appId="1575289767221956" autoLoad={false} fields="name,email,picture" callback={responseFacebook} 
           render={({onClick})=>(<button className="social-btn" onClick={onClick}><FbIcon/> {t('continue_fb')}</button>)} />
+        
         <button className="social-btn" onClick={()=>googleLogin()}><GoogleIcon/> {t('continue_gg')}</button>
+        
         <div className="divider"><span>{t('or')}</span></div>
+        
         <button className="primary-btn" onClick={()=>setView('login')}>{t('sign_in_phone')}</button>
+        
+        {/* Nút Chế độ Khách */}
+        <div style={{marginTop: '15px', cursor: 'pointer', color: '#666', fontSize: '0.9rem', textDecoration:'underline'}} onClick={() => setShowGuestModal(true)}>
+            {t('continue_guest')}
+        </div>
+
         <div className="bottom-text">{t('dont_have_acc')} <span className="highlight-link" onClick={()=>setView('signup')}>{t('sign_up')}</span></div>
+
+        {/* Modal Cảnh báo Guest */}
+        {showGuestModal && (
+            <div style={{position:'fixed', top:0, left:0, width:'100%', height:'100%', background:'rgba(0,0,0,0.5)', display:'flex', justifyContent:'center', alignItems:'center', zIndex:1000}}>
+                <div style={{background:'white', padding:20, borderRadius:15, width:'80%', maxWidth:300, textAlign:'center'}}>
+                    <h3 style={{margin:'0 0 10px 0', color:'#333'}}>{t('guest_warning_title')}</h3>
+                    <p style={{color:'#666', fontSize:14}}>{t('guest_warning_body')}</p>
+                    <div style={{display:'flex', gap:10, justifyContent:'center', marginTop:20}}>
+                        <button onClick={onGuestLogin} style={{background:'#4CAF50', color:'white', border:'none', padding:'10px 20px', borderRadius:20, fontWeight:'bold'}}>{t('guest_confirm')}</button>
+                        <button onClick={() => setShowGuestModal(false)} style={{background:'#eee', color:'#333', border:'none', padding:'10px 20px', borderRadius:20}}>{t('cancel')}</button>
+                    </div>
+                </div>
+            </div>
+        )}
       </div>
     );
   }
@@ -145,7 +178,6 @@ function LoginPage({ onLoginSuccess }) {
         <button className="back-icon" onClick={()=>setView('login')}>←</button>
         <h1 className="login-title">{t('reset_pass')}</h1>
         <p style={{marginBottom:20,color:'#666',textAlign:'center',fontSize:'0.9rem'}}>{t('reset_desc')}</p>
-        {errorMsg && <div style={{color:'red',marginBottom:10,textAlign:'center'}}>{errorMsg}</div>}
         <div className="input-group"><div className="input-icon"><PhoneIcon/></div><input type="tel" className="custom-input" placeholder={t('phone_ph')} name="phone" value={formData.phone} onChange={handleChange}/></div>
         {renderPasswordInput('new_pass_ph', "password")}
         {renderPasswordInput('confirm_pass_ph', "confirmPassword")}
