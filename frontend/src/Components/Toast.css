@@ -1,0 +1,60 @@
+/* src/Components/Toast.css */
+
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 99999; /* Cao hơn tất cả */
+    display: flex;
+    flex-direction: column;
+    pointer-events: none; /* Để click xuyên qua vùng trống */
+}
+
+.toast-message {
+    /* Thay màu cứng bằng biến màu của ThemeContext */
+    background: var(--bg-card); 
+    min-width: 300px;
+    max-width: 90vw; /* Không quá rộng trên mobile */
+    padding: 15px 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2); /* Shadow đậm hơn chút cho nổi */
+    
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    
+    /* Animation trượt vào */
+    animation: slideInToast 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    
+    pointer-events: auto; /* Cho phép click vào để đóng */
+    border-left: 5px solid #4CAF50;
+    cursor: pointer; /* Con trỏ tay để biết là click được */
+    transition: transform 0.2s;
+}
+
+.toast-message:active {
+    transform: scale(0.98);
+}
+
+.toast-icon {
+    font-size: 24px;
+}
+
+.toast-content h4 {
+    margin: 0 0 4px 0;
+    font-size: 15px;
+    color: var(--text-primary); /* Màu chữ chính theo theme */
+    font-weight: 700;
+}
+
+.toast-content p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-secondary); /* Màu chữ phụ theo theme */
+    line-height: 1.4;
+}
+
+@keyframes slideInToast {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}

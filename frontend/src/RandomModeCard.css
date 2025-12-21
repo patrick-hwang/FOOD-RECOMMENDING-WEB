@@ -1,4 +1,34 @@
 /* =========================================
+   CSS VARIABLES FOR THEME SUPPORT
+   ========================================= */
+:root {
+    --bg-primary: #f8fcf8;
+    --bg-secondary: #f5f5f5;
+    --bg-card: #ffffff;
+    --text-primary: #2F3E37;
+    --text-secondary: #666;
+    --border-color: #e0e0e0;
+    --shadow-color: rgba(0,0,0,0.08);
+    --nav-bg: #ffffff;
+}
+
+body.dark-mode {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2a2a2a;
+    --bg-card: #2d2d2d;
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --border-color: #404040;
+    --shadow-color: rgba(0,0,0,0.4);
+    --nav-bg: #252525;
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================================
    1. BASE CONTAINER & CONFIG
    ========================================= */
 .rm-container {
@@ -6,18 +36,24 @@
     flex-direction: column;
     height: 100vh;
     width: 100vw;
-    background: #f8fcf8; /* Nền xanh rất nhạt */
+    background: var(--bg-primary);
     position: relative;
     font-family: 'Montserrat', sans-serif;
     overflow: hidden;
-    box-sizing: border-box;
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(76, 175, 80, 0.08) 0%, transparent 20%),
+        radial-gradient(circle at 90% -5%, rgba(76, 175, 80, 0.1) 0%, transparent 25%),
+        radial-gradient(circle at 85% 40%, rgba(76, 175, 80, 0.05) 0%, transparent 15%),
+        radial-gradient(circle at 0% 50%, rgba(76, 175, 80, 0.06) 0%, transparent 15%);
+    background-attachment: fixed;
+    transition: background-color 0.3s;
 }
 
 /* =========================================
    2. STICKY HEADER (PHẦN TRÊN CÙNG)
    ========================================= */
 .rm-sticky-header {
-    background: #f8fcf8;
+    background: var(--bg-primary);
     z-index: 50;
     flex-shrink: 0;
     padding-bottom: 5px;
@@ -28,6 +64,21 @@
 /* Header Top (Back btn & Logo) */
 .rm-header-top {
     padding: 15px 20px;
+
+    /* Dùng biến màu nền */
+    background-color: var(--bg-primary); 
+    
+    /* Gradient bong bóng (giữ nguyên nhưng làm mờ đi chút ở dark mode) */
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(76, 175, 80, 0.08) 0%, transparent 20%),
+        radial-gradient(circle at 90% -5%, rgba(76, 175, 80, 0.1) 0%, transparent 25%),
+        radial-gradient(circle at 85% 40%, rgba(76, 175, 80, 0.05) 0%, transparent 15%),
+        radial-gradient(circle at 0% 50%, rgba(76, 175, 80, 0.06) 0%, transparent 15%);
+    background-attachment: fixed;
+    transition: background-color 0.3s;
+}
+
+.rm-header-top {
     display: flex;
     align-items: center;
 }
@@ -45,12 +96,12 @@
 .rm-titles h1 {
     font-size: 40px;
     font-weight: 800;
-    color: #2F3E37;
+    color: var(--text-primary);
     margin: 0;
 }
 .rm-titles p {
     font-size: 14px;
-    color: #666;
+    color: var(--text-secondary);
     margin: 2px 0 0 0;
 }
 
@@ -61,7 +112,7 @@
 .rm-tags-label {
     font-size: 18px;
     font-weight: 800;
-    color: #000;
+    color: var(--text-primary);
     display: block;
     margin-bottom: -2px;
 }
@@ -107,7 +158,7 @@
 }
 
 .rm-more-btn {
-    background: white;
+    background: var(--bg-card);
     color: #00AA55;
     border: 1.5px solid #00AA55;
     padding: 7px 14px;
@@ -142,9 +193,10 @@
     border-radius: 16px;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 15px var(--shadow-color);
     flex-shrink: 0;
     cursor: pointer;
+    background: var(--bg-card);
 }
 
 .place-image-wrapper { width: 100%; height: 100%; position: relative; }
@@ -193,7 +245,7 @@
     margin: 0 10px;
     height: 60vh; /* Cao hơn xíu để hiện nhiều tag */
     
-    background: white;
+    background: var(--bg-card);
     border-radius: 20px;
     box-shadow: 0 -5px 40px rgba(0,0,0,0.15);
     z-index: 150;
@@ -212,23 +264,23 @@
 .rm-sel-header {
     padding: 15px 20px;
     display: flex; justify-content: space-between; align-items: center;
-    border-bottom: 1px solid #f0f0f0;
-    background: white;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-card);
 }
-.rm-sel-header h3 { margin: 0; font-size: 18px; font-weight: 800; color: #333; }
+.rm-sel-header h3 { margin: 0; font-size: 18px; font-weight: 800; color: var(--text-primary); }
 .rm-sel-close { cursor: pointer; color: #999; padding: 5px; }
 
 /* Ô Search */
 .rm-search-box {
     margin: 15px 20px 10px 20px;
     padding: 10px 15px;
-    background: #f5f5f5;
+    background: var(--bg-secondary);
     border-radius: 12px;
     display: flex; align-items: center; gap: 10px;
 }
 .rm-search-box input {
     border: none; background: transparent; outline: none;
-    width: 100%; font-size: 15px; color: #333;
+    width: 100%; font-size: 15px; color: var(--text-primary);
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -243,7 +295,7 @@
 
 .rm-tag-group {
     margin-bottom: 15px;
-    border-bottom: 1px dashed #eee;
+    border-bottom: 1px dashed var(--border-color);
     padding-bottom: 15px;
 }
 .rm-tag-group:last-child { border-bottom: none; }
@@ -271,7 +323,7 @@
 
 /* Button Pill Chung (Cho cả Cha và Con) */
 .rm-pill-btn {
-    background: white;
+    background: var(--bg-card);
     border: 1.5px solid #00AA55;
     color: #00AA55;
     font-family: 'Montserrat', sans-serif;
@@ -333,7 +385,7 @@
 .rm-bottom-bar {
     position: fixed;
     bottom: 0; left: 0; right: 0;
-    background: white;
+    background: var(--nav-bg);
     border-top-left-radius: 25px;
     border-top-right-radius: 25px;
     box-shadow: 0 -5px 30px rgba(0,0,0,0.1);
@@ -388,7 +440,7 @@
     width: 50px; height: 50px;
     border-radius: 50%;
     display: flex; justify-content: center; align-items: center;
-    background: white;
+    background: var(--bg-card);
     transition: all 0.3s;
 }
 .rm-carousel-item span {
@@ -475,7 +527,7 @@
     display: flex; align-items: flex-end;
 }
 .rm-modal-sheet {
-    background: white; width: 100%;
+    background: var(--bg-card); width: 100%;
     border-top-left-radius: 20px; border-top-right-radius: 20px;
     padding: 20px;
     animation: slideUpSheet 0.3s ease-out;
@@ -487,3 +539,56 @@
 .rm-modal-footer { text-align: center; }
 .rm-clear-btn { background: none; border: none; color: #F44336; font-weight: 700; font-size: 16px; cursor: pointer; }
 .rm-tag-pill.large { font-size: 14px; padding: 8px 14px; }
+
+/* =========================================
+   7. MINI BUTTONS (THEME & LANGUAGE TOGGLE)
+   ========================================= */
+.rm-mini-btn {
+    background: var(--bg-card);
+    border: 1.5px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.rm-mini-btn:hover {
+    background: var(--bg-secondary);
+}
+
+.rm-mini-btn.active {
+    background: #4CAF50;
+    border-color: #4CAF50;
+    color: white;
+}
+
+/* =========================================
+   8. DARK MODE SPECIFIC OVERRIDES
+   ========================================= */
+body.dark-mode .rm-back-btn svg,
+body.dark-mode .rm-nav-arrow svg {
+    stroke: #4CAF50;
+}
+
+body.dark-mode .place-bookmark {
+    background: rgba(45, 45, 45, 0.95);
+}
+
+body.dark-mode .rm-carousel-item svg {
+    stroke: #b0b0b0;
+}
+
+body.dark-mode .rm-carousel-item.pos-center svg {
+    stroke: #4CAF50;
+}
+
+body.dark-mode .rm-expand-arrow:hover {
+    background: var(--bg-secondary);
+}
+
+body.dark-mode .rm-tags-label {
+    color: var(--text-primary);
+}

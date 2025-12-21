@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './RestaurantDetail.css';
 import myLogoIcon from './assets/images/logo.png';
+import axios from 'axios';
+import { useLanguage } from './Context/LanguageContext';
+import { useTheme } from './Context/ThemeContext';
+
 // --- BỘ ICON GIỮ NGUYÊN ---
 const DetailIcons = {
   Back: () => (<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00AA55" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>),
   Star: ({ fill }) => (<svg width="16" height="16" viewBox="0 0 24 24" fill={fill} stroke="#FFC107" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>),
-  Bookmark: () => (<svg width="32" height="32" viewBox="0 0 24 24" fill="#00AA55" stroke="none"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>),
+  BookmarkFlag: ({ filled }) => (<svg width="32" height="32" viewBox="0 0 24 24" fill={filled ? "#FFC107" : "none"} stroke={filled ? "#FFC107" : "#00AA55"} strokeWidth="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>),
   Pin: () => (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00AA55" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>),
   Clock: () => (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00AA55" strokeWidth="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>),
   Map: () => (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>),
@@ -14,9 +18,16 @@ const DetailIcons = {
   UserAvatar: () => (<svg width="32" height="32" viewBox="0 0 24 24" fill="#ddd" stroke="#999" strokeWidth="1"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/></svg>)
 };
 
-const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, activeTags = [], onToggleTag }) => {
+const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, activeTags = [], onToggleTag, currentUser }) => {
+  const { t } = useLanguage();
+  const { isDarkMode } = useTheme();
+  
   // --- STATE QUẢN LÝ TAB ---
   const [activeTab, setActiveTab] = useState('menu'); // 'menu' | 'view' | 'review'
+  const [isSaved, setIsSaved] = useState(false);
+
+  const API_URL = "http://127.0.0.1:8000/api/user";
+  const userId = currentUser?.isGuest ? null : (currentUser?.phone || currentUser?.email || currentUser?.facebook_id);
 
   // Dữ liệu mẫu (Tags)
   const defaultTags = ["#Localspecility", "#Open24/7", "#Takeaway", "#BanhMi", "#Vietnamese", "#<100.000VND", "#Take away"];
@@ -33,11 +44,51 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
   ];
 
   // Dữ liệu mẫu (Reviews)
- const mockReviews = [
-  { id: 1, name: "Name", rating: 4, comment: "Highly recommmend for tourists - who would liek to try Phở with Saigon's tasting." },
-  { id: 2, name: "Name", rating: 5, comment: "Highly recommmend for tourists - who would liek to try Phở with Saigon's tasting." },
-  { id: 3, name: "Name", rating: 4, comment: "Highly recommmend for tourists - who would liek to try Phở with Saigon's tasting." },
-];
+  const mockReviews = [
+    { id: 1, name: "Name", rating: 4, comment: "Highly recommmend for tourists - who would liek to try Phở with Saigon's tasting." },
+    { id: 2, name: "Name", rating: 5, comment: "Highly recommmend for tourists - who would liek to try Phở with Saigon's tasting." },
+    { id: 3, name: "Name", rating: 4, comment: "Highly recommmend for tourists - who would liek to try Phở with Saigon's tasting." },
+  ];
+
+  // --- CHECK BOOKMARK STATUS ---
+  useEffect(() => {
+    const checkBookmarkStatus = async () => {
+      if (!userId || !item?.id) return;
+      try {
+        const res = await axios.get(`${API_URL}/${userId}`);
+        const bookmarks = res.data.bookmark_items || [];
+        const found = bookmarks.some(b => b.id === item.id);
+        setIsSaved(found);
+      } catch (e) {
+        console.error("Check bookmark error:", e);
+      }
+    };
+    checkBookmarkStatus();
+  }, [userId, item?.id]);
+
+  // --- HANDLE BOOKMARK CLICK ---
+  const handleBookmarkClick = async () => {
+    if (currentUser?.isGuest || !currentUser) {
+      if (window.confirm(t('guest_action_alert'))) {
+        // Redirect to login if needed
+      }
+      return;
+    }
+    
+    const previousState = isSaved;
+    setIsSaved(!isSaved);
+
+    try {
+      const res = await axios.post(`${API_URL}/${userId}/bookmark`, { 
+        restaurant_id: item.id 
+      });
+      if (res.data.status === 'added') setIsSaved(true);
+      else if (res.data.status === 'removed') setIsSaved(false);
+    } catch (e) {
+      console.error(e);
+      setIsSaved(previousState);
+    }
+  };
 
   // --- RENDER CONTENT CHO TỪNG TAB ---
   const renderContent = () => {
@@ -65,7 +116,9 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
             <div className="rd-info-container">
                 <div className="rd-name-row">
                     <h2 className="rd-item-name">{item?.name || "Restaurant Name"}</h2>
-                    <div className="rd-bookmark-icon"><DetailIcons.Bookmark /></div>
+                    <div className="rd-bookmark-icon" onClick={handleBookmarkClick} style={{cursor: 'pointer'}}>
+                      <DetailIcons.BookmarkFlag filled={isSaved} />
+                    </div>
                 </div>
 
                 <div className="rd-rating-row">
@@ -76,12 +129,12 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
 
                 <div className="rd-address-row">
                     <div className="rd-icon-col"><DetailIcons.Pin /></div>
-                    <span className="rd-text-info">Address: {item?.address || "197A Nguyễn Trãi, District 1, HCMC"}</span>
+                    <span className="rd-text-info">{t('address')}: {item?.address || "197A Nguyễn Trãi, District 1, HCMC"}</span>
                 </div>
                 
                 <div className="rd-address-row">
                     <div className="rd-icon-col"><DetailIcons.Clock /></div>
-                    <span className="rd-text-info">Open: 07:00 AM - 11:00 PM</span>
+                    <span className="rd-text-info">{t('open')}: {item?.openTime || "07:00 AM - 11:00 PM"}</span>
                 </div>
             </div>
 
@@ -176,7 +229,7 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
     }
   };
 
-    return (
+  return (
     <div className="rd-screen">
       
       {/* --- PHẦN 1: CỐ ĐỊNH Ở TRÊN (Header + Tabs) --- */}
@@ -240,7 +293,7 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
       </div>
 
     </div>
-);
+  );
 };
 
 export default RestaurantDetail;

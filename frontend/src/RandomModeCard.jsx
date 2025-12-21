@@ -2,7 +2,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import './RandomModeCard.css';
 import logo from './assets/images/logo.png';
 import RestaurantDetail from './RestaurantDetail';
-import { TAG_DEFINITIONS } from './tags'; 
+import { useLanguage } from './Context/LanguageContext';
+import { useTheme } from './Context/ThemeContext';
 
 // --- ICONS SVG (Thêm Search, Chevron, Check) ---
 const Icons = {
@@ -67,11 +68,11 @@ const HIERARCHICAL_TAGS = {
     ]
 };
 
-const PlaceCard = ({ item, onClick }) => (
+const PlaceCard = ({ item, onClick, onSave }) => (
     <div className="place-card" onClick={onClick}>
         <div className="place-image-wrapper">
-             <img src={item.imageUrl} alt={item.name} onError={(e) => { e.target.src = 'https://placehold.co/400x300?text=No+Image'; }} />
-             <div className="place-bookmark"><Icons.Bookmark /></div>
+                         <img src={item.imageUrl} alt={item.name} onError={(e) => { e.target.src = 'https://placehold.co/400x300?text=No+Image'; }} />
+                         <div className="place-bookmark" onClick={(e) => { e.stopPropagation(); onSave && onSave(item); }}><Icons.Bookmark /></div>
         </div>
         <div className="place-info-overlay">
             <h3 className="place-name">{item.name}</h3>
@@ -83,11 +84,14 @@ const PlaceCard = ({ item, onClick }) => (
     </div>
 );
 
-export default function RandomModeCard({ onBack }) {
+export default function RandomModeCard({ onBack, currentUser, onLogout }) {
+        const { lang, switchLanguage, t } = useLanguage();
+        const { isDarkMode, toggleTheme } = useTheme();
     const [recommendations, setRecommendations] = useState([]);
     const [selectedFilters, setSelectedFilters] = useState({});
     const [detailItem, setDetailItem] = useState(null);
     const [loading, setLoading] = useState(false);
+        const [savedIds, setSavedIds] = useState([]);
     
     // Carousel State
     const [centerIndex, setCenterIndex] = useState(2); 
@@ -108,7 +112,7 @@ export default function RandomModeCard({ onBack }) {
         Object.values(selectedFilters).forEach((values) => {
             if (Array.isArray(values)) list.push(...values); 
         });
-        return list; 
+        return list;
     }, [selectedFilters]);
 
     // --- 2. LIST TAG CÓ KEY ĐỂ HIỂN THỊ HEADER ---
@@ -247,6 +251,18 @@ export default function RandomModeCard({ onBack }) {
     const hiddenCount = allSelectedTagsWithKey.length - 3;
     const currentHierarchy = getFilteredHierarchy();
 
+    // --- GUEST MODE BOOKMARK HANDLER ---
+    const handleQuickSave = (item) => {
+        const isGuest = currentUser?.isGuest || !currentUser;
+        if (isGuest) {
+            const confirmLogin = window.confirm(t('guest_action_alert'));
+            if (confirmLogin && typeof onLogout === 'function') onLogout();
+            return;
+        }
+        const isSaved = savedIds.includes(item.id);
+        setSavedIds(prev => isSaved ? prev.filter(id => id !== item.id) : [...prev, item.id]);
+    };
+
     return (
         <div className="rm-container">
             {/* --- HEADER --- */}
@@ -254,11 +270,17 @@ export default function RandomModeCard({ onBack }) {
                 <div className="rm-header-top">
                     <div className="rm-back-btn" onClick={onBack}><Icons.Back /></div>
                     <div style={{flex: 1}}></div>
-                    <Icons.Logo />
+                    {/* Theme & Language controls */}
+                    <div style={{display:'flex', alignItems:'center', gap:8}}>
+                        <button className="rm-mini-btn" onClick={toggleTheme}>{isDarkMode ? '☀️' : '🌙'}</button>
+                        <button className={`rm-mini-btn ${lang==='vi'?'active':''}`} onClick={() => switchLanguage('vi')}>VI</button>
+                        <button className={`rm-mini-btn ${lang==='en'?'active':''}`} onClick={() => switchLanguage('en')}>EN</button>
+                        <Icons.Logo />
+                    </div>
                 </div>
                 <div className="rm-titles">
-                    <h1>Quick Pick</h1>
-                    <p>Randomized for you</p>
+                    <h1>{t('quick_pick')}</h1>
+                    <p>{t('random_subtitle')}</p>
                 </div>
                 <div className="rm-tags-area">
                     <span className="rm-tags-label">Selected tags</span>
@@ -277,7 +299,7 @@ export default function RandomModeCard({ onBack }) {
             {/* --- CARDS --- */}
             <div className="rm-cards-container">
                 {recommendations.length > 0 ? recommendations.map((item, idx) => (
-                    <PlaceCard key={idx} item={item} onClick={() => setDetailItem(item)} />
+                    <PlaceCard key={idx} item={item} onClick={() => setDetailItem(item)} onSave={handleQuickSave} />
                 )) : <div className="rm-empty-state">{loading ? "Finding best matches..." : "Press 'Find my match' to start!"}</div>}
             </div>
 
@@ -391,7 +413,7 @@ export default function RandomModeCard({ onBack }) {
                     <button className="rm-nav-arrow" onClick={handleNextFilter}><Icons.ArrowRight /></button>
                 </div>
 
-                <button className="rm-find-match-btn" onClick={handleShuffle}>Find my match</button>
+                <button className="rm-find-match-btn" onClick={handleShuffle}>{t('find_match')}</button>
             </div>
 
             {/* Modal Show All Selected Tags (Giữ nguyên) */}
