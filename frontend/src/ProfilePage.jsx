@@ -3,7 +3,6 @@ import './Profile.css';
 import axios from 'axios';
 import defaultAvatar from './assets/images/logo.png';
 import RestaurantDetail from './RestaurantDetail';
-import MapNavigationPage from './MapNavigationPage';
 import { useLanguage } from './Context/LanguageContext';
 import { useTheme } from './Context/ThemeContext'; 
 import { useNotification } from './Context/NotificationContext';
