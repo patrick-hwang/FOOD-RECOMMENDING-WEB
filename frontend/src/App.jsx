@@ -7,6 +7,10 @@ import logo from './assets/images/logo.png';
 import LoginPage from './LoginPage';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import TasteMode from './TasteMode';
+import diceIMG from './assets/images/Mode-Icon/dice.png'
+import compassIMG from './assets/images/Mode-Icon/akinator.png'
+
+// --- IMPORT FILE MỚI TẠI ĐÂY ---
 import RandomModeCard from './RandomModeCard'; 
 import BottomNavigation from './Components/BottomNavigation'; 
 import ProfilePage from './ProfilePage'; 
@@ -41,7 +45,20 @@ function AppEntranceEffect({ onDone }) {
   );
 }
 
-function AppChooseMode({ onRandom, onTaste }) {
+const LogoutIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+    <polyline points="16 17 21 12 16 7"></polyline>
+    <line x1="21" y1="12" x2="9" y2="12"></line>
+  </svg>
+);
+
+// --- 2. MÀN HÌNH CHỌN CHẾ ĐỘ (Giữ nguyên) ---
+function AppChooseMode({ onRandom, onTaste, onLogout }) {
+  {/*const handleClear = () => {
+    setText("");
+  };*/}
+
   return (
     <div className="choose-mode-container" style={{position: 'relative'}}>
       <header className="header">
@@ -51,17 +68,39 @@ function AppChooseMode({ onRandom, onTaste }) {
         </div>
       </header>
       <main className="choose-mode-content-container">
-        <h1 className="choose-mode-title">How do you want to search for food?</h1>
+        {/*<h1 className="choose-mode-title">How do you want to search for food?</h1>
         <h2 className="choose-mode-subtitle">Choose your option</h2>
+*/}
+        <div className="input-container">
+          <span className="input-icon">🔍</span>
+          {/*<span className="clear-icon" onClick={handleClear}>X</span>*/}
+          <input type="text" placeholder='What are you in the mood for?'/>
+        </div>
+        
+        <div className="Quick-pick-container">
+          <h1 className='Quick-pick'>Quick Picks for You</h1>
+          <div className='Keyword-container'> 
+            <div className='Keyword'>sticky rice1</div>
+            <div className='Keyword'>sticky rice2</div>
+            <div className='Keyword'>sticky rice3</div>
+            <div className='Keyword'>sticky rice4</div>
+          </div>
+        </div>
+
+
         <div className="options-grid">
           <div className="option-card random-card" onClick={onRandom}>
+            <div className="card-icon">
+              <img src={diceIMG} alt="Dice" style={{width: '201px', height: '274px'}}/>
+            </div>
             <h2 className="card-title">Quick & Random</h2>
-            <div className="card-icon"><span role="img" aria-label="Dice">🎲</span></div>
             <p className="card-description">Filters & random 3 spots</p>
           </div>
           <div className="option-card taste-card" onClick={onTaste}>
+            <div className="card-icon">
+              <img src={compassIMG} alt="Compass" style={{width: '493px', height: '200px'}}/>
+            </div>
             <h2 className="card-title">Test your Taste</h2>
-            <div className="card-icon"><span role="img" aria-label="Quiz">❓</span></div>
             <p className="card-description">Quizzes for personalized recommendations</p>
           </div>
         </div>
