@@ -162,7 +162,31 @@ export const translations = {
         login_now: "Login Now",
         
         // Alerts
-        guest_action_alert: "This feature requires an account. Do you want to login now?"
+        guest_action_alert: "This feature requires an account. Do you want to login now?",
+
+        hi: "Hi",
+        search_placeholder: "What are you in the mood for?",
+        quick_picks_title: "Quick Picks for You",
+        quick_pick_card: "Quick & Random", 
+        quick_pick_desc: "Filters & random 3 spots",
+        taste_card: "Test your Taste",
+        taste_desc: "Quizzes for personalized recommendations",
+        tm_title: "Test Your Taste",
+        tm_subtitle: "Tell us your preferences",
+        tm_question: "Question",
+        tm_btn_yes: "Yes",
+        tm_btn_maybe_yes: "Maybe Yes",
+        tm_btn_idk: "Don't know",
+        tm_btn_maybe_no: "Maybe No",
+        tm_btn_no: "No",
+        tm_prev: "Previous",
+        tm_next: "Next",
+        tm_loading: "Thinking...",
+        tm_no_match: "No matches found.",
+        tm_back_home: "Back to Home",
+        tm_match_badge: "Restaurant Match",
+        tm_view_details: "View Details",
+        tm_continue: "Not my type yet, continue!"
     },
     vi: {
         // --- AUTH ---
@@ -323,7 +347,30 @@ export const translations = {
         login_now: "Đăng nhập ngay",
 
         // Alerts
-        guest_action_alert: "Tính năng này cần tài khoản. Bạn có muốn đăng nhập ngay không?"
+        guest_action_alert: "Tính năng này cần tài khoản. Bạn có muốn đăng nhập ngay không?",
+        hi: "Chào",
+        search_placeholder: "Hôm nay bạn muốn ăn gì?",
+        quick_picks_title: "Gợi ý nhanh cho bạn",
+        quick_pick_card: "Chọn Nhanh & Random", 
+        quick_pick_desc: "Lọc & random 3 địa điểm",
+        taste_card: "Thử thách Khẩu vị",
+        taste_desc: "Trắc nghiệm tìm quán chuẩn gu",
+        tm_title: "Thử thách Khẩu vị",
+        tm_subtitle: "Cho chúng tôi biết sở thích của bạn",
+        tm_question: "Câu hỏi",
+        tm_btn_yes: "Có",
+        tm_btn_maybe_yes: "Có thể",
+        tm_btn_idk: "Không biết",
+        tm_btn_maybe_no: "Chắc là không",
+        tm_btn_no: "Không",
+        tm_prev: "Quay lại",
+        tm_next: "Tiếp theo",
+        tm_loading: "Đang suy nghĩ...",
+        tm_no_match: "Không tìm thấy quán phù hợp.",
+        tm_back_home: "Về trang chủ",
+        tm_match_badge: "Có quán phù hợp",
+        tm_view_details: "Xem chi tiết",
+        tm_continue: "Chưa ưng ý, tiếp tục!"
     }
 
 };

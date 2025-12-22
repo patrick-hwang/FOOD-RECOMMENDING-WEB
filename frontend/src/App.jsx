@@ -19,6 +19,7 @@ import defaultAvatar from './assets/images/logo.png';
 import { LanguageProvider } from './Context/LanguageContext';
 import { ThemeProvider } from './Context/ThemeContext';
 import { NotificationProvider } from './Context/NotificationContext';
+import { useLanguage } from './Context/LanguageContext';
 
 function AppEntranceEffect({ onDone }) {
   const [entered, setEntered] = useState(false);
@@ -54,62 +55,54 @@ const LogoutIcon = () => (
 );
 
 // --- 2. MÀN HÌNH CHỌN CHẾ ĐỘ (Giữ nguyên) ---
-function AppChooseMode({ onRandom, onTaste, onLogout }) {
-  {/*const handleClear = () => {
-    setText("");
-  };*/}
+function AppChooseMode({ onRandom, onTaste, currentUser }) { // Accept currentUser prop
+  const { t } = useLanguage(); // Hook for translations
+  const username = currentUser?.username || "HeppiHehe";
+  const avatar = currentUser?.avatar || logo; // Fallback to logo if no avatar
 
   return (
-    <div className="choose-mode-container" style={{position: 'relative'}}>
-      <header className="header">
-        <div className="logo-container">
-          <img src={logo} className="logo" alt="Logo" />
-          <span className="logo-text">FoodRec</span>
+    <div className="choose-mode-container">
+      {/* 1. Header */}
+      <div className="home-header">
+        <div className="header-user">
+          <img 
+            src={avatar} 
+            className="header-avatar" 
+            alt="User" 
+            referrerPolicy="no-referrer" // <--- ADD THIS LINE
+          />
+          <span>{t('hi')} {username}!</span>
         </div>
-      </header>
-      <main className="choose-mode-content-container">
-        {/*<h1 className="choose-mode-title">How do you want to search for food?</h1>
-        <h2 className="choose-mode-subtitle">Choose your option</h2>
-*/}
-        <div className="input-container">
-          <span className="input-icon">🔍</span>
-          {/*<span className="clear-icon" onClick={handleClear}>X</span>*/}
-          <input type="text" placeholder='What are you in the mood for?'/>
-        </div>
-        
-        <div className="Quick-pick-container">
-          <h1 className='Quick-pick'>Quick Picks for You</h1>
-          <div className='Keyword-container'> 
-            <div className='Keyword'>sticky rice1</div>
-            <div className='Keyword'>sticky rice2</div>
-            <div className='Keyword'>sticky rice3</div>
-            <div className='Keyword'>sticky rice4</div>
-          </div>
-        </div>
+        <img src={logo} style={{width: 30}} alt="Logo" />
+      </div>
 
+      {/* 2. Search */}
+      <div style={{position:'relative'}}>
+        <span style={{position:'absolute', left:15, top:13}}>🔍</span>
+        <input className="home-search" placeholder={t('search_placeholder')} />
+      </div>
 
-        <div className="options-grid">
-          <div className="option-card random-card" onClick={onRandom}>
-            <div className="card-icon">
-              <img src={diceIMG} alt="Dice" style={{width: '201px', height: '274px'}}/>
-            </div>
-            <h2 className="card-title">Quick & Random</h2>
-            <p className="card-description">Filters & random 3 spots</p>
-          </div>
-          <div className="option-card taste-card" onClick={onTaste}>
-            <div className="card-icon">
-              <img src={compassIMG} alt="Compass" style={{width: '493px', height: '200px'}}/>
-            </div>
-            <h2 className="card-title">Test your Taste</h2>
-            <p className="card-description">Quizzes for personalized recommendations</p>
-          </div>
-        </div>
-      </main>
-      <footer className="footer">
-        <div className="choose-mode-footer">
-          <a href="#help" className="help-link">Help?</a>
-        </div>
-      </footer>
+      {/* 3. Chips */}
+      <h3>{t('quick_picks_title')}</h3>
+      <div className="chips-container">
+        <div className="chip">Sticky Rice</div>
+        <div className="chip">Pho</div>
+        <div className="chip">Banh Mi</div>
+        <div className="chip">Coffee</div>
+      </div>
+
+      {/* 4. Cards */}
+      <div className="mode-card-new card-green" onClick={onRandom}>
+        <img src={diceIMG} className="card-3d-icon" alt="Random" />
+        <h2>{t('quick_pick_card')}</h2>
+        <p>{t('quick_pick_desc')}</p>
+      </div>
+
+      <div className="mode-card-new card-yellow" onClick={onTaste}>
+        <img src={compassIMG} className="card-3d-icon" alt="Taste" />
+        <h2>{t('taste_card')}</h2>
+        <p>{t('taste_desc')}</p>
+      </div>
     </div>
   );
 }
@@ -196,6 +189,7 @@ function App() {
                       <AppChooseMode 
                         onRandom={() => navigate('/random')} 
                         onTaste={() => navigate('/taste')} 
+                        currentUser={currentUser} /* <--- ADD THIS PROP */
                       />
                       <BottomNavigation 
                         activeTab="home" 

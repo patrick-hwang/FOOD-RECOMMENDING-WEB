@@ -4,6 +4,7 @@ import FacebookLogin from '@greatsumini/react-facebook-login';
 import axios from 'axios';
 import './Login.css';
 import { useLanguage } from './Context/LanguageContext';
+import { useTheme } from './Context/ThemeContext';
 
 // --- ICONS ---
 const UserIcon = () => <span>👤</span>;
@@ -16,13 +17,15 @@ const EyeOpen = () => <span style={{fontSize: '1.2rem'}}>👁️</span>;
 const EyeClosed = () => <span style={{fontSize: '1.2rem'}}>🙈</span>;
 
 function LoginPage({ onLoginSuccess, onGuestLogin }) {
-  const { t } = useLanguage();
+  // const { t } = useLanguage();
   const [view, setView] = useState('welcome'); // welcome | login | signup | forgot
   const [formData, setFormData] = useState({ username: '', phone: '', password: '', confirmPassword: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
   const [showGuestModal, setShowGuestModal] = useState(false);
+  const { lang, switchLanguage, t } = useLanguage(); // Update destructuring
+  const { isDarkMode, toggleTheme } = useTheme();    // Get theme hook
 
   const API_URL = "http://127.0.0.1:8000/api/auth";
 
@@ -103,6 +106,12 @@ function LoginPage({ onLoginSuccess, onGuestLogin }) {
   if (view === 'welcome') {
     return (
       <div className="login-container">
+        <div style={{position: 'absolute', top: 20, right: 20, display:'flex', gap: 8, zIndex: 10}}>
+          <button className="rm-mini-btn" onClick={toggleTheme}>{isDarkMode ? '☀️' : '🌙'}</button>
+          <button className={`rm-mini-btn ${lang==='vi'?'active':''}`} onClick={() => switchLanguage('vi')}>VI</button>
+          <button className={`rm-mini-btn ${lang==='en'?'active':''}`} onClick={() => switchLanguage('en')}>EN</button>
+        </div>
+        
         <div className="login-illustration"><img src="https://placehold.co/200x200/e2e8f0/10b981?text=FoodRec" style={{borderRadius:'50%'}} alt=""/></div>
         <h1 className="login-title">{t('lets_in')}</h1>
         

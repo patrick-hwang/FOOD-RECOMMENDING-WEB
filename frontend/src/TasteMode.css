@@ -12,18 +12,23 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
+body.dark-mode .tm-header-section svg {
+    fill: var(--text-primary);
+}
+
 /* --- MAIN CONTAINER & BACKGROUND --- */
 .tm-container {
   min-height: 100vh;
   width: 100%;
   max-width: 480px; /* Force mobile width on desktop */
-  background-color: #fff; /* White background for the "App" area */
+  background-color: var(--bg-primary);
   position: relative;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
   margin: 0 auto; /* Center it */
   box-shadow: 0 0 50px rgba(0,0,0,0.1); /* Shadow to separate from gradient */
+  padding-bottom: 100px;
 }
 
 /* Decorative Background Bubbles */
@@ -39,20 +44,39 @@ body {
 
 /* --- HEADER SECTION --- */
 .tm-header-section {
-  text-align: center;
-  padding: 40px 20px 10px;
-  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  z-index: 2;
+  position: relative;
+  width: 100%;
+}
+
+.tm-header-center {
+    text-align: center;
+    flex: 1; /* Takes remaining space */
+}
+
+.tm-back-icon {
+    cursor: pointer;
+    color: var(--text-primary);
+}
+
+.tm-header-actions {
+    display: flex;
+    gap: 5px;
 }
 
 .tm-title {
   font-size: 28px;
   font-weight: 700;
-  color: #333;
+  color: var(--text-primary);
   margin: 0;
 }
 
 .tm-subtitle {
-  color: var(--gray-text);
+  color: var(--text-secondary);
   font-size: 14px;
   margin-top: 5px;
 }
@@ -62,14 +86,18 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: center; /* Center vertically */
   align-items: center;
   padding: 20px;
   z-index: 1;
+  width: 100%;
+  /* Ensure content doesn't overflow improperly */
+  overflow-y: auto; 
+  padding-bottom: 40px;
 }
 
 .tm-card {
-  background: white;
+  background: var(--bg-card);
   width: 100%;
   border-radius: 25px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.08);
@@ -89,7 +117,7 @@ body {
 
 .tm-question-text {
   font-size: 22px;
-  color: #222;
+  color: var(--text-primary);
   font-weight: 500;
   margin-bottom: 40px;
   line-height: 1.4;
@@ -111,13 +139,14 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
   border: 1.5px solid #666;
-  background: white;
-  color: #333;
+  background: var(--bg-card); /* Was white */
+  color: var(--text-primary); /* Was #333 */
+  border-color: var(--border-color);
 }
 .tm-btn-option:hover {
   border-color: var(--primary-green);
   color: var(--primary-green);
-  background: #f9fff9;
+  background: var(--bg-secondary); /* Was #f9fff9 */
 }
 
 .btn-filled {
@@ -150,7 +179,8 @@ body {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin-top: 30px;
+  margin-top: 20px;
+  flex-shrink: 0; /* Prevents squishing */
 }
 
 .tm-nav-btn {
@@ -182,12 +212,12 @@ body {
 }
 
 .tm-result-card {
-  background: white;
+  background: var(--bg-card); /* Was white */
+  border: 1px solid var(--border-color); /* Was #eee */
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 5px 15px rgba(0,0,0,0.05);
   position: relative;
-  border: 1px solid #eee;
   display: flex;
   flex-direction: column;
 }
@@ -246,7 +276,7 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: #333;
+  color: var(--text-primary); /* Was #333 */
 }
 
 .tm-stars {
@@ -270,12 +300,12 @@ body {
 /* Floating Action Button */
 .tm-floating-action {
   position: fixed;
-  bottom: 30px;
+  bottom: 110px;
   left: 50%;
   transform: translateX(-50%);
   width: 90%;
   max-width: 400px;
-  z-index: 10;
+  z-index: 100;
 }
 
 .tm-continue-btn {
@@ -312,7 +342,7 @@ body {
 }
 
 .tm-popup-content {
-    background: white;
+    background: var(--bg-card); /* Was white */
     width: 100%;
     max-width: 500px;
     height: 90vh; 
@@ -326,7 +356,8 @@ body {
     position: absolute;
     top: 15px;
     right: 15px;
-    background: rgba(255,255,255,0.8);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
     border: none;
     border-radius: 50%;
     width: 35px;
@@ -336,4 +367,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+body.dark-mode .tm-btn-option.selected {
+    background-color: rgba(0, 170, 0, 0.2); /* Darker, transparent green */
+    color: #66BB6A; /* Lighter green text for readability */
+    border-color: #66BB6A;
+    box-shadow: 0 0 0 2px #66BB6A;
 }

@@ -132,6 +132,7 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
                 } 
                 alt="Food" 
                 className="rd-main-img"
+                referrerPolicy="no-referrer"
                 onError={(e) => { e.target.src = 'https://placehold.co/600x400?text=Restaurant'; }}
               />
               <div className="rd-dots-indicator">
@@ -201,7 +202,13 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
              <div className="rd-view-grid">
                 {mockViews.map((src, idx) => (
                   <div key={idx} className="rd-view-item">
-                     <img src={src} alt={`view-${idx}`} loading="lazy" />
+                    <img 
+                      src={src} 
+                      alt={`view-${idx}`} 
+                      loading="lazy" 
+                      referrerPolicy="no-referrer"  // <--- ADD THIS LINE
+                      onError={(e) => { /* ... */ }}
+                    />
                   </div>
                 ))}
              </div>
@@ -221,9 +228,11 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
                     <div className="rd-review-left">
                         {/* Dùng ảnh placeholder cartoon cho giống hình mẫu */}
                         <img 
-                            src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${review.id}`} 
-                            alt="avatar" 
-                            className="rd-review-avatar-img"
+                          src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${review.id}`} 
+                          alt="avatar" 
+                          className="rd-review-avatar-img"
+                          referrerPolicy="no-referrer"  // <--- ADD THIS LINE
+                          onError={(e) => { /* ... */ }}
                         />
                     </div>
 

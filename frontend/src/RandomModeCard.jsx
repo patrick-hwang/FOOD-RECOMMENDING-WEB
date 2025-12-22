@@ -80,7 +80,15 @@ const PlaceCard = ({ item, onClick, onSave, isSaved }) => {
     return (
         <div className="place-card" onClick={onClick}>
             <div className="place-image-wrapper">
-                <img src={imageSrc} alt={item?.name || 'Restaurant'} onError={(e) => { e.target.src = 'https://placehold.co/400x300?text=No+Image'; }} />
+                <img 
+                    src={imageSrc} 
+                    alt={item?.name || 'Restaurant'}
+                    referrerPolicy="no-referrer"  // <--- ADD THIS LINE
+                    onError={(e) => { 
+                        e.target.onerror = null; 
+                        e.target.src = 'https://placehold.co/400x300?text=No+Image'; 
+                    }} 
+                />
                 <div className="place-bookmark" onClick={(e) => { e.stopPropagation(); onSave && onSave(item); }}><Icons.Bookmark color={bookmarkColor} /></div>
             </div>
             <div className="place-info-overlay">

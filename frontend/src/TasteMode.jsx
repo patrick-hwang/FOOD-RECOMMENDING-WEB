@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './TasteMode.css'; 
 import logo from './assets/images/logo.png';
 import RestaurantDetail from './RestaurantDetail';
+import { useLanguage } from './Context/LanguageContext';
+import { useTheme } from './Context/ThemeContext';
 
 const Icons = {
     Back: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>,
@@ -29,6 +31,8 @@ export default function TasteMode({ onBack }) {
     const [isNavigating, setIsNavigating] = useState(false);
 
     const [selectedOption, setSelectedOption] = useState(null);
+    const { t, lang, switchLanguage } = useLanguage();
+    const { isDarkMode, toggleTheme } = useTheme();
 
     // --- INITIAL LOAD ---
     useEffect(() => {
@@ -205,6 +209,15 @@ export default function TasteMode({ onBack }) {
         fetchNextQuestion(yesTags, maybeYesTags, noTags, maybeNoTags, askedIds);
     };
 
+    const getQuestionText = () => {
+        if (!currentQuestion) return "";
+        // Use English if lang is 'en' and the field exists, otherwise default to Vietnamese
+        if (lang === 'en' && currentQuestion.question_en) {
+            return currentQuestion.question_en;
+        }
+        return currentQuestion.question;
+    };
+
     // --- RENDER ---
     if (loading) return (
         <div className="tm-container" style={{justifyContent:'center', alignItems:'center'}}>
@@ -244,22 +257,25 @@ export default function TasteMode({ onBack }) {
                 <div className="tm-bg-bubble bubble-1"></div>
                 <div className="tm-bg-bubble bubble-3"></div>
 
-                <div className="tm-header-section" style={{display:'flex', alignItems:'center', justifyContent:'center', position:'relative'}}>
-                    <div style={{position:'absolute', left:'20px', cursor:'pointer'}} onClick={onBack}>
-                       <Icons.Back />
+                <div className="tm-header-section" style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+                    <div onClick={onBack} style={{cursor:'pointer'}}><Icons.Back /></div>
+                    <div style={{textAlign:'center'}}>
+                        <h1 className="tm-title">{t('tm_title')}</h1>
+                        <p className="tm-subtitle">{t('tm_subtitle')}</p>
                     </div>
-                    <div>
-                        <h1 className="tm-title">LET'S GO</h1>
-                        <p className="tm-subtitle">with your matchings</p>
+                    {/* ADD TOGGLES HERE */}
+                    <div style={{display:'flex', gap: 5}}>
+                        <button className="rm-mini-btn" onClick={toggleTheme}>{isDarkMode ? '☀️' : '🌙'}</button>
+                        <button className={`rm-mini-btn ${lang==='vi'?'active':''}`} onClick={() => switchLanguage('vi')}>VI</button>
+                        <button className={`rm-mini-btn ${lang==='en'?'active':''}`} onClick={() => switchLanguage('en')}>EN</button>
                     </div>
-                    <img src={logo} alt="logo" style={{height:'40px', position:'absolute', right:'20px'}}/>
                 </div>
 
                 <div className="tm-result-area">
                     <div className="tm-result-grid">
                         {results.map((item, idx) => (
                             <div key={idx} className="tm-result-card" onClick={() => setDetailItem(item)}>
-                                <div className="tm-match-badge">Restaurant Match</div>
+                                <div className="tm-match-badge">{t('tm_match_badge')}</div>
                                 <div className="tm-card-img-container">
                                     <img 
                                         src={item.imageUrl} 
@@ -276,7 +292,7 @@ export default function TasteMode({ onBack }) {
                                         {[1,2,3,4,5].map(s => <span key={s} style={{color: s <= (item.rating || 4.5) ? '#FFC107' : '#eee'}}>★</span>)} 
                                         {item.rating || 4.5}
                                     </div>
-                                    <button className="tm-view-btn">View Details</button>
+                                    <button className="tm-view-btn">{t('tm_view_details')}</button>
                                 </div>
                             </div>
                         ))}
@@ -285,7 +301,7 @@ export default function TasteMode({ onBack }) {
 
                 <div className="tm-floating-action">
                     <button className="tm-continue-btn" onClick={handleAskMore}>
-                        Not my type yet, continue!
+                        {t('tm_continue')}
                     </button>
                 </div>
             </div>
@@ -307,38 +323,43 @@ export default function TasteMode({ onBack }) {
             <div className="tm-bg-bubble bubble-1"></div>
             <div className="tm-bg-bubble bubble-2"></div>
 
-            <div className="tm-header-section" style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-                <div onClick={onBack} style={{cursor:'pointer'}}><Icons.Back /></div>
-                <div style={{textAlign:'center'}}>
-                     <h1 className="tm-title">Test Your Taste</h1>
-                     <p className="tm-subtitle">Tell us your preferences</p>
+            <div className="tm-header-section">
+                <div onClick={onBack} className="tm-back-icon"><Icons.Back /></div>
+                <div className="tm-header-center">
+                     <h1 className="tm-title">{t('tm_title')}</h1>
+                     <p className="tm-subtitle">{t('tm_subtitle')}</p>
                 </div>
-                <img src={logo} alt="logo" style={{height:'40px'}}/>
+                {/* LANGUAGE / THEME TOGGLES */}
+                <div className="tm-header-actions">
+                    <button className="rm-mini-btn" onClick={toggleTheme}>{isDarkMode ? '☀️' : '🌙'}</button>
+                    <button className={`rm-mini-btn ${lang==='vi'?'active':''}`} onClick={() => switchLanguage('vi')}>VI</button>
+                    <button className={`rm-mini-btn ${lang==='en'?'active':''}`} onClick={() => switchLanguage('en')}>EN</button>
+                </div>
             </div>
 
             <div className="tm-question-area">
                 <div className="tm-card">
-                    <span className="tm-progress-text">Question: {questionCount + 1}</span>
+                    <span className="tm-progress-text">{t('tm_question')}: {questionCount + 1}</span>
                     
                     {currentQuestion && (
                         <>
-                            <h2 className="tm-question-text">{currentQuestion.question}</h2>
+                            <h2 className="tm-question-text">{getQuestionText()}</h2>
                             
                             <div className="tm-btn-group">
                                 <button className={`tm-btn-option btn-outline ${selectedOption === 'yes' ? 'selected' : ''}`} onClick={() => handleOptionSelect('yes')}>
-                                    Yes
+                                    {t('tm_btn_yes')}
                                 </button>
                                 <button className={`tm-btn-option btn-outline ${selectedOption === 'maybe_yes' ? 'selected' : ''}`} onClick={() => handleOptionSelect('maybe_yes')}>
-                                    Maybe Yes
+                                    {t('tm_btn_maybe_yes')}
                                 </button>
                                 <button className={`tm-btn-option btn-outline ${selectedOption === 'idk' ? 'selected' : ''}`} onClick={() => handleOptionSelect('idk')}>
-                                    Don't know
+                                    {t('tm_btn_idk')}
                                 </button>
                                 <button className={`tm-btn-option btn-outline ${selectedOption === 'maybe_no' ? 'selected' : ''}`} onClick={() => handleOptionSelect('maybe_no')}>
-                                    Maybe No
+                                    {t('tm_btn_maybe_no')}
                                 </button>
                                 <button className={`tm-btn-option btn-outline ${selectedOption === 'no' ? 'selected' : ''}`} onClick={() => handleOptionSelect('no')}>
-                                    No
+                                    {t('tm_btn_no')}
                                 </button>
                             </div>
                         </>
@@ -346,8 +367,8 @@ export default function TasteMode({ onBack }) {
                 </div>
 
                 <div className="tm-nav-row">
-                    <button className="tm-nav-btn nav-prev" onClick={handlePrevious}>Previous</button>
-                    <button className="tm-nav-btn" onClick={handleNext}>Next</button>
+                    <button className="tm-nav-btn nav-prev" onClick={handlePrevious}>{t('tm_prev')}</button>
+                    <button className="tm-nav-btn" onClick={handleNext}>{t('tm_next')}</button>
                 </div>
             </div>
         </div>

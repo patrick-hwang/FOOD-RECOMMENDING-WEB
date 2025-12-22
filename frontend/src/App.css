@@ -2,15 +2,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 /* --- 1. GLOBAL BACKGROUND FIX --- */
+:root {
+  --bg-primary: #f8f9fa; /* Light background */
+  --text-primary: #333;
+  --card-bg: #fff;
+  --input-bg: #fff;
+  --chip-bg: #e0e0e0;
+  --chip-text: #333;
+}
+
+body.dark-mode {
+  --bg-primary: #121212; /* Dark background */
+  --text-primary: #fff;
+  --card-bg: #1e1e1e;
+  --input-bg: #2c2c2c;
+  --chip-bg: #333;
+  --chip-text: #fff;
+}
+
 body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Montserrat', sans-serif;
-  /* Apply gradient to body so it covers the full screen (the "2 sides") */
-  background: linear-gradient(90deg, #F3F5F4 0%, #9AAE9C 80%) no-repeat fixed;
-  min-height: 100vh;
-  /* Ensure no white bars on scroll */
-  background-size: cover; 
+  background: var(--bg-primary); /* Use variable! */
+  color: var(--text-primary);
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 #root {
@@ -94,22 +107,119 @@ body {
 
 /* --- 2. HOME SCREEN CARD FIX --- */
 .choose-mode-container {
+  padding: 20px;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
+  padding-bottom: 100px;
+}
+
+/* NEW HEADER STYLES */
+.home-header {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: flex-start;
-  
-  /* Dimensions & Centering */
+  margin-bottom: 20px;
+}
+.header-user { display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 1.2rem; }
+.header-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+
+/* NEW SEARCH BAR */
+.home-search {
   width: 100%;
-  max-width: 480px; /* Keep it mobile-sized */
-  min-height: 100vh; /* Fill height */
-  margin: 0 auto;
-  
-  /* Card Look */
-  background: linear-gradient(180deg, #f8fffb, #f4f4f4, #9aae9c);
-  box-shadow: 0 0 40px rgba(0,0,0,0.1); /* Shadow to separate from sides */
-  position: relative;
+  padding: 15px 40px;
+  border-radius: 30px;
+  border: 1px solid #ddd;
+  background: var(--input-bg);
+  color: var(--text-primary);
   box-sizing: border-box;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* NEW CHIPS (Horizontal Scroll) */
+.chips-container {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  margin-bottom: 40px;
+  padding-bottom: 5px;
+}
+.chip {
+  background: var(--chip-bg);
+  color: var(--chip-text);
+  padding: 8px 20px;
+  border-radius: 20px;
+  white-space: nowrap;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* --- NEW CARDS (Stacked + 3D Icon) --- */
+.mode-card-new {
+  position: relative;
+  height: 180px;
+  border-radius: 20px;
+  padding: 30px;
+  padding-bottom: 50px;
+  
+  /* Increased spacing so the icons don't touch the card above */
+  margin-top: 70px; 
+  
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  text-align: center;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  cursor: pointer;
+
+  /* "Bound" (Bounce) Animation settings */
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+}
+
+/* Hover Effect: Bounce up + Shadow */
+.mode-card-new:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 20px 30px rgba(0,0,0,0.2);
+}
+
+.card-green { 
+  background: linear-gradient(90deg, #00C853, #69F0AE); 
+}
+.card-yellow { 
+  background: linear-gradient(90deg, #dce35b, #45b649); 
+}
+
+/* Base Icon Styles */
+.card-3d-icon {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 10px 5px rgba(0,0,0,0.2));
+  transition: transform 0.4s ease;
+}
+
+/* --- FIX FOR ICON SIZES --- */
+
+/* 1. DICE (Tall & Narrow): Make it taller to match visual weight */
+.card-green .card-3d-icon {
+  height: 175px;      /* Taller than the clock */
+  width: auto;        /* Let width auto-calculate to keep ratio */
+  top: -90px;         /* Half of 145px to center on edge */
+}
+
+/* 2. CLOCK (Square): Keep it standard size */
+.card-yellow .card-3d-icon {
+  height: 130px;
+  width: 130px;
+  object-fit: contain;
+  top: -65px;         /* Half of 130px */
+}
+
+/* Hover: Float icon slightly higher */
+.mode-card-new:hover .card-3d-icon {
+  transform: translateX(-50%) translateY(-5px);
 }
 
 /* Header (Logo) */

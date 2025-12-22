@@ -185,6 +185,13 @@ body.dark-mode {
     /* Padding bottom lớn để không bị Bottom Bar che mất */
     padding-bottom: 240px; 
     padding-top: 15px;
+
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE/Edge */
+}
+
+.rm-cards-container::-webkit-scrollbar {
+    display: none;
 }
 
 .place-card {
