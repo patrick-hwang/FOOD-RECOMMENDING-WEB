@@ -18,7 +18,7 @@ const DetailIcons = {
   UserAvatar: () => (<svg width="32" height="32" viewBox="0 0 24 24" fill="#ddd" stroke="#999" strokeWidth="1"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/></svg>)
 };
 
-const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, activeTags = [], onToggleTag, currentUser }) => {
+const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, activeTags = [], onToggleTag, currentUser, onLogout }) => {
   const { t } = useLanguage();
   const { isDarkMode } = useTheme();
   
@@ -94,7 +94,7 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
   const handleBookmarkClick = async () => {
     if (currentUser?.isGuest || !currentUser) {
       if (window.confirm(t('guest_action_alert'))) {
-        // Redirect to login if needed
+        if (onLogout) onLogout();
       }
       return;
     }
@@ -103,8 +103,9 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
     setIsSaved(!isSaved);
 
     try {
+      const rId = item.id || item._id;
       const res = await axios.post(`${API_URL}/${userId}/bookmark`, { 
-        restaurant_id: item.id 
+        restaurant_id: rId 
       });
       if (res.data.status === 'added') setIsSaved(true);
       else if (res.data.status === 'removed') setIsSaved(false);

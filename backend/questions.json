@@ -1281,7 +1281,7 @@
   },
   {
     "id": 161,
-    "question": "Bạn có muốn ăn giá siêu rẻ (0 - 20,000 VNĐ) hoặc rẻ hơn?",
+    "question": "Bạn có muốn ăn giá siêu rẻ (0 - 20,000 VNĐ) không?",
     "question_en": "Do you want super cheap eats (0 - 20k)?",
     "yes": { "no_tag": ["rẻ", "bình dân", "sang", "nhà hàng", "cao cấp"] },
     "no": { "no_tag": ["siêu rẻ"] },
@@ -1289,7 +1289,7 @@
   },
   {
     "id": 162,
-    "question": "Bạn có muốn ăn giá rẻ (20,000 - 40,000 VNĐ) hoặc rẻ hơn?",
+    "question": "Bạn có muốn ăn giá rẻ (20,000 - 40,000 VNĐ) không?",
     "question_en": "Do you want cheap eats (20k - 40k)?",
     "yes": { "no_tag": ["bình dân", "sang", "nhà hàng", "cao cấp"] },
     "no": { "no_tag": ["siêu rẻ", "rẻ"] },
@@ -1297,7 +1297,7 @@
   },
   {
     "id": 163,
-    "question": "Bạn có muốn ăn giá bình dân (40,000 - 80,000 VNĐ) hoặc rẻ hơn?",
+    "question": "Bạn có muốn ăn giá bình dân (40,000 - 80,000 VNĐ) không?",
     "question_en": "Do you want affordable eats (40k - 80k)?",
     "yes": { "no_tag": ["sang", "nhà hàng", "cao cấp"] },
     "no": { "no_tag": ["siêu rẻ", "rẻ", "bình dân"] },
@@ -1305,7 +1305,7 @@
   },
   {
     "id": 164,
-    "question": "Bạn có muốn ăn giá sang (80,000 - 150,000 VNĐ) hoặc rẻ hơn?",
+    "question": "Bạn có muốn ăn giá sang (80,000 - 150,000 VNĐ) không?",
     "question_en": "Do you want fancy eats (80k - 150k)?",
     "yes": { "no_tag": ["nhà hàng", "cao cấp"] },
     "no": { "no_tag": ["siêu rẻ", "rẻ", "bình dân", "sang"] },
@@ -1313,7 +1313,7 @@
   },
   {
     "id": 165,
-    "question": "Bạn có muốn ăn giá nhà hàng (150,000 - 300,000 VNĐ) hoặc mắc hơn?",
+    "question": "Bạn có muốn ăn giá nhà hàng (150,000 - 300,000 VNĐ) không?",
     "question_en": "Do you want high-end dining (150k - 300k)?",
     "yes": { "no_tag": ["siêu rẻ", "rẻ", "bình dân", "sang"] },
     "no": { "no_tag": ["nhà hàng", "cao cấp"] },
@@ -1321,7 +1321,7 @@
   },
   {
     "id": 166,
-    "question": "Bạn có muốn ăn giá cao cấp (300,000 - 500,000 VNĐ) hoặc mắc hơn?",
+    "question": "Bạn có muốn ăn giá cao cấp (300,000 - 500,000 VNĐ) không?",
     "question_en": "Do you want luxury dining (300k - 500k+)?",
     "yes": { "no_tag": ["siêu rẻ", "rẻ", "bình dân", "sang", "nhà hàng"] },
     "no": { "no_tag": ["cao cấp"] },

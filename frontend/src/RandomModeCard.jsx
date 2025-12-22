@@ -5,6 +5,7 @@ import RestaurantDetail from './RestaurantDetail';
 import { useLanguage } from './Context/LanguageContext';
 import { useTheme } from './Context/ThemeContext';
 import axios from 'axios';
+import { HIERARCHICAL_TAGS } from './tags';
 
 // --- ICONS SVG (Thêm Search, Chevron, Check) ---
 const Icons = {
@@ -32,42 +33,10 @@ const FILTER_ORDER = [
   { key: 'price_range', Icon: Icons.Price, label: 'Price' },
   { key: 'cuisine_origin', Icon: Icons.Origin, label: 'Origin' },
   { key: 'main_dishes', Icon: Icons.Dish, label: 'Main Dishes' },
-  { key: 'atmosphere', Icon: Icons.Atmosphere, label: 'Atmosphere' },
+//   { key: 'atmosphere', Icon: Icons.Atmosphere, label: 'Atmosphere' },
   { key: 'occasion', Icon: Icons.Occasion, label: 'Occasion' },
   { key: 'distance', Icon: Icons.Distance, label: 'Distance' },
 ];
-
-// --- MOCK DATA HIERARCHY (Cấu trúc 3 chiều như bạn yêu cầu) ---
-const HIERARCHICAL_TAGS = {
-    price_range: [
-        { name: "Bình dân", children: ["$ (Dưới 50k)", "$$ (50k - 100k)"] },
-        { name: "Sang trọng", children: ["$$$ (100k - 500k)", "$$$$ (Trên 500k)"] }
-    ],
-    cuisine_origin: [
-        { name: "Việt Nam", children: ["Miền Bắc", "Miền Trung", "Miền Nam", "Miền Tây"] },
-        { name: "Quốc tế", children: ["Hàn Quốc", "Nhật Bản", "Trung Hoa", "Âu Mỹ", "Thái Lan"] }
-    ],
-    main_dishes: [
-        { name: "Món nước", children: ["Phở", "Bún", "Miến", "Hủ tiếu", "Bánh canh"] },
-        { name: "Cơm & Xôi", children: ["Cơm tấm", "Cơm rang", "Xôi mặn", "Cơm văn phòng"] },
-        { name: "Bánh mì & Bột", children: ["Bánh mì", "Bánh cuốn", "Bánh bao"] },
-        { name: "Lẩu & Nướng", children: ["Lẩu thái", "Lẩu riêu", "Nướng BBQ"] },
-        { name: "Đồ ăn nhẹ", children: ["Chè", "Trà sữa", "Bánh ngọt"] }
-    ],
-    atmosphere: [
-        { name: "Trong nhà", children: ["Ấm cúng", "Máy lạnh", "Yên tĩnh"] },
-        { name: "Ngoài trời", children: ["Sân vườn", "Vỉa hè", "Rooftop", "Ven hồ"] },
-        { name: "Decor", children: ["Vintage", "Hiện đại", "Sống ảo"] }
-    ],
-    occasion: [
-        { name: "Bữa chính", children: ["Ăn sáng", "Ăn trưa", "Ăn tối"] },
-        { name: "Gặp gỡ", children: ["Hẹn hò", "Tiếp khách", "Họp nhóm", "Sinh nhật"] }
-    ],
-    distance: [
-        { name: "Gần tôi", children: ["Dưới 1km", "1km - 3km"] },
-        { name: "Xung quanh", children: ["3km - 5km", "5km - 10km"] }
-    ]
-};
 
 const PlaceCard = ({ item, onClick, onSave, isSaved }) => {
     const imageSrc = item?.imageUrl
@@ -103,13 +72,13 @@ const PlaceCard = ({ item, onClick, onSave, isSaved }) => {
 };
 
 export default function RandomModeCard({ onBack, currentUser, onLogout }) {
-        const { lang, switchLanguage, t } = useLanguage();
-        const { isDarkMode, toggleTheme } = useTheme();
+    const { lang, switchLanguage, t } = useLanguage();
+    const { isDarkMode, toggleTheme } = useTheme();
     const [recommendations, setRecommendations] = useState([]);
     const [selectedFilters, setSelectedFilters] = useState({});
     const [detailItem, setDetailItem] = useState(null);
     const [loading, setLoading] = useState(false);
-        const [savedIds, setSavedIds] = useState([]);
+    const [savedIds, setSavedIds] = useState([]);
     const [detailSelectedTags, setDetailSelectedTags] = useState([]);
     
     // Carousel State
@@ -151,15 +120,68 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
     async function handleShuffle() {
         setLoading(true);
         setRecommendations([]);
-        try {
-            const body = { tags: selectedFilters, count: 4 };
-            const res = await axios.post('http://127.0.0.1:8000/api/filter-random', body);
-            const data = Array.isArray(res.data) ? res.data : [];
-            setRecommendations(data);
-        } catch (e) {
-            console.error('Fetch random failed:', e);
-        } finally {
-            setLoading(false);
+
+        // 1. Separate 'distance' tags from the rest
+        // We do NOT send "distance" inside 'tags' because the backend treats those as text fields.
+        const requestTags = { ...selectedFilters };
+        const distanceTags = requestTags['distance'];
+        delete requestTags['distance'];
+
+        // 2. Define the Fetch Logic
+        const performFetch = async (geoPayload = null) => {
+            try {
+                const body = { 
+                    tags: requestTags, 
+                    count: 4, 
+                    geo: geoPayload // { center: {lat, lng}, maxKm: 5 }
+                };
+                const res = await axios.post('http://127.0.0.1:8000/api/filter-random', body);
+                const data = Array.isArray(res.data) ? res.data : [];
+                setRecommendations(data);
+            } catch (e) {
+                console.error('Fetch random failed:', e);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        // 3. Check if Distance Filter is active
+        if (distanceTags && distanceTags.length > 0) {
+            // Determine max radius based on selected tags
+            let maxKm = 0;
+            distanceTags.forEach(t => {
+                if (t.includes("Dưới 1km")) maxKm = Math.max(maxKm, 1);
+                else if (t.includes("3km")) maxKm = Math.max(maxKm, 3);
+                else if (t.includes("5km")) maxKm = Math.max(maxKm, 5);
+                else if (t.includes("10km")) maxKm = Math.max(maxKm, 10);
+            });
+            if (maxKm === 0) maxKm = 5; // Default fallback
+
+            // Get User Location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const { latitude, longitude } = position.coords;
+                        // Call API WITH Location
+                        performFetch({
+                            center: { lat: latitude, lng: longitude },
+                            maxKm: maxKm
+                        });
+                    },
+                    (error) => {
+                        console.warn("Location access denied:", error);
+                        alert("Please enable location to use Distance filter.");
+                        // Fallback: Fetch without location filtering
+                        performFetch(null); 
+                    }
+                );
+            } else {
+                alert("Geolocation not supported.");
+                performFetch(null);
+            }
+        } else {
+            // No Distance filter selected -> Fetch normally
+            performFetch(null);
         }
     }
 
@@ -294,6 +316,7 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
                 activeTags={[...allSelectedTagValues, ...detailSelectedTags]} 
                 onToggleTag={handleDetailTagToggle}
                 currentUser={currentUser}
+                onLogout={onLogout}
             />
         );
     }
@@ -307,7 +330,9 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
         const isGuest = currentUser?.isGuest || !currentUser;
         if (isGuest) {
             const confirmLogin = window.confirm(t('guest_action_alert'));
-            if (confirmLogin && typeof onLogout === 'function') onLogout();
+            if (confirmLogin && onLogout) {
+                onLogout(); 
+            }
             return;
         }
         const phone = currentUser.phone || currentUser.email || currentUser.facebook_id;
@@ -353,7 +378,7 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
                     <p>{t('random_subtitle')}</p>
                 </div>
                 <div className="rm-tags-area">
-                    <span className="rm-tags-label">Selected tags</span>
+                    <span className="rm-tags-label">{t('selected_tags')}</span>
                     <div className="rm-tags-row">
                         {visibleTags.map((t) => (
                             <div key={`${t.key}-${t.value}`} className="rm-tag-pill">
@@ -380,7 +405,11 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
                             isSaved={isSaved}
                         />
                     );
-                }) : <div className="rm-empty-state">{loading ? "Finding best matches..." : "Press 'Find my match' to start!"}</div>}
+                }) : (
+                    <div className="rm-empty-state">
+                        {loading ? t('finding_matches') : t('press_start')}
+                    </div>
+                )}
             </div>
 
             {/* --- BOTTOM BAR --- */}
@@ -390,7 +419,7 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
                 {showSelectionModal && (
                     <div className="rm-selection-modal">
                         <div className="rm-sel-header">
-                            <h3>Select the {activeFilter.label}</h3>
+                            <h3>{t('select')} {t(activeFilter.key)}</h3>
                             <div onClick={closeSelectionModal} className="rm-sel-close"><Icons.Close /></div>
                         </div>
 
@@ -485,7 +514,7 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
                                     }}
                                 >
                                     <div className="rm-icon-circle">{item.Icon()}</div>
-                                    <span>{item.label}</span>
+                                    <span>{t(item.key)}</span>
                                 </div>
                             );
                         })}

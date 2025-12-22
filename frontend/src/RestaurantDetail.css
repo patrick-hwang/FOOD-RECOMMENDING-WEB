@@ -32,6 +32,7 @@ body.dark-mode {
     overflow: hidden;
     position: relative;
     font-family: 'Montserrat', sans-serif;
+    padding-bottom: 90px;
 }
 
 /* --- HEADER --- */

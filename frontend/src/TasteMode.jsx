@@ -11,7 +11,7 @@ const Icons = {
     Close: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
 };
 
-export default function TasteMode({ onBack }) {
+export default function TasteMode({ onBack, currentUser, onLogout }) {
     // --- STATE ---
     const [yesTags, setYesTags] = useState([]);
     const [maybeYesTags, setMaybeYesTags] = useState([]);
@@ -228,20 +228,30 @@ export default function TasteMode({ onBack }) {
 
     // 1. Navigation Mode
     if (isNavigating && detailItem) {
-        return <MapNavigationPage item={detailItem} onBack={() => setIsNavigating(false)} />;
+        // Pass currentUser if needed
+        return (
+            <div style={{position:'fixed', top:0, left:0, width:'100vw', height:'100vh', zIndex:21000, background: isDarkMode?'#121212':'white'}}>
+                <RestaurantDetail 
+                    item={detailItem} 
+                    onBack={() => setIsNavigating(false)} 
+                    onGetDirection={()=>{}}
+                />
+            </div>
+        );
     }
 
     // 2. Detail Popup Overlay
     const DetailPopup = () => (
         <div className="tm-popup-overlay">
             <div className="tm-popup-content">
-                <button className="tm-popup-close" onClick={() => setDetailItem(null)}><Icons.Close/></button>
-                <div style={{height: '100%', overflowY: 'auto'}}>
+                <div className="tm-popup-scroll" style={{height: '100%', overflowY: 'auto'}}>
                     <RestaurantDetail 
                         item={detailItem} 
                         onBack={() => setDetailItem(null)} 
                         onShuffleAgain={() => { setDetailItem(null); handleAskMore(); }}
                         onGetDirection={() => setIsNavigating(true)}
+                        currentUser={currentUser} 
+                        onLogout={onLogout}
                     />
                 </div>
             </div>
@@ -299,11 +309,13 @@ export default function TasteMode({ onBack }) {
                     </div>
                 </div>
 
-                <div className="tm-floating-action">
-                    <button className="tm-continue-btn" onClick={handleAskMore}>
-                        {t('tm_continue')}
-                    </button>
-                </div>
+                {!detailItem && (
+                    <div className="tm-floating-action">
+                        <button className="tm-continue-btn" onClick={handleAskMore}>
+                            {t('tm_continue')}
+                        </button>
+                    </div>
+                )}
             </div>
         );
     }

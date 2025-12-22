@@ -46,11 +46,17 @@ export const translations = {
         hot_picks: "Hot picks",
         find_match: "Find my match",
         shuffle: "Shuffle",
-        
+        select: "Select",
+
+        selected_tags: "Selected tags",
+        press_start: "Press 'Find my match' to start!",
+        finding_matches: "Finding best matches...",
+
         // Filters Labels
         price_range: "Price",
         cuisine_origin: "Origin",
         main_dishes: "Dish",
+        occasion: "Occasion",
         place: "Place",
         distance: "Distance",
         speciality_vn: "Speciality",
@@ -233,14 +239,20 @@ export const translations = {
         hot_picks: "Nổi bật",
         find_match: "Tìm quán ngay",
         shuffle: "Trộn",
+        select: "Chọn",
 
         // Filters Labels
         price_range: "Giá cả",
         cuisine_origin: "Vùng miền",
         main_dishes: "Món chính",
+        occasion: "Dịp", // <--- ADD THIS
         place: "Không gian",
         distance: "Khoảng cách",
         speciality_vn: "Đặc sản VN",
+
+        selected_tags: "Tag đã chọn",
+        press_start: "Nhấn 'Tìm quán ngay' để bắt đầu!",
+        finding_matches: "Đang tìm quán phù hợp...",
 
         // --- PROFILE ---
         guest: "Khách",
@@ -368,7 +380,7 @@ export const translations = {
         tm_loading: "Đang suy nghĩ...",
         tm_no_match: "Không tìm thấy quán phù hợp.",
         tm_back_home: "Về trang chủ",
-        tm_match_badge: "Có quán phù hợp",
+        tm_match_badge: "Quán phù hợp",
         tm_view_details: "Xem chi tiết",
         tm_continue: "Chưa ưng ý, tiếp tục!"
     }

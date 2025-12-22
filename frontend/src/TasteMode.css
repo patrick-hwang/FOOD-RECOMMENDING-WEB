@@ -375,3 +375,11 @@ body.dark-mode .tm-btn-option.selected {
     border-color: #66BB6A;
     box-shadow: 0 0 0 2px #66BB6A;
 }
+
+.tm-popup-scroll {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+.tm-popup-scroll::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}

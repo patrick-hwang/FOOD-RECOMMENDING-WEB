@@ -207,6 +207,7 @@ function App() {
                       <RandomModeCard 
                         onBack={() => navigate('/home')} 
                         currentUser={currentUser}
+                        onLogout={handleLogout}
                       />
                       <BottomNavigation 
                         activeTab="home" 
@@ -224,6 +225,7 @@ function App() {
                       <TasteMode 
                         onBack={() => navigate('/home')}
                         currentUser={currentUser}
+                        onLogout={handleLogout}
                       />
                       <BottomNavigation 
                         activeTab="home" 

@@ -1,235 +1,90 @@
-export const TAG_DEFINITIONS = {
-    "nhiệt độ": [
-        "lạnh",
-        "mát",
-        "nguội",
-        "ấm",
-        "nóng",
-        "sôi/rất nóng"
+// src/utils/tags.js
+
+export const HIERARCHICAL_TAGS = {
+    price_range: [
+        { 
+            name: "Bình dân", 
+            children: ["siêu rẻ", "rẻ", "bình dân"] 
+        },
+        { 
+            name: "Sang trọng", 
+            children: ["sang", "nhà hàng", "cao cấp"] 
+        }
     ],
-    "nước cốt dừa": [
-        "nước cốt dừa"
+    cuisine_origin: [
+        { 
+            name: "Việt Nam", 
+            children: [
+                "Hà Nội", "Hải Phòng", "Phú Yên", "Huế", "Quảng Ngãi", 
+                "Đà Nẵng", "Quảng Nam", "Khánh Hòa", "Phan Rang", "Bình Định", 
+                "Nghệ An", "Hà Tĩnh", "Tiền Giang", "Đồng Tháp", "Cà Mau", 
+                "Sóc Trăng", "An Giang", "Sài Gòn", "Bà Rịa - Vũng Tàu", "Lâm Đồng"
+            ] 
+        },
+        { 
+            name: "Quốc tế", 
+            children: [
+                "Pháp", "Mỹ", "Ý", "Đức", "Nhật Bản", "Hàn Quốc", "Trung Quốc"
+            ] 
+        }
     ],
-    "sữa": [
-        "sữa"
+    main_dishes: [
+        { 
+            name: "Món Sợi & Nước", 
+            children: [
+                "bún", "phở", "hủ tiếu", "mì sợi", "bánh canh bột gạo", "bánh đa", 
+                "miến dong", "miến/bún tàu", "súp", "lẩu", "cháo", "cà ri", "hầm"
+            ] 
+        },
+        { 
+            name: "Cơm & Nếp", 
+            children: [
+                "cơm", "bắp", "xôi", "bánh nếp", "cốm", "chè nếp", "nếp hấp"
+            ] 
+        },
+        { 
+            name: "Các loại Bánh", 
+            children: [
+                "bánh xèo", "bánh bèo", "bánh căn", "bánh cuốn", "bánh ướt", 
+                "bánh hỏi", "bánh bò", "bánh đúc", "bánh mì", "bánh bao", 
+                "bánh quẩy", "bánh tiêu", "bánh su kem", "bánh bông lan", "donut"
+            ] 
+        },
+        { 
+            name: "Món Mặn (Thịt/Cá)", 
+            children: [
+                "thịt bò", "thịt heo", "thịt trâu", "thịt dê", "thịt cừu", 
+                "thịt gà", "thịt vịt", "thịt ngan", "thịt ngỗng", "thịt chim cút",
+                "tôm", "mực", "cá", "nghêu", "sò", "ốc", "cua"
+            ] 
+        },
+        { 
+            name: "Chay & Rau", 
+            children: [
+                "rau củ", "đậu hũ", "nấm", "chả chay", "mì chay", "cơm chay"
+            ] 
+        },
+        {
+            name: "Đồ uống & Tráng miệng",
+            children: [
+                "cà phê", "trà sữa", "nước ép/ sinh tố", "có cồn", "nước có ga",
+                "chè", "kem tươi", "kem cheese", "sữa chua", "trân châu", 
+                "thạch", "kem trứng", "flan", "rau má", "matcha", "cacao", "dừa"
+            ]
+        }
     ],
-    "trứng": [
-        "trứng gà",
-        "trứng cút"
+    occasion: [
+        { 
+            name: "Bữa chính", 
+            children: ["bữa sáng", "buổi trưa", "buổi tối"] // Added 'buổi tối' generally implied 
+        },
+        { 
+            name: "Ăn chơi & Đêm", 
+            children: ["ăn vặt", "tráng miệng", "buổi đêm"] 
+        }
     ],
-    "đậu - hạt": [
-        "cà phê",
-        "đậu phộng",
-        "đậu đen",
-        "đậu đỏ",
-        "đậu ván",
-        "ca cao",
-        "hạt sen"
-    ],
-    "thảo mộc có mùi hương đặc trưng": [
-        "sả",
-        "hồi",
-        "quế",
-        "gừng",
-        "lá dứa",
-        "vani"
-    ],
-    "thời điểm/dịp": [
-        "bữa sáng",
-        "ăn vặt",
-        "tráng miệng",
-        "buổi đêm",
-        "buổi trưa"
-    ],
-    "miền Bắc": [
-        "Hà Nội",
-        "Hải Phòng"
-    ],
-    "miền Trung": [
-        "Phú Yên",
-        "Huế",
-        "Quảng Ngãi",
-        "Đà Nẵng",
-        "Quảng Nam",
-        "Khánh Hòa",
-        "Phan Rang",
-        "Bình Định",
-        "Nghệ An",
-        "Hà Tĩnh"
-    ],
-    "miền Tây": [
-        "Tiền Giang",
-        "Đồng Tháp",
-        "Cà Mau",
-        "Sóc Trăng",
-        "An Giang"
-    ],
-    "miền Nam": [
-        "Sài Gòn",
-        "Bà Rịa - Vũng Tàu"
-    ],
-    "Tây Nguyên": [
-        "Lâm Đồng"
-    ],
-    "nước ngoài": [
-        "Pháp",
-        "Mỹ",
-        "Ý",
-        "Đức",
-        "Nhật Bản",
-        "Hàn Quốc",
-        "Trung Quốc"
-    ],
-    "sợi": [
-        "bún",
-        "phở",
-        "hủ tiếu",
-        "mì sợi",
-        "bánh canh bột gạo",
-        "bánh đa",
-        "miến dong",
-        "miến/bún tàu"
-    ],
-    "món ăn nước": [
-        "súp",
-        "lẩu",
-        "cháo",
-        "cà ri",
-        "hầm"
-    ],
-    "món khô": [
-        "xào",
-        "chiên",
-        "nướng",
-        "trộn",
-        "hấp",
-        "kho",
-        "rang",
-        "quay",
-        "luộc"
-    ],
-    "món rời": [
-        "cơm",
-        "bắp"
-    ],
-    "món nếp": [
-        "xôi",
-        "bánh nếp",
-        "cốm",
-        "chè nếp",
-        "nếp hấp"
-    ],
-    "bánh bột gạo": [
-        "bánh xèo",
-        "bánh bèo",
-        "bánh căn",
-        "bánh cuốn",
-        "bánh ướt",
-        "bánh hỏi",
-        "bánh bò",
-        "bánh đúc"
-    ],
-    "bánh bột mì": [
-        "bánh mì",
-        "bánh bao",
-        "bánh quẩy",
-        "bánh tiêu",
-        "bánh su kem",
-        "bánh bông lan",
-        "donut"
-    ],
-    "thịt gia súc": [
-        "thịt bò",
-        "thịt heo",
-        "thịt trâu",
-        "thịt dê",
-        "thịt cừu"
-    ],
-    "thịt gia cầm": [
-        "thịt gà",
-        "thịt vịt",
-        "thịt ngan",
-        "thịt ngỗng",
-        "thịt chim cút"
-    ],
-    "hải sản": [
-        "tôm",
-        "mực",
-        "cá",
-        "nghêu",
-        "sò",
-        "ốc",
-        "cua"
-    ],
-    "món chay": [
-        "rau củ",
-        "đậu hũ",
-        "nấm",
-        "chả chay",
-        "mì chay",
-        "cơm chay"
-    ],
-    "độ ngọt": [
-        "không ngọt",
-        "ít ngọt",
-        "vừa ngọt",
-        "ngọt đậm",
-        "rất ngọt"
-    ],
-    "độ cay": [
-        "không cay",
-        "cay nhẹ",
-        "cay vừa",
-        "cay nhiều",
-        "rất cay"
-    ],
-    "độ béo": [
-        "không béo",
-        "béo nhẹ",
-        "béo vừa",
-        "béo đậm"
-    ],
-    "độ mặn": [
-        "nhạt",
-        "hơi mặn",
-        "mặn vừa",
-        "mặn đậm"
-    ],
-    "độ chua": [
-        "không chua",
-        "chua nhẹ",
-        "chua vừa",
-        "chua đậm"
-    ],
-    "thức uống": [
-        "cà phê",
-        "trà sữa",
-        "nước ép/ sinh tố",
-        "có cồn",
-        "nước có ga"
-    ],
-    "đồ ăn ngọt": [
-        "chè",
-        "kem tươi",
-        "kem cheese",
-        "sữa chua",
-        "trân châu",
-        "thạch",
-        "kem trứng",
-        "flan"
-    ],
-    "không phải trái cây": [
-        "rau má",
-        "matcha",
-        "cacao",
-        "dừa"
-    ],
-    "giá tiền": [
-        "siêu rẻ",
-        "rẻ",
-        "bình dân",
-        "sang",
-        "nhà hàng",
-        "cao cấp"
+    distance: [
+        { name: "Gần tôi", children: ["Dưới 1km", "1km - 3km"] },
+        { name: "Xung quanh", children: ["3km - 5km", "5km - 10km"] }
     ]
-}
+};

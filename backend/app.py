@@ -24,6 +24,53 @@ CONNECTION_STRING = "mongodb+srv://lequocvi2412_db_user:123456789#@cluster0.ujbl
 DATABASE_NAME = "du_lich_am_thuc"
 COLLECTION_NAME = "restaurants"
 
+client = MongoClient(CONNECTION_STRING, server_api=ServerApi('1'))
+db = client[DATABASE_NAME]
+collection_quan_an = db[COLLECTION_NAME]
+try:
+    # Tìm các document đang ở dạng cũ (có key 'lat' trong coordinates)
+    old_data_cursor = collection_quan_an.find({"coordinates.lat": {"$exists": True}})
+    count = 0
+    
+    for doc in old_data_cursor:
+        try:
+            old_coords = doc.get("coordinates", {})
+            # Chuyển từ String sang Float
+            lat_str = old_coords.get("lat")
+            lng_str = old_coords.get("long")
+            
+            if lat_str and lng_str:
+                lat = float(lat_str)
+                lng = float(lng_str)
+                
+                # Tạo cấu trúc GeoJSON: [Longitude, Latitude]
+                new_coords = {
+                    "type": "Point",
+                    "coordinates": [lng, lat]
+                }
+                
+                # Cập nhật lại vào DB
+                collection_quan_an.update_one(
+                    {"_id": doc["_id"]},
+                    {"$set": {"coordinates": new_coords}}
+                )
+                count += 1
+        except Exception as e:
+            print(f"Lỗi convert ID {doc.get('_id')}: {e}")
+
+    if count > 0:
+        print(f"✅ Đã cập nhật thành công {count} địa điểm sang chuẩn GeoJSON!")
+
+except Exception as e:
+    print(f"⚠️ Lỗi khi cập nhật dữ liệu: {e}")
+
+# [ĐOẠN TẠO INDEX MÀ BẠN ĐÃ THÊM LÚC NÃY]
+try:
+    collection_quan_an.create_index([("coordinates", "2dsphere")])
+    print("✅ Geospatial index created successfully!")
+except Exception as e:
+    print(f"⚠️ Warning creating index: {e}")
+
 def get_password_hash(password):
     pwd_bytes = password.encode('utf-8')
     salt = bcrypt.gensalt()
@@ -226,7 +273,17 @@ async def reset_password(payload: UserResetPassword):
 @app.get("/api/user/{phone}")
 async def get_user_profile(phone: str):
     if collection_users is None: raise HTTPException(status_code=503)
-    user = collection_users.find_one({"phone": phone})
+    
+    # [FIX] Search by phone OR email OR facebook_id
+    user_filter = {
+        "$or": [
+            {"phone": phone},
+            {"email": phone},
+            {"facebook_id": phone}
+        ]
+    }
+    
+    user = collection_users.find_one(user_filter)
     if not user: raise HTTPException(status_code=404, detail="User not found")
     
     history_ids = [ObjectId(hid) for hid in user.get("history", []) if ObjectId.is_valid(hid)]
@@ -243,52 +300,64 @@ async def get_user_profile(phone: str):
 @app.put("/api/user/{phone}/update")
 async def update_user_profile(phone: str, payload: UpdateProfileRequest):
     if collection_users is None: raise HTTPException(status_code=503)
+    
+    user_filter = {
+        "$or": [{"phone": phone}, {"email": phone}, {"facebook_id": phone}]
+    }
+    
     update_data = {k: v for k, v in payload.dict().items() if v is not None}
     if "username" in update_data and not update_data["username"]: del update_data["username"]
     if not update_data: return {"message": "No data"}
-    collection_users.update_one({"phone": phone}, {"$set": update_data})
+    
+    result = collection_users.update_one(user_filter, {"$set": update_data})
+    if result.matched_count == 0: raise HTTPException(status_code=404, detail="User not found")
+    
     return {"message": "Update success"}
 
 @app.post("/api/user/{phone}/history")
 async def add_history(phone: str, payload: HistoryRequest):
     if collection_users is None: raise HTTPException(status_code=503)
-    collection_users.update_one({"phone": phone}, {"$addToSet": {"history": payload.restaurant_id}})
+    
+    user_filter = {
+        "$or": [{"phone": phone}, {"email": phone}, {"facebook_id": phone}]
+    }
+    
+    collection_users.update_one(user_filter, {"$addToSet": {"history": payload.restaurant_id}})
     return {"message": "Added history"}
 
 @app.delete("/api/user/{phone}/history")
 async def delete_history(phone: str, restaurant_id: Optional[str] = None):
     if collection_users is None: raise HTTPException(status_code=503)
+    
+    user_filter = {
+        "$or": [{"phone": phone}, {"email": phone}, {"facebook_id": phone}]
+    }
+    
     if restaurant_id:
-         collection_users.update_one({"phone": phone}, {"$pull": {"history": restaurant_id}})
+         collection_users.update_one(user_filter, {"$pull": {"history": restaurant_id}})
          return {"message": "Removed item from history"}
     else:
-         collection_users.update_one({"phone": phone}, {"$set": {"history": []}})
+         collection_users.update_one(user_filter, {"$set": {"history": []}})
          return {"message": "Cleared all history"}
 
 @app.post("/api/user/{phone}/bookmark")
 async def toggle_bookmark(phone: str, payload: BookmarkRequest):
     if collection_users is None: raise HTTPException(status_code=503)
-    user = collection_users.find_one({"phone": phone})
-    if not user: raise HTTPException(status_code=404)
+    
+    user_filter = {
+        "$or": [{"phone": phone}, {"email": phone}, {"facebook_id": phone}]
+    }
+    
+    user = collection_users.find_one(user_filter)
+    if not user: raise HTTPException(status_code=404, detail="User not found")
     
     bookmarks = user.get("bookmarks", [])
     if payload.restaurant_id in bookmarks:
-        collection_users.update_one({"phone": phone}, {"$pull": {"bookmarks": payload.restaurant_id}})
+        collection_users.update_one(user_filter, {"$pull": {"bookmarks": payload.restaurant_id}})
         return {"status": "removed"}
     else:
-        collection_users.update_one({"phone": phone}, {"$addToSet": {"bookmarks": payload.restaurant_id}})
+        collection_users.update_one(user_filter, {"$addToSet": {"bookmarks": payload.restaurant_id}})
         return {"status": "added"}
-
-@app.post("/api/filter-random")
-async def filter_random(payload: FilterRandomRequest):
-    if collection_quan_an is None: raise HTTPException(status_code=503)
-    try:
-        pipeline = []
-        pipeline.append({"$sample": {"size": payload.count}})
-        docs = list(collection_quan_an.aggregate(pipeline))
-        return [convert_document(d) for d in docs]
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/api/restaurant/{restaurant_id}")
 async def get_restaurant_details(restaurant_id: str):
@@ -347,9 +416,22 @@ async def filter_random(payload: FilterRandomRequest):
         # Maps the UI category to the list of possible fields in result.json
         key_map = {
             "price_range": ["tags.giá tiền"],
-            "cuisine_origin": ["tags.miền Bắc", "tags.miền Trung", "tags.miền Tây", "tags.miền Nam", "tags.Tây Nguyên", "tags.nước ngoài"],
-            "main_dishes": ["tags.món ăn nước", "tags.món khô", "tags.sợi", "tags.món rời", "tags.bánh bột gạo", "tags.bánh bột mì", "tags.hải sản", "tags.thịt gia súc", "tags.thịt gia cầm", "tags.món chay"],
-            "place": ["tags.không gian", "tags.vật chất", "tags.âm thanh"], # New "Place" Category
+            "cuisine_origin": [
+                "tags.miền Bắc", "tags.miền Trung", "tags.miền Tây", "tags.miền Nam", 
+                "tags.Tây Nguyên", "tags.nước ngoài"
+            ],
+            "main_dishes": [
+                "tags.món ăn nước", "tags.món khô", "tags.sợi", "tags.món rời", 
+                "tags.món nếp",          # Added for Sticky Rice/Xôi
+                "tags.bánh bột gạo", "tags.bánh bột mì", 
+                "tags.hải sản", "tags.thịt gia súc", "tags.thịt gia cầm", "tags.món chay",
+                "tags.thức uống",        # Added for Drinks
+                "tags.đồ ăn ngọt",       # Added for Desserts/Sweet Soup
+                "tags.không phải trái cây", # Added for Matcha/Cacao etc
+                "tags.đậu - hạt"         # Added for nuts/beans
+            ],
+            "occasion": ["tags.thời điểm/dịp"],  # Added for Occasion filter
+            "place": ["tags.không gian", "tags.vật chất", "tags.âm thanh"],
             "speciality_vn": ["tags.speciality_vn"]
         }
 
