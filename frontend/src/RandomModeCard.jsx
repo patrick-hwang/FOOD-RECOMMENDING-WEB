@@ -49,12 +49,18 @@ const FILTER_ORDER = [
 ];
 
 const PlaceCard = ({ item, onClick, onSave, isSaved }) => {
-    const imageSrc = item?.imageUrl
-        || item?.thumbnail
+    const imageSrc = item?.thumbnail
         || (Array.isArray(item?.places_images) && item.places_images[0])
         || (Array.isArray(item?.menu_images) && item.menu_images[0])
         || 'https://placehold.co/400x300?text=No+Image';
-    const rating = item?.rating || 4.5;
+    const ratingRaw = item?.rating_info?.score;
+    const rating = (() => {
+        if (ratingRaw == null) return 4.5;
+        const normalized = String(ratingRaw).replace(',', '.');
+        const num = parseFloat(normalized);
+        if (Number.isNaN(num)) return 4.5;
+        return Math.max(0, Math.min(5, num));
+    })();
     const bookmarkColor = isSaved ? '#FFC107' : '#333';
     return (
         <div className="place-card" onClick={onClick}>
@@ -531,7 +537,6 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
                     </div>
                     <button className="rm-nav-arrow" onClick={handleNextFilter}><Icons.ArrowRight /></button>
                 </div>
-
                 <button className="rm-find-match-btn" onClick={handleShuffle}>{t('find_match')}</button>
             </div>
 
