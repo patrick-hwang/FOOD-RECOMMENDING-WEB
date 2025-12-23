@@ -299,8 +299,22 @@ export default function TasteMode({ onBack, currentUser, onLogout }) {
                                 <div className="tm-card-content">
                                     <h3 className="tm-res-name">{item.name}</h3>
                                     <div className="tm-stars">
-                                        {[1,2,3,4,5].map(s => <span key={s} style={{color: s <= (item.rating || 4.5) ? '#FFC107' : '#eee'}}>★</span>)} 
-                                        {item.rating || 4.5}
+                                        {(() => {
+                                            const ratingRaw = item?.rating_info?.score;
+                                            const rating = (() => {
+                                                if (ratingRaw == null) return 4.5;
+                                                const normalized = String(ratingRaw).replace(',', '.');
+                                                const num = parseFloat(normalized);
+                                                if (Number.isNaN(num)) return 4.5;
+                                                return Math.max(0, Math.min(5, num));
+                                            })();
+                                            return (
+                                                <>
+                                                    {[1,2,3,4,5].map(s => <span key={s} style={{color: s <= rating ? '#FFC107' : '#eee'}}>★</span>)}
+                                                    {' '}{rating.toFixed(1)}
+                                                </>
+                                            );
+                                        })()}
                                     </div>
                                     <button className="tm-view-btn">{t('tm_view_details')}</button>
                                 </div>
