@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './RestaurantDetail.css';
 import myLogoIcon from './assets/images/logo.png';
 import axios from 'axios';
@@ -35,16 +35,31 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
       return ["#Localspecility", "#Open24/7", "#Takeaway", "#BanhMi", "#Vietnamese"];
     }
     const tags = item.tags;
+
     if (Array.isArray(tags)) {
-      return tags.map(t => (typeof t === 'string' && !t.startsWith('#')) ? `#${t}` : t);
+      return tags.map(tg => {
+        if (typeof tg !== 'string') return tg;
+        const cleanKey = tg.startsWith('#') ? tg.slice(1) : tg;
+        return `#${t(cleanKey)}`;
+      });
+      
     }
     if (typeof tags === 'object') {
       const result = [];
       Object.values(tags).forEach(val => {
         if (Array.isArray(val)) {
-          val.forEach(t => result.push(typeof t === 'string' && !t.startsWith('#') ? `#${t}` : t));
+          val.forEach(tg => {
+            if (typeof tg !== 'string') result.push(tg);
+            else {
+            const cleanKey = tg.startsWith('#') ? tg.slice(1) : tg;
+            result.push(`#${t(cleanKey)}`);
+            //result.push(typeof t === 'string' && !t.startsWith('#') ? `#${t}` : t)
+            }
+          });
         } else if (typeof val === 'string') {
-          result.push(val.startsWith('#') ? val : `#${val}`);
+          const cleanKey = val.startsWith('#') ? val.slice(1) : val;
+          result.push(`#${t(cleanKey)}`);
+          //result.push(val.startsWith('#') ? val : `#${val}`);
         }
       });
       return result.length > 0 ? result : ["#Restaurant"];
@@ -52,7 +67,9 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
     return ["#Restaurant"];
   };
   
-  const displayTags = getDisplayTags();
+  const displayTags = useMemo(() => {
+    return getDisplayTags();
+}, [item, t]);
 
   // Dữ liệu mẫu (Views - Ảnh)
   const getViewImages = () => {
@@ -160,22 +177,22 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
 
                 <div className="rd-address-row">
                     <div className="rd-icon-col"><DetailIcons.Pin /></div>
-                    <span className="rd-text-info">{t('address')}: {item?.address || item?.location || "Địa chỉ không xác định"}</span>
+                    <span className="rd-text-info">{t('address')}: {item?.address || item?.location || t('location_unknown')}</span>
                 </div>
                 
                 <div className="rd-address-row">
                     <div className="rd-icon-col"><DetailIcons.Clock /></div>
-                    <span className="rd-text-info">{t('open')}: {item?.openTime || item?.operating_hours || "Giờ mở cửa không xác định"}</span>
+                    <span className="rd-text-info">{t('open')}: {item?.openTime || item?.operating_hours || t('activehour_unknown')}</span>
                 </div>
             </div>
 
             {/* Tags (Chỉ hiện ở tab Menu) */}
             <div className="rd-tags-wrapper">
                 <div className="rd-tags-green-header">
-                    Tag information & Filters
+                    {t('tag_info_filter')}
                 </div>
                 <div className="rd-tags-content">
-                    <p className="rd-tags-note">Tap tags to select</p>
+                    <p className="rd-tags-note">{t('tap_tag_select')}</p>
                     <div className="rd-tags-list">
                         {displayTags.map((tagWithHash, i) => {
                             const rawTag = tagWithHash.replace(/^#/, '');
@@ -186,7 +203,8 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
                                     className={`rd-tag-btn ${isActive ? 'active' : ''}`}
                                     onClick={() => onToggleTag && onToggleTag(tagWithHash)}
                                 >
-                                    {tagWithHash}
+                                    {`#${t(rawTag)}`}
+                                    {/*tagWithHash*/}
                                 </button>
                             );
                         })}
@@ -296,19 +314,19 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
               className={`rd-tab ${activeTab === 'menu' ? 'active' : ''}`}
               onClick={() => setActiveTab('menu')}
             >
-              Menu (7)
+              {t('menu')} (7)
             </button>
             <button 
               className={`rd-tab ${activeTab === 'view' ? 'active' : ''}`}
               onClick={() => setActiveTab('view')}
             >
-              View ({mockViews.length})
+              {t('view')} ({mockViews.length})
             </button>
             <button 
               className={`rd-tab ${activeTab === 'review' ? 'active' : ''}`}
               onClick={() => setActiveTab('review')}
             >
-              Review ({mockReviews.length})
+              {t('review')} ({mockReviews.length})
             </button>
           </div>
       </div>
@@ -321,12 +339,12 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
       {/* --- PHẦN 3: CỐ ĐỊNH Ở DƯỚI (Footer) --- */}
       <div className="rd-footer-bar">
           <button className="rd-btn-direction" onClick={onGetDirection}>
-              Get direction
+              {t('get_direction')}
               <span style={{marginLeft: 8, display: 'flex'}}><DetailIcons.Map /></span>
           </button>
 
           <div className="rd-shuffle-block" onClick={onShuffleAgain}>
-              <span className="rd-shuffle-label">Shuffle Again</span>
+              <span className="rd-shuffle-label">{t('shuffle_again')}</span>
               <div className="rd-spin-icon"><DetailIcons.Refresh /></div>
           </div>
       </div>

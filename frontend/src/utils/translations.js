@@ -91,6 +91,7 @@ export const translations = {
         email: "Email",
         phone: "Phone number",
         gender: "Gender",
+        gender_placeholder: "Male/Female/Other",
         age: "Age",
         submit: "Submit",
         save_changes: "Save Changes",
@@ -102,6 +103,7 @@ export const translations = {
         // --- RESTAURANT DETAIL ---
         menu: "Menu",
         view: "View",
+        review: "Review",
         address: "Address",
         open: "Open",
         get_direction: "Get direction",
@@ -198,7 +200,12 @@ export const translations = {
         tm_back_home: "Back to Home",
         tm_match_badge: "Restaurant Match",
         tm_view_details: "View Details",
-        tm_continue: "Not my type yet, continue!"
+        tm_continue: "Not my type yet, continue!",
+        tag_info_filter: "Tag information & Filters",
+        tap_tag_select: "Tap Tags to select",
+        search_tag: "Search Tag...",
+        location_unknown: "Unknown Location",
+        activehour_unknown: "Unknown Active Hour"
     },
     vi: {
         // --- AUTH ---
@@ -225,6 +232,7 @@ export const translations = {
         update_loading: "Đang cập nhật...",
         signing_in: "Đang đăng nhập...",
         signing_up: "Đang đăng ký...",
+
 
         // --- ONBOARDING ---
         ob_title_0: "CHÀO MỪNG ĐẾN\nFoodRec!👋",
@@ -290,6 +298,7 @@ export const translations = {
         email: "Email",
         phone: "Số điện thoại",
         gender: "Giới tính",
+        gender_placeholder: "Nam/Nữ/Khác",
         age: "Tuổi",
         submit: "Lưu thông tin",
         save_changes: "Lưu thay đổi",
@@ -301,6 +310,7 @@ export const translations = {
         // --- RESTAURANT DETAIL ---
         menu: "Thực đơn",
         view: "Không gian",
+        review: "Đánh giá",
         address: "Địa chỉ",
         open: "Mở cửa",
         get_direction: "Chỉ đường",
@@ -394,7 +404,12 @@ export const translations = {
         tm_back_home: "Về trang chủ",
         tm_match_badge: "Quán phù hợp",
         tm_view_details: "Xem chi tiết",
-        tm_continue: "Chưa ưng ý, tiếp tục!"
+        tm_continue: "Chưa ưng ý, tiếp tục!",
+        tag_info_filter: "Thông tin Tags để Lọc",
+        tap_tag_select: "Bấm Tags để chọn",
+        search_tag: "Tìm tag...",
+        location_unknown: "Địa chỉ không xác định",
+        activehour_unknown: "Giờ mở cửa không xác định"
     }
 
 };
