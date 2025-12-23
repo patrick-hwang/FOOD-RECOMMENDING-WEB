@@ -1,5 +1,7 @@
 // src/Components/SearchResults.jsx
-import React from 'react';
+import React, { useMemo, useState } from 'react';
+import axios from 'axios';
+import PlaceCard from './PlaceCard';
 
 // Icons for results
 const Icons = {
@@ -10,40 +12,7 @@ const Icons = {
     )
 };
 
-// PlaceCard Component
-const PlaceCard = ({ item, onClick }) => {
-    const imageSrc = item?.imageUrl
-        || item?.thumbnail
-        || (Array.isArray(item?.places_images) && item.places_images[0])
-        || (Array.isArray(item?.menu_images) && item.menu_images[0])
-        || 'https://placehold.co/400x300?text=No+Image';
-    const rawRating = item?.rating_info?.score ?? item?.rating ?? 4.5;
-    const ratingNumber = Number.parseFloat(rawRating);
-    const rating = Number.isFinite(ratingNumber) ? ratingNumber : 4.5;
-
-    return (
-        <div className="search-place-card" onClick={onClick}>
-            <div className="search-place-image-wrapper">
-                <img
-                    src={imageSrc}
-                    alt={item?.name || 'Restaurant'}
-                    referrerPolicy="no-referrer"
-                    onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = 'https://placehold.co/400x300?text=No+Image';
-                    }}
-                />
-            </div>
-            <div className="search-place-info-overlay">
-                <h3 className="search-place-name">{item?.name || 'Restaurant'}</h3>
-                <div className="search-place-rating">
-                    {[1, 2, 3, 4, 5].map(s => <Icons.Star key={s} fill={s <= rating ? "#FFC107" : "none"} />)}
-                    <span style={{ marginLeft: 4, color: 'white', fontWeight: 'bold' }}>{rating.toFixed(1)}</span>
-                </div>
-            </div>
-        </div>
-    );
-};
+// Use shared PlaceCard; pass baseClass to preserve existing CSS class names
 
 function SearchResults({
     searchQuery,
@@ -52,9 +21,45 @@ function SearchResults({
     lang,
     canShowMore,
     onOpenDetail,
-    onShowMore
+    onShowMore,
+    currentUser,
+    onLogout,
 }) {
     const hasResults = searchResults && searchResults.length > 0;
+
+    // --- Quick Save State ---
+    const [savedIds, setSavedIds] = useState([]);
+
+    const handleQuickSave = (item) => {
+        const isGuest = currentUser?.isGuest || !currentUser;
+        if (isGuest) {
+            const msg = lang === 'vi'
+                ? 'Bạn cần đăng nhập để lưu quán. Đến trang đăng nhập?'
+                : 'You need to log in to save. Go to login?';
+            const confirmLogin = window.confirm(msg);
+            if (confirmLogin && typeof onLogout === 'function') onLogout();
+            return;
+        }
+
+        const phone = currentUser.phone || currentUser.email || currentUser.facebook_id;
+        const restaurantId = item.id || item._id;
+        if (!phone || !restaurantId) return;
+
+        const isSaved = savedIds.includes(restaurantId);
+        setSavedIds(prev => isSaved ? prev.filter(id => id !== restaurantId) : [...prev, restaurantId]);
+
+        axios.post(`http://127.0.0.1:8000/api/user/${phone}/bookmark`, { restaurant_id: restaurantId })
+            .then((res) => {
+                if (res.data?.status === 'added') {
+                    setSavedIds(prev => prev.includes(restaurantId) ? prev : [...prev, restaurantId]);
+                } else if (res.data?.status === 'removed') {
+                    setSavedIds(prev => prev.filter(id => id !== restaurantId));
+                }
+            })
+            .catch(() => {
+                setSavedIds(prev => isSaved ? [...prev, restaurantId] : prev.filter(id => id !== restaurantId));
+            });
+    };
 
     return (
         <>
@@ -72,13 +77,19 @@ function SearchResults({
                 </div>
             ) : hasResults ? (
                 <div className="search-results-grid">
-                    {searchResults.map((item, idx) => (
-                        <PlaceCard
-                            key={item.id || idx}
-                            item={item}
-                            onClick={() => onOpenDetail(item)}
-                        />
-                    ))}
+                    {searchResults.map((item, idx) => {
+                        const restaurantId = item.id || item._id;
+                        const isSaved = restaurantId ? savedIds.includes(restaurantId) : false;
+                        return (
+                            <PlaceCard
+                                key={restaurantId || idx}
+                                item={item}
+                                onClick={() => onOpenDetail(item)}
+                                onSave={handleQuickSave}
+                                isSaved={isSaved}
+                            />
+                        );
+                    })}
                 </div>
             ) : (
                 <div className="search-empty-state">

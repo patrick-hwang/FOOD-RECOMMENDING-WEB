@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import './RandomModeCard.css';
 import logo from './assets/images/logo.png';
+import PlaceCard from './Components/PlaceCard';
 import RestaurantDetail from './RestaurantDetail';
 import { useLanguage } from './Context/LanguageContext';
 import { useTheme } from './Context/ThemeContext';
@@ -48,44 +49,7 @@ const FILTER_ORDER = [
   { key: 'distance', Icon: Icons.Distance, label: 'Distance' },
 ];
 
-const PlaceCard = ({ item, onClick, onSave, isSaved }) => {
-    const imageSrc = item?.thumbnail
-        || (Array.isArray(item?.places_images) && item.places_images[0])
-        || (Array.isArray(item?.menu_images) && item.menu_images[0])
-        || 'https://placehold.co/400x300?text=No+Image';
-    const ratingRaw = item?.rating_info?.score;
-    const rating = (() => {
-        if (ratingRaw == null) return 4.5;
-        const normalized = String(ratingRaw).replace(',', '.');
-        const num = parseFloat(normalized);
-        if (Number.isNaN(num)) return 4.5;
-        return Math.max(0, Math.min(5, num));
-    })();
-    const bookmarkColor = isSaved ? '#FFC107' : '#333';
-    return (
-        <div className="place-card" onClick={onClick}>
-            <div className="place-image-wrapper">
-                <img 
-                    src={imageSrc} 
-                    alt={item?.name || 'Restaurant'}
-                    referrerPolicy="no-referrer"  // <--- ADD THIS LINE
-                    onError={(e) => { 
-                        e.target.onerror = null; 
-                        e.target.src = 'https://placehold.co/400x300?text=No+Image'; 
-                    }} 
-                />
-                <div className="place-bookmark" onClick={(e) => { e.stopPropagation(); onSave && onSave(item); }}><Icons.Bookmark color={bookmarkColor} /></div>
-            </div>
-            <div className="place-info-overlay">
-                <h3 className="place-name">{item?.name || 'Restaurant'}</h3>
-                <div className="place-rating">
-                    {[1,2,3,4,5].map(s => <Icons.Star key={s} fill={s <= rating ? "#FFC107" : "none"} />)}
-                    <span style={{marginLeft:4, color:'white', fontWeight:'bold'}}>{rating}</span>
-                </div>
-            </div>
-        </div>
-    );
-};
+// PlaceCard is now imported from ./Components/PlaceCard
 
 export default function RandomModeCard({ onBack, currentUser, onLogout }) {
     const { lang, switchLanguage, t } = useLanguage();

@@ -1,0 +1,15 @@
+/* Ensure PlaceCard uses the same font as RandomModeCard */
+.place-card,
+.search-place-card {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Inherit to overlay texts just in case containers differ */
+.place-info-overlay,
+.search-place-info-overlay,
+.place-name,
+.search-place-name,
+.place-rating,
+.search-place-rating {
+  font-family: inherit;
+}
