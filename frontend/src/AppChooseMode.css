@@ -1,0 +1,136 @@
+/* =========================================
+   AppChooseMode Styles
+   ========================================= */
+
+/* Main Container */
+.choose-mode-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-bottom: 100px;
+}
+
+/* --- Header Styles --- */
+.home-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.header-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* --- Search Bar --- */
+.home-search {
+    width: 100%;
+    padding: 15px 40px;
+    border-radius: 30px;
+    border: 1px solid #ddd;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    box-sizing: border-box;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* --- Chips Container (Horizontal Scroll) --- */
+.chips-container {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    margin-bottom: 40px;
+    padding-bottom: 5px;
+}
+
+.chip {
+    background: var(--chip-bg);
+    color: var(--chip-text);
+    padding: 8px 20px;
+    border-radius: 20px;
+    white-space: nowrap;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+/* --- Mode Cards (Stacked + 3D Icon) --- */
+.mode-card-new {
+    position: relative;
+    height: 180px;
+    border-radius: 20px;
+    padding: 30px;
+    padding-bottom: 50px;
+    
+    /* Increased spacing so the icons don't touch the card above */
+    margin-top: 70px;
+    
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    cursor: pointer;
+
+    /* Bounce Animation settings */
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+}
+
+/* Hover Effect: Bounce up + Shadow */
+.mode-card-new:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 20px 30px rgba(0,0,0,0.2);
+}
+
+/* Card Colors */
+.card-green {
+    background: linear-gradient(90deg, #00C853, #69F0AE);
+}
+
+.card-yellow {
+    background: linear-gradient(90deg, #dce35b, #45b649);
+}
+
+/* Base Icon Styles */
+.card-3d-icon {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    filter: drop-shadow(0 10px 5px rgba(0,0,0,0.2));
+    transition: transform 0.4s ease;
+}
+
+/* --- Icon Sizes (based on aspect ratio) --- */
+
+/* 1. DICE (Tall & Narrow): Make it taller to match visual weight */
+.card-green .card-3d-icon {
+    height: 175px;
+    width: auto;
+    top: -90px;
+}
+
+/* 2. COMPASS (Square): Keep it standard size */
+.card-yellow .card-3d-icon {
+    height: 130px;
+    width: 130px;
+    object-fit: contain;
+    top: -65px;
+}
+
+/* Hover: Float icon slightly higher */
+.mode-card-new:hover .card-3d-icon {
+    transform: translateX(-50%) translateY(-5px);
+}

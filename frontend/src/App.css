@@ -3,7 +3,8 @@
 
 /* --- 1. GLOBAL BACKGROUND FIX --- */
 :root {
-  --bg-primary: #f8f9fa; /* Light background */
+  --bg-primary: #f8f9fa;
+  /* Light background */
   --text-primary: #333;
   --card-bg: #fff;
   --input-bg: #fff;
@@ -12,7 +13,8 @@
 }
 
 body.dark-mode {
-  --bg-primary: #121212; /* Dark background */
+  --bg-primary: #121212;
+  /* Dark background */
   --text-primary: #fff;
   --card-bg: #1e1e1e;
   --input-bg: #2c2c2c;
@@ -21,7 +23,8 @@ body.dark-mode {
 }
 
 body {
-  background: var(--bg-primary); /* Use variable! */
+  background: var(--bg-primary);
+  /* Use variable! */
   color: var(--text-primary);
   transition: background 0.3s ease, color 0.3s ease;
 }
@@ -30,7 +33,8 @@ body {
   width: 100%;
   min-height: 100vh;
   display: flex;
-  justify-content: center; /* Center the App horizontally */
+  justify-content: center;
+  /* Center the App horizontally */
   margin: 0;
   padding: 0;
 }
@@ -47,19 +51,21 @@ body {
 .EntranceEffect {
   flex-direction: column;
 }
+
 .entrance-slide-rect {
   position: absolute;
   left: 50%;
   height: 50vh;
   width: 100vw;
   transform: translate(-50%, 0);
-  transition: transform 700ms cubic-bezier(.22,.9,.35,1), opacity 400ms ease;
+  transition: transform 700ms cubic-bezier(.22, .9, .35, 1), opacity 400ms ease;
   z-index: 40;
   pointer-events: none;
   font-family: Old Standard TT;
   font-size: 2rem;
   font-weight: 500;
 }
+
 .entrance-slide-rect.top {
   top: 0;
   transform: translate(-50%, -100%);
@@ -70,6 +76,7 @@ body {
   justify-content: center;
   text-align: center;
 }
+
 .entrance-slide-rect.bottom {
   bottom: 0;
   transform: translate(-50%, 100%);
@@ -79,148 +86,45 @@ body {
   justify-content: center;
   text-align: center;
 }
+
 .entrance-slide-rect.in.top {
   transform: translate(-50%, 0);
   background: #D9D9D933;
 }
+
 .entrance-slide-rect.in.bottom {
   transform: translate(-50%, 0);
   background: #668D4C82;
 }
+
 .entrance-slide-rect.in {
   opacity: 1;
 }
+
 .entrance-text {
   display: inline-block;
   opacity: 0;
   transform: translateY(8px) scale(0.6);
-  transition: transform 420ms cubic-bezier(.22,.9,.35,1), opacity 320ms ease;
+  transition: transform 420ms cubic-bezier(.22, .9, .35, 1), opacity 320ms ease;
   color: inherit;
 }
+
 .entrance-text.in {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
-.entrance-slide-rect.top .entrance-text { transform-origin: center bottom; }
-.entrance-slide-rect.bottom .entrance-text { transform-origin: center top; }
+
+.entrance-slide-rect.top .entrance-text {
+  transform-origin: center bottom;
+}
+
+.entrance-slide-rect.bottom .entrance-text {
+  transform-origin: center top;
+}
 
 
 /* --- 2. HOME SCREEN CARD FIX --- */
-.choose-mode-container {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  padding-bottom: 100px;
-}
-
-/* NEW HEADER STYLES */
-.home-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-.header-user { display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 1.2rem; }
-.header-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
-
-/* NEW SEARCH BAR */
-.home-search {
-  width: 100%;
-  padding: 15px 40px;
-  border-radius: 30px;
-  border: 1px solid #ddd;
-  background: var(--input-bg);
-  color: var(--text-primary);
-  box-sizing: border-box;
-  margin-bottom: 25px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-
-/* NEW CHIPS (Horizontal Scroll) */
-.chips-container {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  margin-bottom: 40px;
-  padding-bottom: 5px;
-}
-.chip {
-  background: var(--chip-bg);
-  color: var(--chip-text);
-  padding: 8px 20px;
-  border-radius: 20px;
-  white-space: nowrap;
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-/* --- NEW CARDS (Stacked + 3D Icon) --- */
-.mode-card-new {
-  position: relative;
-  height: 180px;
-  border-radius: 20px;
-  padding: 30px;
-  padding-bottom: 50px;
-  
-  /* Increased spacing so the icons don't touch the card above */
-  margin-top: 70px; 
-  
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  text-align: center;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-  cursor: pointer;
-
-  /* "Bound" (Bounce) Animation settings */
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
-}
-
-/* Hover Effect: Bounce up + Shadow */
-.mode-card-new:hover {
-  transform: translateY(-12px) scale(1.02);
-  box-shadow: 0 20px 30px rgba(0,0,0,0.2);
-}
-
-.card-green { 
-  background: linear-gradient(90deg, #00C853, #69F0AE); 
-}
-.card-yellow { 
-  background: linear-gradient(90deg, #dce35b, #45b649); 
-}
-
-/* Base Icon Styles */
-.card-3d-icon {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  filter: drop-shadow(0 10px 5px rgba(0,0,0,0.2));
-  transition: transform 0.4s ease;
-}
-
-/* --- FIX FOR ICON SIZES --- */
-
-/* 1. DICE (Tall & Narrow): Make it taller to match visual weight */
-.card-green .card-3d-icon {
-  height: 175px;      /* Taller than the clock */
-  width: auto;        /* Let width auto-calculate to keep ratio */
-  top: -90px;         /* Half of 145px to center on edge */
-}
-
-/* 2. CLOCK (Square): Keep it standard size */
-.card-yellow .card-3d-icon {
-  height: 130px;
-  width: 130px;
-  object-fit: contain;
-  top: -65px;         /* Half of 130px */
-}
-
-/* Hover: Float icon slightly higher */
-.mode-card-new:hover .card-3d-icon {
-  transform: translateX(-50%) translateY(-5px);
-}
+/* --- Moved to AppChooseMode.css --- */
 
 /* Header (Logo) */
 .header {
@@ -228,6 +132,7 @@ body {
   flex-shrink: 0;
   padding-top: 20px;
 }
+
 .logo-container {
   display: flex;
   align-items: center;
@@ -235,6 +140,7 @@ body {
   font-size: 1.5em;
   font-weight: bold;
 }
+
 .logo {
   margin-right: 1rem;
   margin-left: 1rem;
@@ -242,6 +148,7 @@ body {
   color: #4CAF50;
   height: 3rem;
 }
+
 .logo-text {
   margin-right: 1rem;
   margin-top: 1rem;
@@ -252,7 +159,7 @@ body {
 .choose-mode-content-container {
   text-align: center;
   width: 100%;
-  flex-grow: 1; 
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -329,9 +236,9 @@ body {
   margin-bottom: 90px;
 }
 
-.Quick-pick-container h1{
+.Quick-pick-container h1 {
   position: absolute;
-  color: black ;
+  color: black;
   font-size: 1.5rem;
   padding-top: 5px;
   font-weight: bold;
@@ -352,13 +259,13 @@ body {
 
 .Keyword {
   flex: 0 0 auto;
-  background-color: #ccc;   
-  border-radius: 10px;      
-  padding: 0px 15px;          
-  white-space: nowrap;       
-  font-weight: 600;          
-  cursor: pointer;           
-  user-select: none; 
+  background-color: #ccc;
+  border-radius: 10px;
+  padding: 0px 15px;
+  white-space: nowrap;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
 }
 
 /* Grid Options */
@@ -370,6 +277,7 @@ body {
   width: 100%;
   padding-bottom: 0px;
 }
+
 @media (max-width: 499px) {
   .options-grid {
     grid-template-columns: 1fr;
@@ -385,7 +293,7 @@ body {
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  min-height: 20px; 
+  min-height: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -395,59 +303,67 @@ body {
   margin-bottom: 0px;
   padding-bottom: -50px;
 }
+
 .option-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
+
 .card-title {
   font-size: 1.2em;
   font-weight: bold;
   margin-bottom: 10px;
 }
+
 .card-icon {
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translate(-50%, -50%); 
-  font-size: 3em; 
+  transform: translate(-50%, -50%);
+  font-size: 3em;
   margin: 0px 0;
 }
+
 .card-description {
   font-size: 0.85em;
   color: #555;
 }
 
 .random-card {
-  background: radial-gradient(farthest-corner at 0px 0px, #f8ff6f 0%, #a6d577 100%); 
+  background: radial-gradient(farthest-corner at 0px 0px, #f8ff6f 0%, #a6d577 100%);
   border: 1px solid #d9f99d;
 }
+
 .taste-card {
-  background: radial-gradient(farthest-corner at 0px 0px, #fcffc1 0%, #98b6e7 100%); 
-  color: #3b82f6; 
+  background: radial-gradient(farthest-corner at 0px 0px, #fcffc1 0%, #98b6e7 100%);
+  color: #3b82f6;
   border: 1px solid #93c5fd;
 }
 
 .random-card {
-  background: radial-gradient(farthest-corner at 100% 50%,  #8cc640 100%, #01a651 0%); 
+  background: radial-gradient(farthest-corner at 100% 50%, #8cc640 100%, #01a651 0%);
   color: white;
 }
+
 .taste-card {
-  background: radial-gradient(farthest-corner at 0px 0px, #f8ff6f 0%, #a6d577 100%); 
-  color: white; 
+  background: radial-gradient(farthest-corner at 0px 0px, #f8ff6f 0%, #a6d577 100%);
+  color: white;
 }
 
 
-.taste-card .card-description, .taste-card .card-title {
-    color: #1e3a8a;
+.taste-card .card-description,
+.taste-card .card-title {
+  color: #1e3a8a;
 }
 
 /* Footer */
 .footer {
   width: 100%;
   text-align: center;
-  flex-shrink: 0; 
+  flex-shrink: 0;
   padding-bottom: 20px;
 }
+
 .choose-mode-footer {
   position: relative;
   width: 100%;
@@ -456,17 +372,19 @@ body {
   padding: 10px 0;
   background: transparent;
 }
+
 .help-link {
   padding: 0.5rem 1rem;
   border-radius: 20px;
-  background: rgba(255,255,255,0.8);
-  border: 1px solid rgba(0,0,0,0.05);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   color: #666;
   text-decoration: none;
   font-size: 0.9em;
   font-weight: 500;
 }
+
 .help-link:hover {
   color: #333;
   background: white;
@@ -485,11 +403,12 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
-  z-index: 50; 
+  z-index: 50;
   color: #ef4444;
 }
+
 .logout-btn-absolute:hover {
   transform: scale(1.05);
   background-color: #fef2f2;
