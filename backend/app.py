@@ -171,6 +171,10 @@ class SpecialityVNUpdate(BaseModel):
     names_contains: Optional[List[str]] = None
     value: bool
 
+class SearchRequest(BaseModel):
+    query: str
+    limit: int = 10
+
 # ==============================================================================
 # 4. API ENDPOINTS
 # ==============================================================================
@@ -548,6 +552,77 @@ async def admin_set_speciality_vn(payload: SpecialityVNUpdate):
     except HTTPException:
         raise
     except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Lỗi server: {e}")
+
+@app.post("/api/search")
+async def search_restaurants(payload: SearchRequest):
+    """Search restaurants by name, reviews content, and tags using tokenized substring matching"""
+    if collection_quan_an is None:
+        raise HTTPException(status_code=503, detail="Lỗi server DB")
+    
+    try:
+        query = payload.query.strip()
+        if not query:
+            return {"results": [], "count": 0}
+        
+        # Tokenize query by spaces
+        tokens = [t.strip() for t in query.split() if t.strip()]
+        if not tokens:
+            return {"results": [], "count": 0}
+        
+        # Build OR conditions for each token across name, reviews, and tags
+        or_conditions = []
+        
+        for token in tokens:
+            token_conditions = []
+            
+            # Search in name
+            token_conditions.append({"name": {"$regex": token, "$options": "i"}})
+            
+            # Search in reviews content
+            token_conditions.append({"reviews.content": {"$regex": token, "$options": "i"}})
+            
+            # Search in all tag values (tags is an object with various keys)
+            # We use $expr to check if any value in tags object matches
+            # Simpler approach: use dot notation for known tag fields or search all with $where
+            # For performance, we'll search specific tag paths we know exist
+            tag_paths = [
+                "tags.sợi", "tags.món ăn nước", "tags.thịt gia súc", "tags.thịt gia cầm",
+                "tags.trứng", "tags.độ cay", "tags.thức uống", "tags.giá tiền",
+                "tags.món rời", "tags.miền Nam", "tags.miền Bắc", "tags.miền Trung",
+                "tags.miền Tây", "tags.Tây Nguyên", "tags.nước ngoài",
+                "tags.món khô", "tags.món nếp", "tags.bánh bột gạo", "tags.bánh bột mì",
+                "tags.hải sản", "tags.món chay", "tags.đồ ăn ngọt",
+                "tags.không phải trái cây", "tags.đậu - hạt", "tags.thời điểm/dịp",
+                "tags.không gian", "tags.vật chất", "tags.âm thanh"
+            ]
+            
+            for tag_path in tag_paths:
+                token_conditions.append({tag_path: {"$regex": token, "$options": "i"}})
+            
+            # At least one condition must match for this token
+            or_conditions.append({"$or": token_conditions})
+        
+        # All tokens must match (AND logic across tokens)
+        query_filter = {"$and": or_conditions} if len(or_conditions) > 1 else or_conditions[0]
+        
+        # Execute query with limit
+        cursor = collection_quan_an.find(query_filter).limit(payload.limit)
+        results = []
+        
+        for doc in cursor:
+            converted = convert_document(doc)
+            # Handle thumbnail fallback
+            if "thumbnail" not in converted and "places_images" in converted and converted["places_images"]:
+                converted["thumbnail"] = converted["places_images"][0]
+            elif "thumbnail" not in converted:
+                converted["thumbnail"] = "https://placehold.co/150x150"
+            results.append(converted)
+        
+        return {"results": results, "count": len(results)}
+    
+    except Exception as e:
+        print(f"Error in search: {e}")
         raise HTTPException(status_code=500, detail=f"Lỗi server: {e}")
     
 # ==============================================================================
