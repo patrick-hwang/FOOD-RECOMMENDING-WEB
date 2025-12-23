@@ -403,7 +403,7 @@ function EditProfile({ currentUser, profileData, onBack }) {
                     <div className="edit-group" style={{flex:1}}>
                         <div className="edit-input-container">
                             <label className="edit-label">{t('gender')}</label>
-                            <input className="edit-input" placeholder="Female" value={formData.gender} onChange={e => setFormData({...formData, gender: e.target.value})} />
+                            <input className="edit-input" placeholder={t('gender_placeholder')} value={formData.gender} onChange={e => setFormData({...formData, gender: e.target.value})} />
                         </div>
                     </div>
                     <div className="edit-group" style={{flex:1}}>

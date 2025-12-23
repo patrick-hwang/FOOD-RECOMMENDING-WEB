@@ -149,11 +149,11 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
         if (distanceTags && distanceTags.length > 0) {
             // Determine max radius based on selected tags
             let maxKm = 0;
-            distanceTags.forEach(t => {
-                if (t.includes("Dưới 1km")) maxKm = Math.max(maxKm, 1);
-                else if (t.includes("3km")) maxKm = Math.max(maxKm, 3);
-                else if (t.includes("5km")) maxKm = Math.max(maxKm, 5);
-                else if (t.includes("10km")) maxKm = Math.max(maxKm, 10);
+            distanceTags.forEach(tg => {
+                if (tg.includes("Dưới 1km")) maxKm = Math.max(maxKm, 1);
+                else if (tg.includes("3km")) maxKm = Math.max(maxKm, 3);
+                else if (tg.includes("5km")) maxKm = Math.max(maxKm, 5);
+                else if (tg.includes("10km")) maxKm = Math.max(maxKm, 10);
             });
             if (maxKm === 0) maxKm = 5; // Default fallback
 
@@ -249,7 +249,7 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
     const handleDetailTagToggle = (tagWithHash) => {
         const rawTag = tagWithHash.replace(/^#/, '');
         setDetailSelectedTags(prev => prev.includes(rawTag)
-            ? prev.filter(t => t !== rawTag)
+            ? prev.filter(tg => tg !== rawTag)
             : [...prev, rawTag]
         );
 
@@ -258,7 +258,7 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
             const key = 'main_dishes';
             const current = prev[key] || [];
             const exists = current.includes(rawTag);
-            const updated = exists ? current.filter(t => t !== rawTag) : [...current, rawTag];
+            const updated = exists ? current.filter(tg => tg !== rawTag) : [...current, rawTag];
             if (updated.length === 0) {
                 const next = { ...prev };
                 delete next[key];
@@ -380,10 +380,10 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
                 <div className="rm-tags-area">
                     <span className="rm-tags-label">{t('selected_tags')}</span>
                     <div className="rm-tags-row">
-                        {visibleTags.map((t) => (
-                            <div key={`${t.key}-${t.value}`} className="rm-tag-pill">
-                                #{t.value}
-                                <div className="rm-tag-close" onClick={() => removeTag(t.key, t.value)}><Icons.Close /></div>
+                        {visibleTags.map((tg) => (
+                            <div key={`${tg.key}-${tg.value}`} className="rm-tag-pill">
+                                #{t(tg.value)}
+                                <div className="rm-tag-close" onClick={() => removeTag(tg.key, tg.value)}><Icons.Close /></div>
                             </div>
                         ))}
                         {hiddenCount > 0 && <button className="rm-more-btn" onClick={() => setShowAllTagsModal(true)}>More</button>}
@@ -427,7 +427,7 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
                             <Icons.Search />
                             <input 
                                 type="text" 
-                                placeholder="Search tag..." 
+                                placeholder= {t('search_tag')} 
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
@@ -449,7 +449,7 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
                                                 className={`rm-pill-btn parent ${isParentSelected ? 'active' : ''}`} 
                                                 onClick={() => handleSelectTag(parent.name)}
                                             >
-                                                {parent.name}
+                                                {t(parent.name)}
                                             </button>
 
                                             {/* Mũi tên mở rộng (Nằm tách biệt bên phải) */}
@@ -478,7 +478,7 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
                                                             className={`rm-pill-btn child ${isChildSelected ? 'active' : ''}`}
                                                             onClick={() => handleSelectTag(child)}
                                                         >
-                                                            {child}
+                                                            {t(child)}
                                                         </button>
                                                     );
                                                 })}
@@ -534,10 +534,10 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
                             <div onClick={() => setShowAllTagsModal(false)} style={{cursor: 'pointer'}}><Icons.Close /></div>
                         </div>
                         <div className="rm-modal-body">
-                            {allSelectedTagsWithKey.map((t) => (
-                                <div key={`${t.key}-${t.value}`} className="rm-tag-pill large">
-                                    {t.value}
-                                    <div className="rm-tag-close" onClick={() => removeTag(t.key, t.value)}><Icons.Close /></div>
+                            {allSelectedTagsWithKey.map((tg) => (
+                                <div key={`${tg.key}-${tg.value}`} className="rm-tag-pill large">
+                                    {`#${t(tg.value.replace(/^#/, ''))}`}
+                                    <div className="rm-tag-close" onClick={() => removeTag(tg.key, tg.value)}><Icons.Close /></div>
                                 </div>
                             ))}
                         </div>
