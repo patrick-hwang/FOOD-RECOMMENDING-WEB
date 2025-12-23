@@ -183,7 +183,7 @@ body.dark-mode {
     -webkit-overflow-scrolling: touch;
     
     /* Padding bottom lớn để không bị Bottom Bar che mất */
-    padding-bottom: 240px; 
+    padding-bottom: 160px; 
     padding-top: 15px;
 
     scrollbar-width: none; /* Firefox */
@@ -396,7 +396,7 @@ body.dark-mode {
     border-top-left-radius: 25px;
     border-top-right-radius: 25px;
     box-shadow: 0 -5px 30px rgba(0,0,0,0.1);
-    padding: 15px 0 70px 0;
+    padding: 12px 0 15px 0;
     z-index: 100;
     display: flex; flex-direction: column; align-items: center;
 }

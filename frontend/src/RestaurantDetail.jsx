@@ -462,7 +462,6 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
           <div className="rd-spin-icon"><DetailIcons.Refresh /></div>
         </div>
       </div>
-
     </div>
   );
 };
