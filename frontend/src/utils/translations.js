@@ -79,7 +79,13 @@ export const translations = {
         logout: "Log out",
         on: "On",
         off: "Off",
-        
+        our_story: "Our Story",
+        our_story_desc: "The journey of FoodRec",
+        help_title: "Help & Support",
+        help_desc: "How can we help you?",
+        story_content: "FoodRec was born from a passion for exploring local Vietnamese cuisine. We believe that every meal is an adventure, and our mission is to connect food lovers with authentic local gems through technology.",
+        contact_us: "Contact us at: support@foodrec.vn",
+
         // --- EDIT PROFILE ---
         name: "Name",
         email: "Email",
@@ -272,6 +278,12 @@ export const translations = {
         logout: "Đăng xuất",
         on: "Bật",
         off: "Tắt",
+        our_story: "Câu chuyện của chúng tôi",
+        our_story_desc: "Hành trình của FoodRec",
+        help_title: "Trợ giúp & Hỗ trợ",
+        help_desc: "Chúng tôi có thể giúp gì cho bạn?",
+        story_content: "FoodRec ra đời từ niềm đam mê khám phá ẩm thực Việt. Chúng tôi tin rằng mỗi bữa ăn là một cuộc phiêu lưu, và sứ mệnh của chúng tôi là kết nối những tâm hồn ăn uống với những quán ăn bản địa đích thực thông qua công nghệ.",
+        contact_us: "Liên hệ: support@foodrec.vn",
 
         // --- EDIT PROFILE ---
         name: "Tên hiển thị",

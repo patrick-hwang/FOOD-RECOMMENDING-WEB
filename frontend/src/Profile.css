@@ -1,81 +1,82 @@
-/* --- src/Profile.css --- */
-
-/* CẤU TRÚC CHÍNH */
+/* =========================================
+   1. CẤU TRÚC CHÍNH (LAYOUT)
+   ========================================= */
 .prof-container {
-    background-color: var(--bg-primary); /* Biến màu nền */
+    background-color: var(--bg-primary);
     min-height: 100vh;
     width: 100%;
     display: flex;
     flex-direction: column;
     font-family: 'Montserrat', sans-serif;
-    padding-bottom: 100px; /* Chừa chỗ cho Bottom Nav */
+    padding-bottom: 30px; 
     box-sizing: border-box;
     overflow-x: hidden;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* LỚP PHỦ FULL MÀN HÌNH (Che Bottom Nav) */
+/* LỚP PHỦ FULL MÀN HÌNH (Che thanh điều hướng khi vào Settings/Edit) */
 .prof-fullscreen-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: var(--bg-primary); /* Nền theo theme */
-    z-index: 10000; /* Cao hơn Bottom Nav */
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: var(--bg-primary);
+    z-index: 10000;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    animation: slideInRight 0.3s ease-out;
+    animation: slideInRight 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 @keyframes slideInRight {
-    from { transform: translateX(100%); }
-    to { transform: translateX(0); }
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
 }
 
-/* --- HEADER --- */
+/* =========================================
+   2. HEADER & AVATAR
+   ========================================= */
 .prof-header-bg {
     background: linear-gradient(180deg, #4CAF50 0%, #66BB6A 100%);
     height: 160px;
     width: 100%;
-    border-bottom-left-radius: 50%;
-    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
     position: relative;
     flex-shrink: 0;
     box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
 }
 
-.prof-header-actions {
+.prof-back-main {
     position: absolute;
-    top: 25px;
-    right: 25px;
-    cursor: pointer;
+    top: 25px; left: 25px;
+    color: white; cursor: pointer;
     z-index: 20;
-    color: white; /* Icon trên nền xanh luôn trắng */
+    display: flex; align-items: center;
 }
 
-/* --- AVATAR --- */
-.prof-avatar-wrapper {
+.prof-header-actions {
     position: absolute;
-    bottom: -60px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 130px;
-    height: 130px;
-    background: var(--bg-secondary);
+    top: 25px; right: 25px;
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: white;
+    z-index: 20;
+}
+
+.prof-avatar-wrapper {
+    margin: -65px auto 0 auto;
+    width: 130px; height: 130px;
+    background: var(--bg-card);
     border-radius: 50%;
     padding: 5px;
-    box-shadow: 0 8px 20px var(--shadow-color);
+    box-shadow: 0 8px 25px var(--shadow-color);
     z-index: 10;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: flex; justify-content: center; align-items: center;
+    position: relative;
 }
 
 .prof-avatar-img {
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     border-radius: 50%;
     object-fit: cover;
     background: var(--bg-card);
@@ -84,25 +85,23 @@
 
 .prof-edit-cam {
     position: absolute;
-    bottom: 5px;
-    right: 5px;
+    bottom: 5px; right: 5px;
     background: var(--bg-card);
     color: var(--text-primary);
     border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
     border: 1px solid var(--border-color);
-    box-shadow: 0 2px 5px var(--shadow-color);
+    box-shadow: 0 4px 10px var(--shadow-color);
     cursor: pointer;
     z-index: 12;
 }
 
-/* --- INFO USER --- */
+/* =========================================
+   3. INFO & BADGES (Danh hiệu người dùng)
+   ========================================= */
 .prof-info-section {
-    margin-top: 70px;
+    margin-top: 20px;
     text-align: center;
     padding: 0 20px;
 }
@@ -111,419 +110,267 @@
     font-size: 24px;
     font-weight: 800;
     color: var(--text-primary);
-    margin-bottom: 5px;
+    margin-bottom: 8px;
 }
 
 .prof-badges {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
+    display: flex; justify-content: center;
+    gap: 12px; margin-bottom: 25px;
 }
 
 .prof-badge-pill {
     background: var(--bg-card);
-    border: 1px solid var(--border-color);
+    border: 1.5px solid var(--border-color);
     border-radius: 20px;
-    padding: 4px 15px;
-    font-size: 12px;
-    font-weight: 600;
+    padding: 5px 15px;
+    font-size: 13px;
+    font-weight: 700;
     color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    box-shadow: 0 2px 4px var(--shadow-color);
+    display: flex; align-items: center; gap: 6px;
+    box-shadow: 0 2px 6px var(--shadow-color);
 }
 
-/* --- TABS --- */
+/* =========================================
+   4. TABS & GRID QUÁN ĂN
+   ========================================= */
 .prof-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-    margin-bottom: 15px;
-    border-bottom: 1px solid var(--border-color);
+    display: flex; justify-content: center;
+    gap: 60px; margin-bottom: 20px;
+    border-bottom: 2px solid var(--border-color);
+    padding: 0 20px;
 }
 
 .prof-tab-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 10px 20px;
+    background: none; border: none; cursor: pointer;
+    padding: 12px 10px;
     color: var(--text-secondary);
+    font-weight: 700;
+    font-size: 15px;
     position: relative;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
 }
 
-.prof-tab-btn.active {
-    color: #4CAF50;
-}
-
+.prof-tab-btn.active { color: #4CAF50; }
 .prof-tab-btn.active::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: #4CAF50;
-    border-radius: 2px 2px 0 0;
+    content: ''; position: absolute; bottom: -2px; left: 0;
+    width: 100%; height: 3px;
+    background: #4CAF50; border-radius: 4px;
 }
 
-/* --- CONTENT GRID --- */
 .prof-content-area {
-    flex-grow: 1;
-    width: 100%;
+    flex: 1;
     padding: 10px 20px;
-    box-sizing: border-box;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
     align-content: start;
 }
 
 .prof-card-grid {
     background: var(--bg-card);
-    border-radius: 12px;
-    box-shadow: 0 4px 12px var(--shadow-color);
+    border-radius: 16px;
+    box-shadow: 0 6px 15px var(--shadow-color);
     overflow: hidden;
     cursor: pointer;
-    display: flex;
-    flex-direction: column;
+    display: flex; flex-direction: column;
     position: relative;
-    transition: transform 0.2s;
-    height: auto;
-    -webkit-user-select: none;
-    user-select: none;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.prof-card-grid:active {
-    transform: scale(0.98);
-}
+.prof-card-grid:active { transform: scale(0.96); }
 
 .prof-card-img-container {
-    width: 100%;
-    height: 120px;
+    width: 100%; height: 125px;
     background: var(--bg-secondary);
     position: relative;
 }
 
-.prof-card-img-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+.prof-card-img-container img { width: 100%; height: 100%; object-fit: cover; }
 
 .prof-card-bookmark-btn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: rgba(255, 255, 255, 0.9);
+    position: absolute; top: 8px; right: 8px;
+    background: rgba(255, 255, 255, 0.95);
     border-radius: 50%;
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    cursor: pointer;
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
     z-index: 5;
 }
 
-.prof-card-info {
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-}
+.prof-card-info { padding: 12px; }
+.prof-card-name { font-size: 15px; font-weight: 800; color: var(--text-primary); margin: 0 0 5px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.prof-card-rating { display: flex; align-items: center; gap: 3px; font-size: 13px; color: #FFC107; font-weight: 800; }
 
-.prof-card-name {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin: 0 0 4px 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.prof-card-rating {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    font-size: 12px;
-    color: #FFC107;
-    font-weight: bold;
-}
-
-/* --- DELETE MODAL --- */
-.delete-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 3000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.delete-modal {
-    background: var(--bg-card);
-    width: 80%;
-    max-width: 300px;
-    border-radius: 15px;
-    padding: 20px;
+/* GUEST MODE: CĂN GIỮA ICON KHÓA TUYỆT ĐỐI */
+.prof-empty-guest {
+    grid-column: 1 / -1; 
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 80px 20px;
     text-align: center;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    height: 100%;
 }
+.prof-empty-guest svg { margin-bottom: 25px; color: var(--border-color); }
+.prof-empty { grid-column: 1 / -1; text-align: center; color: var(--text-secondary); margin-top: 60px; font-weight: 500; }
 
-.delete-modal h3 {
-    margin: 0 0 10px 0;
-    font-size: 18px;
-    color: var(--text-primary);
-}
-
-.delete-modal p {
-    margin: 0 0 20px 0;
-    color: var(--text-secondary);
-    font-size: 14px;
-}
-
-.delete-modal-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-}
-
-.delete-btn-yes {
-    background: #ff4d4f;
-    color: white;
-    border: none;
-    padding: 8px 20px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.delete-btn-no {
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    border: none;
-    padding: 8px 20px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-/* --- SETTINGS & EDIT PROFILE --- */
-.prof-settings-container {
+/* =========================================
+   5. SETTINGS & SUB-VIEWS (Trang mới Story/Help)
+   ========================================= */
+.custom-sub-header {
     padding: 20px;
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky; top: 0; z-index: 100;
 }
+
+.sub-header-title { flex: 1; text-align: center; margin: 0; font-size: 20px; color: var(--text-primary); font-weight: 800; }
+
+.prof-settings-container { padding: 25px 20px; max-width: 600px; margin: 0 auto; width: 100%; }
 
 .setting-row {
-    display: flex;
-    align-items: center;
-    padding: 16px 10px;
+    display: flex; align-items: center;
+    padding: 18px 12px;
     border-bottom: 1px solid var(--border-color);
-    font-size: 16px;
-    color: var(--text-primary);
+    font-size: 17px; color: var(--text-primary);
     cursor: pointer;
+    transition: background 0.2s;
 }
-
-.setting-row:hover {
-    background: var(--bg-secondary);
-}
-
-.setting-icon {
-    margin-right: 15px;
-    width: 25px;
-    text-align: center;
-    font-size: 20px;
-}
-
-.setting-arrow {
-    margin-left: auto;
-    color: var(--text-secondary);
-    font-weight: bold;
-}
+.setting-row:hover { background: var(--bg-secondary); }
+.setting-icon { margin-right: 18px; width: 28px; text-align: center; font-size: 22px; }
+.setting-arrow { margin-left: auto; color: var(--text-secondary); font-weight: 800; }
 
 .logout-btn {
-    margin-top: 40px;
-    width: 100%;
-    padding: 15px;
-    border-radius: 30px;
-    border: 1px solid #FF5252;
-    background: var(--bg-card);
-    color: #FF5252;
-    font-weight: 700;
-    cursor: pointer;
-    font-size: 16px;
+    margin-top: 50px; width: 100%; padding: 16px;
+    border-radius: 35px; border: 2px solid #FF5252;
+    background: var(--bg-card); color: #FF5252;
+    font-weight: 800; cursor: pointer; font-size: 17px;
+    transition: all 0.2s;
 }
+.logout-btn:active { background: #FF5252; color: white; }
 
-/* --- EDIT FORM --- */
-.edit-form {
-    padding: 30px 20px;
-    max-width: 500px;
-    margin: 0 auto;
+/* STORY & HELP DESIGN */
+.sub-content-padded { padding: 40px 25px; display: flex; flex-direction: column; align-items: center; }
+.story-logo { width: 100px; height: 100px; margin-bottom: 30px; border-radius: 25px; box-shadow: 0 8px 20px var(--shadow-color); }
+.story-text { line-height: 1.9; color: var(--text-primary); text-align: center; font-size: 16px; font-weight: 500; }
+.help-card {
+    background: var(--bg-card); width: 100%; padding: 22px;
+    border-radius: 18px; margin-bottom: 18px;
+    border: 1px solid var(--border-color); box-shadow: 0 5px 15px var(--shadow-color);
 }
+.help-card h3 { margin: 0 0 10px 0; color: #4CAF50; font-size: 18px; font-weight: 800; }
+.help-card p { margin: 0; font-size: 15px; color: var(--text-secondary); line-height: 1.6; }
+.help-contact { margin-top: 40px; color: var(--text-secondary); font-size: 14px; font-weight: 700; border-top: 1px solid var(--border-color); padding-top: 20px; width: 100%; text-align: center; }
 
-.edit-group {
-    margin-bottom: 20px;
-}
+/* =========================================
+   6. EDIT PROFILE FORM (Cờ VN & Nhóm Input)
+   ========================================= */
+.edit-form { padding: 30px 20px; max-width: 500px; margin: 0 auto; width: 100%; }
+
+.edit-group { margin-bottom: 22px; }
 
 .edit-input-container {
     border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 5px 12px;
+    border-radius: 14px;
+    padding: 10px 18px;
     background: var(--bg-card);
-    display: flex;
-    flex-direction: column;
+    display: flex; flex-direction: column;
+    box-shadow: 0 2px 5px var(--shadow-color);
+    transition: border-color 0.2s;
 }
+.edit-input-container:focus-within { border-color: #4CAF50; }
 
-.edit-label {
-    font-size: 11px;
-    color: var(--text-secondary);
-    margin-bottom: 2px;
-    font-weight: 500;
-}
+.edit-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
 
 .edit-input {
-    border: none;
-    outline: none;
-    font-size: 15px;
-    color: var(--text-primary);
-    font-weight: 500;
-    width: 100%;
+    border: none; outline: none;
+    font-size: 17px; color: var(--text-primary);
+    font-weight: 600; width: 100%;
     background: transparent;
+    padding: 2px 0;
 }
 
-.vn-flag {
-    width: 24px;
-    height: 16px;
-    margin-right: 10px;
-    border-radius: 2px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
+.vn-flag { width: 28px; height: 18px; margin-right: 15px; border-radius: 3px; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
 
 .edit-btn-submit {
-    width: 100%;
-    background: #4CAF50;
-    color: white;
-    border: none;
-    padding: 15px;
-    border-radius: 30px;
-    font-size: 16px;
-    font-weight: 700;
-    margin-top: 20px;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+    width: 100%; background: linear-gradient(90deg, #4CAF50, #66BB6A); color: white; border: none;
+    padding: 18px; border-radius: 35px;
+    font-size: 17px; font-weight: 800;
+    margin-top: 25px; cursor: pointer;
+    box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
+}
+.edit-btn-submit:active { transform: scale(0.98); }
+
+/* =========================================
+   7. MODALS (Xóa & Menu Avatar)
+   ========================================= */
+.delete-modal-overlay, .avatar-menu-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 20000;
+    display: flex; justify-content: center; align-items: center;
 }
 
-.prof-empty {
-    text-align: center;
-    color: var(--text-secondary);
-    margin-top: 50px;
-    grid-column: 1 / -1;
-}
-
-/* --- AVATAR MENU (BOTTOM SHEET) --- */
-.avatar-menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 11000;
-    display: flex;
-    align-items: flex-end;
-}
-
-.avatar-menu-card {
+.delete-modal, .avatar-menu-card {
     background: var(--bg-card);
-    width: 100%;
-    border-top-left-radius: 25px;
-    border-top-right-radius: 25px;
-    padding: 20px 0;
-    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.2);
-    animation: slideUp 0.3s ease-out;
-    color: var(--text-primary);
+    width: 88%; max-width: 340px;
+    border-radius: 25px; padding: 30px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-@keyframes slideUp {
-    from { transform: translateY(100%); }
-    to { transform: translateY(0); }
+@keyframes zoomIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
 
-.avatar-menu-preview {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
+.delete-modal h3 { margin: 0 0 12px 0; color: var(--text-primary); font-size: 20px; font-weight: 800; }
+.delete-modal p { color: var(--text-secondary); margin-bottom: 25px; font-weight: 600; }
 
-.avatar-menu-preview img {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-    background: #e0e0e0;
-}
+.delete-modal-actions { display: flex; gap: 15px; justify-content: center; }
+.delete-btn-yes { background: #FF5252; color: white; border: none; padding: 12px 30px; border-radius: 12px; font-weight: 800; cursor: pointer; }
+.delete-btn-no { background: var(--bg-secondary); color: var(--text-primary); border: none; padding: 12px 30px; border-radius: 12px; font-weight: 800; cursor: pointer; }
 
+/* Avatar Menu (Bottom Sheet Style) */
+.avatar-menu-card {
+    padding: 10px 0 25px 0;
+}
 .avatar-menu-item {
-    display: flex;
-    align-items: center;
-    padding: 15px 30px;
-    cursor: pointer;
-    transition: background 0.1s;
+    padding: 18px 25px; border-bottom: 1px solid var(--border-color);
+    cursor: pointer; color: var(--text-primary); font-weight: 700;
+    display: flex; align-items: center;
+}
+.avatar-menu-item:hover { background: var(--bg-secondary); }
+.avatar-menu-item:last-child { border-bottom: none; }
+.avatar-menu-item.delete { color: #FF5252; }
+
+/* =========================================
+   8. NIGHT MODE (DARK THEME)
+   ========================================= */
+body.dark-mode .prof-header-bg {
+    background: linear-gradient(180deg, #1b5e20 0%, #2e7d32 100%);
 }
 
-.avatar-menu-item:active {
-    background: var(--bg-secondary);
+body.dark-mode .prof-back-main,
+body.dark-mode .custom-sub-header svg,
+body.dark-mode .prof-header-actions {
+    color: #ffffff !important;
 }
 
-.avatar-menu-icon {
-    margin-right: 15px;
-    width: 24px;
-    display: flex;
-    justify-content: center;
+body.dark-mode .prof-avatar-img {
+    border-color: #1e1e1e;
 }
 
-.avatar-menu-text {
-    font-size: 16px;
-    color: var(--text-primary);
-    font-weight: 500;
+body.dark-mode .prof-card-bookmark-btn {
+    background: rgba(45, 45, 45, 0.95);
 }
 
-.avatar-menu-text.delete {
-    color: #FF5252;
+body.dark-mode .prof-tab-btn.active {
+    color: #66BB6A;
 }
 
-/* --- FIX MÀU ICON KHI DARK MODE --- */
-
-/* 1. Nút Back (class .prof-back-btn thêm trong JSX) */
-.prof-back-btn svg {
-    stroke: var(--text-primary); /* Mặc định theo màu chữ chính */
-    transition: stroke 0.3s;
-}
-
-/* Khi Dark Mode: Màu chữ chính là trắng -> Icon tự trắng */
-/* Tuy nhiên để chắc chắn: */
-body.dark-mode .prof-back-btn svg {
-    stroke: #ffffff !important;
-}
-
-/* 2. Icon Setting & Menu Avatar */
-body.dark-mode .setting-icon svg,
-body.dark-mode .avatar-menu-icon svg {
-    stroke: #ffffff !important;
-}
-
-/* 3. Icon đặc biệt (Sao vàng, Bookmark xanh/vàng) không đổi màu */
-body.dark-mode .prof-container svg[fill="#FFC107"],
-body.dark-mode .prof-container svg[fill="#00AA00"] {
-    stroke: none !important;
+body.dark-mode .prof-tab-btn.active::after {
+    background: #66BB6A;
 }

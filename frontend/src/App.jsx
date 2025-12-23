@@ -1,58 +1,67 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+
+// Import CSS
 import './App.css';
+
+// Import Components & Pages
 import SplashScreen from './Components/SplashScreen';
 import OnboardingPage from './Pages/Onboarding';
-import logo from './assets/images/logo.png';
 import LoginPage from './LoginPage';
-import { Routes, Route, useNavigate } from 'react-router-dom';
 import TasteMode from './TasteMode';
-
-// --- IMPORT FILE MỚI TẠI ĐÂY ---
 import RandomModeCard from './RandomModeCard';
 import AppChooseMode from './AppChooseMode';
-import BottomNavigation from './Components/BottomNavigation';
 import ProfilePage from './ProfilePage';
+
+// Import Contexts & Utils
 import Toast from './Components/Toast';
 import defaultAvatar from './assets/images/logo.png';
 import { LanguageProvider } from './Context/LanguageContext';
 import { ThemeProvider } from './Context/ThemeContext';
 import { NotificationProvider } from './Context/NotificationContext';
-import { useLanguage } from './Context/LanguageContext';
 
+// --- HIỆU ỨNG CHUYỂN CẢNH (ENTRANCE) ---
 function AppEntranceEffect({ onDone }) {
   const [entered, setEntered] = useState(false);
   const [showText, setShowText] = useState(false);
   const [hideRects, setHideRects] = useState(false);
+
   useEffect(() => {
     const enterTimer = setTimeout(() => setEntered(true), 50);
     const textTimer = setTimeout(() => setShowText(true), 500);
     const exitStart = 1500;
     const exitTimer = setTimeout(() => setEntered(false), exitStart);
     const hideTimer = setTimeout(() => setHideRects(true), exitStart + 1000);
-    return () => { clearTimeout(enterTimer); clearTimeout(textTimer); clearTimeout(exitTimer); clearTimeout(hideTimer); };
+    return () => { 
+      clearTimeout(enterTimer); 
+      clearTimeout(textTimer); 
+      clearTimeout(exitTimer); 
+      clearTimeout(hideTimer); 
+    };
   }, []);
-  useEffect(() => { if (hideRects && typeof onDone === 'function') onDone(); }, [hideRects, onDone]);
+
+  useEffect(() => { 
+    if (hideRects && typeof onDone === 'function') onDone(); 
+  }, [hideRects, onDone]);
+
   return (
     <div className="EntranceEffect">
       {!hideRects && (
         <>
-          <div className={`entrance-slide-rect top ${entered ? 'in' : ''}`}><span className={`entrance-text ${showText ? 'in' : ''}`}>NEW DESTINATIONS</span></div>
-          <div className={`entrance-slide-rect bottom ${entered ? 'in' : ''}`}><span className={`entrance-text ${showText ? 'in' : ''}`}>NEW CRAVINGS</span></div>
+          <div className={`entrance-slide-rect top ${entered ? 'in' : ''}`}>
+            <span className={`entrance-text ${showText ? 'in' : ''}`}>NEW DESTINATIONS</span>
+          </div>
+          <div className={`entrance-slide-rect bottom ${entered ? 'in' : ''}`}>
+            <span className={`entrance-text ${showText ? 'in' : ''}`}>NEW CRAVINGS</span>
+          </div>
         </>
       )}
     </div>
   );
 }
 
-const LogoutIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-    <polyline points="16 17 21 12 16 7"></polyline>
-    <line x1="21" y1="12" x2="9" y2="12"></line>
-  </svg>
-);
-
+// --- LUỒNG GIỚI THIỆU (INTRO FLOW) ---
 function IntroSequence() {
   const [introStep, setIntroStep] = useState('splash');
   const navigate = useNavigate();
@@ -66,7 +75,7 @@ function IntroSequence() {
   );
 }
 
-// --- APP MAIN (Tích hợp Guest Mode, Language, Theme) ---
+// --- APP MAIN ---
 function App() {
   const GOOGLE_CLIENT_ID = '975848353478-mguhticg531ok092j9krom4mhb25j6at.apps.googleusercontent.com';
   const navigate = useNavigate();
@@ -74,12 +83,11 @@ function App() {
 
   // Xử lý đăng nhập thành công (User thật)
   const handleLoginSuccess = (user) => {
-    const userObj = user || { phone: "0123456789", username: "Demo User" };
-    setCurrentUser(userObj);
+    setCurrentUser(user);
     navigate('/home');
   };
 
-  // Xử lý đăng nhập Guest
+  // Xử lý đăng nhập Guest (Chế độ khách)
   const handleGuestLogin = () => {
     const guestUser = {
       isGuest: true,
@@ -93,7 +101,6 @@ function App() {
   // Xử lý đăng xuất
   const handleLogout = () => {
     if (currentUser?.isGuest) {
-      // Guest logout không cần confirm
       setCurrentUser(null);
       navigate('/login');
     } else {
@@ -110,13 +117,14 @@ function App() {
         <LanguageProvider>
           <ThemeProvider>
             <div className="App">
+              {/* Toast thông báo hiển thị toàn cục */}
               <Toast />
 
               <Routes>
-                {/* URL: / (Intro Flow) */}
+                {/* 1. Trang Intro (Splash -> Entrance -> Onboarding) */}
                 <Route path="/" element={<IntroSequence />} />
 
-                {/* URL: /login */}
+                {/* 2. Trang Đăng nhập */}
                 <Route
                   path="/login"
                   element={
@@ -127,74 +135,51 @@ function App() {
                   }
                 />
 
-                {/* URL: /home */}
+                {/* 3. Trang chủ (Chọn chế độ) - Đã bỏ BottomNavigation */}
                 <Route
                   path="/home"
                   element={
-                    <>
-                      <AppChooseMode
-                        onRandom={() => navigate('/random')}
-                        onTaste={() => navigate('/taste')}
-                        currentUser={currentUser} /* <--- ADD THIS PROP */
-                      />
-                      <BottomNavigation
-                        activeTab="home"
-                        onTabChange={(tab) => navigate(tab === 'profile' ? '/profile' : '/home')}
-                      />
-                    </>
+                    <AppChooseMode
+                      onRandom={() => navigate('/random')}
+                      onTaste={() => navigate('/taste')}
+                      currentUser={currentUser}
+                    />
                   }
                 />
 
-                {/* URL: /random */}
+                {/* 4. Chế độ Chọn nhanh (Random) */}
                 <Route
                   path="/random"
                   element={
-                    <>
-                      <RandomModeCard
-                        onBack={() => navigate('/home')}
-                        currentUser={currentUser}
-                        onLogout={handleLogout}
-                      />
-                      <BottomNavigation
-                        activeTab="home"
-                        onTabChange={(tab) => navigate(tab === 'profile' ? '/profile' : '/home')}
-                      />
-                    </>
+                    <RandomModeCard
+                      onBack={() => navigate('/home')}
+                      currentUser={currentUser}
+                      onLogout={handleLogout}
+                    />
                   }
                 />
 
-                {/* URL: /taste */}
+                {/* 5. Chế độ Khẩu vị (Taste Quiz) */}
                 <Route
                   path="/taste"
                   element={
-                    <>
-                      <TasteMode
-                        onBack={() => navigate('/home')}
-                        currentUser={currentUser}
-                        onLogout={handleLogout}
-                      />
-                      <BottomNavigation
-                        activeTab="home"
-                        onTabChange={(tab) => navigate(tab === 'profile' ? '/profile' : '/home')}
-                      />
-                    </>
+                    <TasteMode
+                      onBack={() => navigate('/home')}
+                      currentUser={currentUser}
+                      onLogout={handleLogout}
+                    />
                   }
                 />
 
-                {/* URL: /profile */}
+                {/* 6. Trang cá nhân - Nút Back dẫn về Home thay vì dùng Bottom Nav */}
                 <Route
                   path="/profile"
                   element={
-                    <>
-                      <ProfilePage
-                        currentUser={currentUser}
-                        onLogout={handleLogout}
-                      />
-                      <BottomNavigation
-                        activeTab="profile"
-                        onTabChange={(tab) => navigate(tab === 'profile' ? '/profile' : '/home')}
-                      />
-                    </>
+                    <ProfilePage
+                      currentUser={currentUser}
+                      onLogout={handleLogout}
+                      onBack={() => navigate('/home')}
+                    />
                   }
                 />
               </Routes>
