@@ -558,8 +558,8 @@ async def admin_set_speciality_vn(payload: SpecialityVNUpdate):
 async def search_restaurants(payload: SearchRequest):
     """Search restaurants by name, reviews content, and tags using tokenized
     substring matching with scoring. For each token:
-      - name match: +5 points
-      - tags match: +4 points
+      - name match: +6 points
+      - tags match: +3 points
       - reviews match: +1 point
     Results are sorted by total score (desc) and limited to the requested size.
     """
@@ -652,12 +652,12 @@ async def search_restaurants(payload: SearchRequest):
 
             score = 0
             for tok in tokens:
-                # Name match +5
+                # Name match +6
                 if contains_token(name_val, tok):
-                    score += 5
-                # Tags match +4 (if any tag value contains token)
+                    score += 6
+                # Tags match +3 (if any tag value contains token)
                 if any(contains_token(t, tok) for t in tags_flat):
-                    score += 4
+                    score += 3
                 # Reviews match +1 (if any review contains token)
                 if any(contains_token(rv, tok) for rv in review_texts):
                     score += 1
