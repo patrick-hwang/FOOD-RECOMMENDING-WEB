@@ -167,24 +167,6 @@ body {
   box-sizing: border-box;
 }
 
-/*
-.choose-mode-title {
-  font-size: 2em;
-  font-weight: 600;
-  font-family: Montserrat;
-  color: #4CAF50;
-  margin-top: 0;
-}
-
-.choose-mode-subtitle {
-  font-size: 1.8em;
-  font-weight: 400;
-  font-family: Montserrat;
-  margin-bottom: 2rem;
-  color: #555;
-}
-*/
-
 /* Input */
 .input-container {
   position: relative;
