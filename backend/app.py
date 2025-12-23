@@ -556,7 +556,13 @@ async def admin_set_speciality_vn(payload: SpecialityVNUpdate):
 
 @app.post("/api/search")
 async def search_restaurants(payload: SearchRequest):
-    """Search restaurants by name, reviews content, and tags using tokenized substring matching"""
+    """Search restaurants by name, reviews content, and tags using tokenized
+    substring matching with scoring. For each token:
+      - name match: +5 points
+      - tags match: +4 points
+      - reviews match: +1 point
+    Results are sorted by total score (desc) and limited to the requested size.
+    """
     if collection_quan_an is None:
         raise HTTPException(status_code=503, detail="Lỗi server DB")
     
@@ -606,20 +612,76 @@ async def search_restaurants(payload: SearchRequest):
         # All tokens must match (AND logic across tokens)
         query_filter = {"$and": or_conditions} if len(or_conditions) > 1 else or_conditions[0]
         
-        # Execute query with limit
-        cursor = collection_quan_an.find(query_filter).limit(payload.limit)
-        results = []
-        
+        # Fetch a reasonable batch of candidates, then score and sort in Python.
+        # Use a multiplier to avoid missing good results when the requested limit is small.
+        candidate_limit = max(int(payload.limit) * 10, 100)
+        cursor = collection_quan_an.find(query_filter).limit(candidate_limit)
+
+        # Helper to flatten tags into a list of strings
+        def flatten_tags(tags_obj):
+            values = []
+            if isinstance(tags_obj, dict):
+                for v in tags_obj.values():
+                    if isinstance(v, list):
+                        values.extend([str(x) for x in v if isinstance(x, (str, int, float))])
+                    elif isinstance(v, (str, int, float)):
+                        values.append(str(v))
+            return values
+
+        # Helper to normalize and check substring (case-insensitive)
+        def contains_token(haystack: str, token: str) -> bool:
+            try:
+                return token.lower() in haystack.lower()
+            except Exception:
+                return False
+
+        scored = []
         for doc in cursor:
+            name_val = str(doc.get("name", ""))
+            tags_flat = flatten_tags(doc.get("tags", {}))
+            reviews_list = doc.get("reviews", [])
+
+            # Prepare review contents (handle list of dicts or strings)
+            review_texts = []
+            if isinstance(reviews_list, list):
+                for r in reviews_list:
+                    if isinstance(r, dict):
+                        review_texts.append(str(r.get("content", "")))
+                    else:
+                        review_texts.append(str(r))
+
+            score = 0
+            for tok in tokens:
+                # Name match +5
+                if contains_token(name_val, tok):
+                    score += 5
+                # Tags match +4 (if any tag value contains token)
+                if any(contains_token(t, tok) for t in tags_flat):
+                    score += 4
+                # Reviews match +1 (if any review contains token)
+                if any(contains_token(rv, tok) for rv in review_texts):
+                    score += 1
+
             converted = convert_document(doc)
             # Handle thumbnail fallback
             if "thumbnail" not in converted and "places_images" in converted and converted["places_images"]:
                 converted["thumbnail"] = converted["places_images"][0]
             elif "thumbnail" not in converted:
                 converted["thumbnail"] = "https://placehold.co/150x150"
-            results.append(converted)
-        
-        return {"results": results, "count": len(results)}
+
+            converted["_score"] = score
+            scored.append(converted)
+
+        # Sort by score (desc), then by name (asc) for stability
+        scored.sort(key=lambda d: (-d.get("_score", 0), d.get("name", "")))
+
+        # Apply final limit and strip internal score if desired
+        final = scored[: int(payload.limit)]
+        for d in final:
+            # keep _score for debugging if frontend ignores unknown fields
+            pass
+
+        return {"results": final, "count": len(final)}
     
     except Exception as e:
         print(f"Error in search: {e}")
