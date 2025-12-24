@@ -13,21 +13,24 @@ body {
 }
 
 body.dark-mode .tm-header-section svg {
-    fill: var(--text-primary);
+  fill: var(--text-primary);
 }
 
 /* --- MAIN CONTAINER & BACKGROUND --- */
 .tm-container {
   min-height: 100vh;
   width: 100%;
-  max-width: 480px; /* Force mobile width on desktop */
+  max-width: 480px;
+  /* Force mobile width on desktop */
   background-color: var(--bg-primary);
   position: relative;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  margin: 0 auto; /* Center it */
-  box-shadow: 0 0 50px rgba(0,0,0,0.1); /* Shadow to separate from gradient */
+  margin: 0 auto;
+  /* Center it */
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+  /* Shadow to separate from gradient */
   padding-bottom: 20px;
 }
 
@@ -38,9 +41,27 @@ body.dark-mode .tm-header-section svg {
   background-color: rgba(0, 170, 0, 0.05);
   z-index: 0;
 }
-.bubble-1 { width: 300px; height: 300px; top: -100px; right: -50px; }
-.bubble-2 { width: 200px; height: 200px; bottom: 10%; left: -50px; }
-.bubble-3 { width: 150px; height: 150px; top: 20%; left: 10%; }
+
+.bubble-1 {
+  width: 300px;
+  height: 300px;
+  top: -100px;
+  right: -50px;
+}
+
+.bubble-2 {
+  width: 200px;
+  height: 200px;
+  bottom: 10%;
+  left: -50px;
+}
+
+.bubble-3 {
+  width: 150px;
+  height: 150px;
+  top: 20%;
+  left: 10%;
+}
 
 /* --- HEADER SECTION --- */
 .tm-header-section {
@@ -54,18 +75,19 @@ body.dark-mode .tm-header-section svg {
 }
 
 .tm-header-center {
-    text-align: center;
-    flex: 1; /* Takes remaining space */
+  text-align: center;
+  flex: 1;
+  /* Takes remaining space */
 }
 
 .tm-back-icon {
-    cursor: pointer;
-    color: var(--text-primary);
+  cursor: pointer;
+  color: var(--text-primary);
 }
 
 .tm-header-actions {
-    display: flex;
-    gap: 5px;
+  display: flex;
+  gap: 5px;
 }
 
 .tm-title {
@@ -86,13 +108,14 @@ body.dark-mode .tm-header-section svg {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Center vertically */
+  justify-content: center;
+  /* Center vertically */
   align-items: center;
   padding: 20px;
   z-index: 1;
   width: 100%;
   /* Ensure content doesn't overflow improperly */
-  overflow-y: auto; 
+  overflow-y: auto;
   padding-bottom: 40px;
 }
 
@@ -100,7 +123,7 @@ body.dark-mode .tm-header-section svg {
   background: var(--bg-card);
   width: 100%;
   border-radius: 25px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
   padding: 30px;
   text-align: center;
   position: relative;
@@ -139,14 +162,18 @@ body.dark-mode .tm-header-section svg {
   cursor: pointer;
   transition: all 0.2s ease;
   border: 1.5px solid #666;
-  background: var(--bg-card); /* Was white */
-  color: var(--text-primary); /* Was #333 */
+  background: var(--bg-card);
+  /* Was white */
+  color: var(--text-primary);
+  /* Was #333 */
   border-color: var(--border-color);
 }
+
 .tm-btn-option:hover {
   border-color: var(--primary-green);
   color: var(--primary-green);
-  background: var(--bg-secondary); /* Was #f9fff9 */
+  background: var(--bg-secondary);
+  /* Was #f9fff9 */
 }
 
 .btn-filled {
@@ -155,23 +182,24 @@ body.dark-mode .tm-header-section svg {
   color: white;
   box-shadow: 0 4px 15px rgba(0, 170, 0, 0.3);
 }
+
 .btn-filled:hover {
   background: #008f00;
 }
 
 /* Selected States */
 .tm-btn-option.selected {
-    background-color: #e6f9e6;
-    border-color: var(--primary-green);
-    color: var(--primary-green);
-    font-weight: 700;
-    box-shadow: 0 0 0 2px var(--primary-green);
+  background-color: #e6f9e6;
+  border-color: var(--primary-green);
+  color: var(--primary-green);
+  font-weight: 700;
+  box-shadow: 0 0 0 2px var(--primary-green);
 }
 
 .tm-btn-option.btn-filled.selected-fill {
-    background-color: #007700;
-    font-weight: 700;
-    box-shadow: 0 0 0 3px #b3ffb3;
+  background-color: #007700;
+  font-weight: 700;
+  box-shadow: 0 0 0 3px #b3ffb3;
 }
 
 /* Navigation Buttons (Bottom) */
@@ -180,7 +208,8 @@ body.dark-mode .tm-header-section svg {
   justify-content: space-between;
   width: 100%;
   margin-top: 20px;
-  flex-shrink: 0; /* Prevents squishing */
+  flex-shrink: 0;
+  /* Prevents squishing */
 }
 
 .tm-nav-btn {
@@ -192,9 +221,10 @@ body.dark-mode .tm-header-section svg {
   font-weight: 600;
   cursor: pointer;
 }
+
 .nav-prev {
-    background: #ccc;
-    color: #333;
+  background: #ccc;
+  color: #333;
 }
 
 /* --- RESULT PAGE LAYOUT --- */
@@ -206,17 +236,19 @@ body.dark-mode .tm-header-section svg {
 
 .tm-result-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); 
+  grid-template-columns: repeat(2, 1fr);
   gap: 15px;
-  margin-bottom: 50px; 
+  margin-bottom: 50px;
 }
 
 .tm-result-card {
-  background: var(--bg-card); /* Was white */
-  border: 1px solid var(--border-color); /* Was #eee */
+  background: var(--bg-card);
+  /* Was white */
+  border: 1px solid var(--border-color);
+  /* Was #eee */
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -235,7 +267,7 @@ body.dark-mode .tm-header-section svg {
 .tm-card-img-container {
   position: relative;
   width: 100%;
-  padding-top: 75%; 
+  padding-top: 75%;
 }
 
 .tm-card-img {
@@ -261,7 +293,7 @@ body.dark-mode .tm-header-section svg {
   justify-content: center;
   color: white;
   font-size: 20px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .tm-card-content {
@@ -276,7 +308,8 @@ body.dark-mode .tm-header-section svg {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--text-primary); /* Was #333 */
+  color: var(--text-primary);
+  /* Was #333 */
 }
 
 .tm-stars {
@@ -328,58 +361,72 @@ body.dark-mode .tm-header-section svg {
 
 /* --- POPUP OVERLAY --- */
 .tm-popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0,0,0,0.5);
-    z-index: 100;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
 .tm-popup-content {
-    background: var(--bg-card); /* Was white */
-    width: 100%;
-    max-width: 500px;
-    height: 90vh; 
-    border-radius: 20px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+  background: var(--bg-card);
+  /* Was white */
+  width: 100%;
+  max-width: 500px;
+  height: 90vh;
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
 }
 
 .tm-popup-close {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    border: none;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    z-index: 101;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  z-index: 101;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 body.dark-mode .tm-btn-option.selected {
-    background-color: rgba(0, 170, 0, 0.2); /* Darker, transparent green */
-    color: #66BB6A; /* Lighter green text for readability */
-    border-color: #66BB6A;
-    box-shadow: 0 0 0 2px #66BB6A;
+  background-color: rgba(0, 170, 0, 0.2);
+  /* Darker, transparent green */
+  color: #66BB6A;
+  /* Lighter green text for readability */
+  border-color: #66BB6A;
+  box-shadow: 0 0 0 2px #66BB6A;
 }
 
 .tm-popup-scroll {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
+
 .tm-popup-scroll::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+  display: none;
+  /* Chrome, Safari, Opera */
+}
+
+/* Ensure detail component fits the popup height */
+.tm-popup-content .rd-screen {
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
 }

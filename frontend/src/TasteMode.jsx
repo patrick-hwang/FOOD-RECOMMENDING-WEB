@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './TasteMode.css'; 
 import logo from './assets/images/logo.png';
-import RestaurantDetail from './RestaurantDetail';
+import PopupRestaurantDetail from './PopupRestaurantDetail';
 import { useLanguage } from './Context/LanguageContext';
 import { useTheme } from './Context/ThemeContext';
 
@@ -28,7 +28,7 @@ export default function TasteMode({ onBack, currentUser, onLogout }) {
     
     // Popup & Nav State
     const [detailItem, setDetailItem] = useState(null); 
-    const [isNavigating, setIsNavigating] = useState(false);
+    // Navigation mode removed
 
     const [selectedOption, setSelectedOption] = useState(null);
     const { t, lang, switchLanguage } = useLanguage();
@@ -218,6 +218,19 @@ export default function TasteMode({ onBack, currentUser, onLogout }) {
         return currentQuestion.question;
     };
 
+    const handleGetDirection = (item) => {
+        if (!item) return;
+        const coords = item.coords || (item.coordinates && item.coordinates.lat && item.coordinates.long
+            ? { lat: parseFloat(item.coordinates.lat), lng: parseFloat(item.coordinates.long) }
+            : null);
+        const parts = [item.name, item.address].filter(Boolean);
+        if (parts.length === 0 && coords) parts.push(`${coords.lat},${coords.lng}`);
+        const query = parts.join(' ').trim();
+        if (!query) return;
+        const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+        window.open(url, '_blank', 'noopener,noreferrer');
+    };
+
     // --- RENDER ---
     if (loading) return (
         <div className="tm-container" style={{justifyContent:'center', alignItems:'center'}}>
@@ -226,34 +239,17 @@ export default function TasteMode({ onBack, currentUser, onLogout }) {
         </div>
     );
 
-    // 1. Navigation Mode
-    if (isNavigating && detailItem) {
-        // Pass currentUser if needed
-        return (
-            <div style={{position:'fixed', top:0, left:0, width:'100vw', height:'100vh', zIndex:21000, background: isDarkMode?'#121212':'white'}}>
-                <RestaurantDetail 
-                    item={detailItem} 
-                    onBack={() => setIsNavigating(false)} 
-                    onGetDirection={()=>{}}
-                />
-            </div>
-        );
-    }
-
     // 2. Detail Popup Overlay
     const DetailPopup = () => (
         <div className="tm-popup-overlay">
             <div className="tm-popup-content">
-                <div className="tm-popup-scroll" style={{height: '100%', overflowY: 'auto'}}>
-                    <RestaurantDetail 
-                        item={detailItem} 
-                        onBack={() => setDetailItem(null)} 
-                        onShuffleAgain={() => { setDetailItem(null); handleAskMore(); }}
-                        onGetDirection={() => setIsNavigating(true)}
-                        currentUser={currentUser} 
-                        onLogout={onLogout}
-                    />
-                </div>
+                <PopupRestaurantDetail 
+                    item={detailItem} 
+                    onBack={() => setDetailItem(null)} 
+                    onGetDirection={() => handleGetDirection(detailItem)}
+                    currentUser={currentUser} 
+                    onLogout={onLogout}
+                />
             </div>
         </div>
     );
