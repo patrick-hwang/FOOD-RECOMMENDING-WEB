@@ -425,14 +425,15 @@ async def filter_random(payload: FilterRandomRequest):
                 "tags.Tây Nguyên", "tags.nước ngoài"
             ],
             "main_dishes": [
-                "tags.món ăn nước", "tags.món khô", "tags.sợi", "tags.món rời", 
+                "tags.món ăn nước", "tags.món khô", "tags.sợi", "tags.món rời",
                 "tags.món nếp",          # Added for Sticky Rice/Xôi
-                "tags.bánh bột gạo", "tags.bánh bột mì", 
-                "tags.hải sản", "tags.thịt gia súc", "tags.thịt gia cầm", "tags.món chay",
-                "tags.thức uống",        # Added for Drinks
-                "tags.đồ ăn ngọt",       # Added for Desserts/Sweet Soup
-                "tags.không phải trái cây", # Added for Matcha/Cacao etc
-                "tags.đậu - hạt"         # Added for nuts/beans
+                "tags.bánh bột gạo", "tags.bánh bột mì", "tags.thức uống", "tags.đồ ăn ngọt"
+            ],
+            "ingredients": [
+                "tags.thịt gia súc", "tags.thịt gia cầm", "tags.hải sản", "tags.món rời",
+                "tags.món chay", "tags.trứng", "tags.sữa", "tags.nước cốt dừa",
+                "tags.đậu - hạt", "tags.thảo mộc có mùi hương đặc trưng", 
+                "tags.không phải trái cây"
             ],
             "occasion": ["tags.thời điểm/dịp"],  # Added for Occasion filter
             "place": ["tags.không gian", "tags.vật chất", "tags.âm thanh"],
