@@ -32,39 +32,40 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
   // Xử lý tags từ backend: tags là object { category: [...], ... } hoặc mảng
   const getDisplayTags = () => {
     if (!item?.tags) {
-      return ["#Localspecility", "#Open24/7", "#Takeaway", "#BanhMi", "#Vietnamese"];
+      // Return default sample tags
+      return [
+        { raw: "Localspecility", display: "#Localspecility" },
+        { raw: "Vietnamese", display: "#Vietnamese" }
+      ];
     }
     const tags = item.tags;
+    const result = [];
+
+    const processTag = (tg) => {
+        if (typeof tg === 'string') {
+            const cleanKey = tg.startsWith('#') ? tg.slice(1) : tg;
+            // Store both RAW (for DB logic) and DISPLAY (for UI)
+            result.push({ 
+                raw: cleanKey, 
+                display: `#${t(cleanKey)}` 
+            });
+        }
+    };
 
     if (Array.isArray(tags)) {
-      return tags.map(tg => {
-        if (typeof tg !== 'string') return tg;
-        const cleanKey = tg.startsWith('#') ? tg.slice(1) : tg;
-        return `#${t(cleanKey)}`;
-      });
-
-    }
-    if (typeof tags === 'object') {
-      const result = [];
-      Object.values(tags).forEach(val => {
-        if (Array.isArray(val)) {
-          val.forEach(tg => {
-            if (typeof tg !== 'string') result.push(tg);
-            else {
-              const cleanKey = tg.startsWith('#') ? tg.slice(1) : tg;
-              result.push(`#${t(cleanKey)}`);
-              //result.push(typeof t === 'string' && !t.startsWith('#') ? `#${t}` : t)
+        tags.forEach(processTag);
+    } else if (typeof tags === 'object') {
+        Object.values(tags).forEach(val => {
+            if (Array.isArray(val)) {
+                val.forEach(processTag);
+            } else if (typeof val === 'string') {
+                processTag(val);
             }
-          });
-        } else if (typeof val === 'string') {
-          const cleanKey = val.startsWith('#') ? val.slice(1) : val;
-          result.push(`#${t(cleanKey)}`);
-          //result.push(val.startsWith('#') ? val : `#${val}`);
-        }
-      });
-      return result.length > 0 ? result : ["#Restaurant"];
+        });
     }
-    return ["#Restaurant"];
+    
+    // Fallback if empty
+    return result.length > 0 ? result : [{ raw: "Restaurant", display: "#Restaurant" }];
   };
 
   const displayTags = useMemo(() => {
@@ -287,17 +288,16 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
               <div className="rd-tags-content">
                 <p className="rd-tags-note">{t('tap_tag_select')}</p>
                 <div className="rd-tags-list">
-                  {displayTags.map((tagWithHash, i) => {
-                    const rawTag = tagWithHash.replace(/^#/, '');
-                    const isActive = activeTags.includes(rawTag);
+                  {displayTags.map((tagObj, i) => {
+                    const isActive = activeTags.includes(tagObj.raw);
                     return (
                       <button
                         key={i}
                         className={`rd-tag-btn ${isActive ? 'active' : ''}`}
-                        onClick={() => onToggleTag && onToggleTag(tagWithHash)}
+                        // Send RAW value to parent
+                        onClick={() => onToggleTag && onToggleTag(tagObj.raw)}
                       >
-                        {`#${t(rawTag)}`}
-                        {/*tagWithHash*/}
+                        {tagObj.display}
                       </button>
                     );
                   })}

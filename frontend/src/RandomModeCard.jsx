@@ -10,11 +10,12 @@ import { HIERARCHICAL_TAGS } from './tags';
 
 // --- ICONS SVG (Thêm Search, Chevron, Check) ---
 const Icons = {
+  Ingredient: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 10h16l-2 10H6L4 10z"/><path d="M8 10V6a4 4 0 0 1 8 0v4"/></svg>,
   Dish: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"></path><line x1="6" y1="17" x2="18" y2="17"></line></svg>,
   Price: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>,
   Origin: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>,
   Atmosphere: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.5,19c0-1.7-1.3-3-3-3c-0.4,0-0.7,0.1-1.1,0.2c-0.3-2.6-2.6-4.7-5.4-4.7c-3,0-5.5,2.5-5.5,5.5c0,1.7,1.3,3,3,3H17.5z"></path></svg>,
-  Occasion: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="3 2 21 2 21 22 3 22"></polygon><line x1="12" y1="6" x2="12" y2="10"></line><line x1="12" y1="14" x2="12" y2="18"></line></svg>,
+  Occasion: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2C7.03 2 3 6.03 3 11c0 4.97 4.03 9 9 9s9-4.03 9-9c0-4.97-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7z"/><path d="M12 6v6l4 2"/></svg>,
   Distance: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>,
   Star: ({ fill = "none" }) => (<svg width="14" height="14" viewBox="0 0 24 24" fill={fill} stroke="#FFC107" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>),
   Bookmark: ({ color = "#333" }) => {
@@ -45,6 +46,7 @@ const FILTER_ORDER = [
   { key: 'cuisine_origin', Icon: Icons.Origin, label: 'Origin' },
   { key: 'main_dishes', Icon: Icons.Dish, label: 'Main Dishes' },
 //   { key: 'atmosphere', Icon: Icons.Atmosphere, label: 'Atmosphere' },
+  { key: 'ingredients', Icon: Icons.Ingredient, label: 'Ingredients' },
   { key: 'occasion', Icon: Icons.Occasion, label: 'Occasion' },
   { key: 'distance', Icon: Icons.Distance, label: 'Distance' },
 ];
@@ -226,25 +228,37 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
         });
     };
 
-    const handleDetailTagToggle = (tagWithHash) => {
-        const rawTag = tagWithHash.replace(/^#/, '');
+    const findCategoryForTag = (tag) => {
+        for (const [key, groups] of Object.entries(HIERARCHICAL_TAGS)) {
+            for (const group of groups) {
+                if (group.children.includes(tag)) return key;
+            }
+        }
+        return 'main_dishes'; // Fallback
+    };
+
+    const handleDetailTagToggle = (rawTag) => {
+        
+        // Find the correct category key (e.g., 'price_range' for 'rẻ')
+        const categoryKey = findCategoryForTag(rawTag);
+
         setDetailSelectedTags(prev => prev.includes(rawTag)
-            ? prev.filter(tg => tg !== rawTag)
+            ? prev.filter(t => t !== rawTag)
             : [...prev, rawTag]
         );
 
-        // Also sync into main filter set so Random Mode sees it
         setSelectedFilters(prev => {
-            const key = 'main_dishes';
-            const current = prev[key] || [];
+            // Use the DYNAMIC categoryKey, not hardcoded 'main_dishes'
+            const current = prev[categoryKey] || [];
             const exists = current.includes(rawTag);
-            const updated = exists ? current.filter(tg => tg !== rawTag) : [...current, rawTag];
+            const updated = exists ? current.filter(t => t !== rawTag) : [...current, rawTag];
+            
             if (updated.length === 0) {
                 const next = { ...prev };
-                delete next[key];
+                delete next[categoryKey];
                 return next;
             }
-            return { ...prev, [key]: updated };
+            return { ...prev, [categoryKey]: updated };
         });
     };
 
@@ -515,7 +529,7 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
                         <div className="rm-modal-body">
                             {allSelectedTagsWithKey.map((tg) => (
                                 <div key={`${tg.key}-${tg.value}`} className="rm-tag-pill large">
-                                    {`#${t(tg.value.replace(/^#/, ''))}`}
+                                    #{t(tg.value)}
                                     <div className="rm-tag-close" onClick={() => removeTag(tg.key, tg.value)}><Icons.Close /></div>
                                 </div>
                             ))}

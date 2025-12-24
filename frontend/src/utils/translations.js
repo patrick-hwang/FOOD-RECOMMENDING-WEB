@@ -57,6 +57,7 @@ export const translations = {
         cuisine_origin: "Origin",
         main_dishes: "Dish",
         occasion: "Occasion",
+        ingredients: "Ingredients",
         place: "Place",
         distance: "Distance",
         speciality_vn: "Speciality",
@@ -146,6 +147,205 @@ export const translations = {
         "cao cấp": "High-end",
         "thượng lưu": "Luxury",
         "đại gia": "Elite",
+
+        // 1. Price (Phân khúc)
+        "Phân khúc": "Price Range",
+        "siêu rẻ": "Super Cheap",
+        "rẻ": "Cheap",
+        "bình dân": "Affordable",
+        "sang": "Fancy",
+        "nhà hàng": "Restaurant",
+        "cao cấp": "High-end",
+
+        // 2. Origin (Nguồn gốc)
+        "Việt Nam": "Vietnam", 
+        "Quốc tế": "International",
+        
+        // Regions & Cities
+        "Hà Nội": "Hanoi", "Hải Phòng": "Hai Phong",
+        "Phú Yên": "Phu Yen", "Huế": "Hue", "Quảng Ngãi": "Quang Ngai", 
+        "Đà Nẵng": "Da Nang", "Quảng Nam": "Quang Nam", "Khánh Hòa": "Khanh Hoa", 
+        "Phan Rang": "Phan Rang", "Bình Định": "Binh Dinh", "Nghệ An": "Nghe An", 
+        "Hà Tĩnh": "Ha Tinh", "Tiền Giang": "Tien Giang", "Đồng Tháp": "Dong Thap", 
+        "Cà Mau": "Ca Mau", "Sóc Trăng": "Soc Trang", "An Giang": "An Giang", 
+        "Sài Gòn": "Saigon", "Bà Rịa - Vũng Tàu": "Vung Tau", "Lâm Đồng": "Lam Dong",
+
+        // International Countries
+        "Pháp": "French", "Mỹ": "American", "Ý": "Italian", "Đức": "German", 
+        "Nhật Bản": "Japanese", "Hàn Quốc": "Korean", "Trung Quốc": "Chinese",
+
+        // 3. Main Dishes (Món ăn)
+        // Noodle Dishes (Món Sợi)
+        "Món Sợi": "Noodles",
+        "bún": "Rice Vermicelli (Bun)", 
+        "phở": "Pho", 
+        "hủ tiếu": "Hu Tieu", 
+        "mì sợi": "Egg Noodles", 
+        "bánh canh bột gạo": "Thick Noodles (Banh Canh)", 
+        "bánh đa": "Red Noodles (Banh Da)", 
+        "miến dong": "Glass Noodles", 
+        "miến/bún tàu": "Cellophane Noodles",
+
+        // Sticky Rice (Món Nếp)
+        "Món Nếp": "Sticky Rice",
+        "cơm": "Rice", 
+        "xôi": "Sticky Rice", 
+        "cốm": "Green Rice", 
+        "bánh nếp": "Sticky Rice Cake", 
+        "chè nếp": "Sticky Rice Sweet Soup", 
+        "nếp hấp": "Steamed Sticky Rice",
+
+        // Rice Cakes (Bánh Bột Gạo)
+        "Bánh Bột Gạo": "Rice Cakes",
+        "bánh xèo": "Vietnamese Pancake (Banh Xeo)", 
+        "bánh bèo": "Water Fern Cake (Banh Beo)", 
+        "bánh căn": "Mini Pancake (Banh Can)", 
+        "bánh cuốn": "Steamed Rolls (Banh Cuon)", 
+        "bánh ướt": "Wet Cake (Banh Uot)", 
+        "bánh hỏi": "Weave Noodles (Banh Hoi)", 
+        "bánh bò": "Honeycomb Cake", 
+        "bánh đúc": "Plain Rice Flan",
+
+        // Wheat Cakes (Bánh Bột Mì)
+        "Bánh Bột Mì": "Wheat Cakes/Breads",
+        "bánh mì": "Banh Mi", 
+        "bánh bao": "Bao Bun", 
+        "bánh quẩy": "Fried Dough Stick", 
+        "bánh tiêu": "Hollow Donut", 
+        "bánh su kem": "Cream Puff", 
+        "bánh bông lan": "Sponge Cake", 
+        "donut": "Donut",
+
+        // Liquid/Soup Dishes (Món Nước)
+        "Món Nước": "Soup/Liquid",
+        "súp": "Soup", 
+        "lẩu": "Hotpot", 
+        "cháo": "Congee", 
+        "cà ri": "Curry", 
+        "hầm": "Stew",
+
+        // Dry Dishes (Món Khô)
+        "Món Khô": "Dry Dishes",
+        "xào": "Stir-fried", 
+        "chiên": "Fried", 
+        "nướng": "Grilled", 
+        "trộn": "Mixed", 
+        "hấp": "Steamed", 
+        "kho": "Braised", 
+        "rang": "Roasted", 
+        "quay": "Rotisserie", 
+        "luộc": "Boiled",
+
+        // Beverages (Thức Uống)
+        "Thức Uống": "Beverages",
+        "cà phê": "Coffee", 
+        "trà sữa": "Milk Tea", 
+        "nước ép/ sinh tố": "Juice/Smoothie", 
+        "có cồn": "Alcoholic", 
+        "nước có ga": "Soft Drinks",
+
+        // Desserts (Đồ Ăn Ngọt)
+        "Đồ Ăn Ngọt": "Desserts",
+        "chè": "Sweet Soup (Che)", 
+        "kem tươi": "Ice Cream", 
+        "kem cheese": "Cream Cheese", 
+        "sữa chua": "Yogurt", 
+        "trân châu": "Boba/Tapioca", 
+        "thạch": "Jelly", 
+        "kem trứng": "Egg Cream", 
+        "flan": "Flan",
+
+        // 4. Ingredients (Nguyên liệu)
+        // Herbs (Thảo Mộc)
+        "Thảo Mộc": "Herbs",
+        "sả": "Lemongrass", 
+        "hồi": "Star Anise", 
+        "quế": "Cinnamon", 
+        "gừng": "Ginger", 
+        "lá dứa": "Pandan", 
+        "vani": "Vanilla",
+
+        // Red Meat (Thịt Gia Súc)
+        "Thịt Gia Súc": "Red Meat",
+        "thịt bò": "Beef", 
+        "thịt heo": "Pork", 
+        "thịt trâu": "Buffalo", 
+        "thịt dê": "Goat", 
+        "thịt cừu": "Lamb",
+
+        // Poultry (Thịt Gia Cầm)
+        "Thịt Gia Cầm": "Poultry",
+        "thịt gà": "Chicken", 
+        "thịt vịt": "Duck", 
+        "thịt ngan": "Muscovy Duck", 
+        "thịt ngỗng": "Goose", 
+        "thịt chim cút": "Quail",
+
+        // Seafood (Hải sản)
+        "Hải sản": "Seafood",
+        "tôm": "Shrimp", 
+        "mực": "Squid", 
+        "cá": "Fish", 
+        "nghêu": "Clam", 
+        "sò": "Scallop", 
+        "ốc": "Snail", 
+        "cua": "Crab",
+
+        // Vegetarian (Món Chay)
+        "Món Chay": "Vegetarian",
+        "rau củ": "Vegetables", 
+        "đậu hũ": "Tofu", 
+        "nấm": "Mushroom", 
+        "chả chay": "Veggie Sausage", 
+        "mì chay": "Veggie Noodles", 
+        "cơm chay": "Veggie Rice",
+
+        // Dairy & Eggs (Sữa, Trứng)
+        "Sữa, Trứng": "Dairy & Eggs",
+        "sữa": "Milk", 
+        "trứng gà": "Chicken Egg", 
+        "trứng cút": "Quail Egg",
+
+        // Beans & Nuts (Đậu - Hạt)
+        "Đậu - Hạt": "Beans & Nuts",
+        "cà phê": "Coffee Bean", // Note: appears in ingredients in tags.js
+        "đậu phộng": "Peanut", 
+        "đậu đen": "Black Bean", 
+        "đậu đỏ": "Red Bean", 
+        "đậu ván": "Hyacinth Bean", 
+        "ca cao": "Cacao", 
+        "hạt sen": "Lotus Seed",
+
+        // Other Ingredients (Nguyên Liệu Khác)
+        "Nguyên Liệu Khác": "Other Ingredients",
+        "bắp": "Corn", 
+        "rau má": "Pennywort", 
+        "matcha": "Matcha", 
+        "nước cốt dừa": "Coconut Milk", 
+        "dừa": "Coconut",
+
+        // 5. Occasion (Dịp)
+        "Thời điểm": "Time",
+        "bữa sáng": "Breakfast", 
+        "buổi trưa": "Lunch", 
+        "buổi đêm": "Late Night/Dinner", 
+        "ăn vặt": "Snack", 
+        "tráng miệng": "Dessert",
+
+        // 6. Distance
+        "Gần tôi": "Near Me", 
+        "Xung quanh": "Around",
+        "Dưới 1km": "Under 1km", 
+        "1km - 3km": "1km - 3km", 
+        "3km - 5km": "3km - 5km", 
+        "5km - 10km": "5km - 10km",
+
+        // 7. General / Database Fields
+        "speciality_vn": "VN Speciality",
+        "không gian": "Space",
+        "vật chất": "Facilities",
+        "âm thanh": "Vibe/Sound",
+        "giá tiền": "Price",
 
         "yes": "Yes",
         "no": "No",
@@ -260,6 +460,7 @@ export const translations = {
         cuisine_origin: "Vùng miền",
         main_dishes: "Món chính",
         occasion: "Dịp", // <--- ADD THIS
+        ingredients: "Nguyên liệu",
         place: "Không gian",
         distance: "Khoảng cách",
         speciality_vn: "Đặc sản VN",
@@ -352,6 +553,41 @@ export const translations = {
         "cao cấp": "Cao cấp",
         "thượng lưu": "Thượng lưu",
         "đại gia": "Đại gia",
+
+        "Phân khúc": "Phân khúc", "siêu rẻ": "Siêu rẻ", "rẻ": "Rẻ", "bình dân": "Bình dân", "sang": "Sang trọng", "nhà hàng": "Nhà hàng", "cao cấp": "Cao cấp",
+        
+        // 2. Origin
+        "Việt Nam": "Việt Nam", "Quốc tế": "Quốc tế",
+        "Hà Nội": "Hà Nội", "Hải Phòng": "Hải Phòng", "Phú Yên": "Phú Yên", "Huế": "Huế", "Quảng Ngãi": "Quảng Ngãi", 
+        "Đà Nẵng": "Đà Nẵng", "Quảng Nam": "Quảng Nam", "Khánh Hòa": "Khánh Hòa", "Phan Rang": "Phan Rang", 
+        "Bình Định": "Bình Định", "Nghệ An": "Nghệ An", "Hà Tĩnh": "Hà Tĩnh", "Tiền Giang": "Tiền Giang", 
+        "Đồng Tháp": "Đồng Tháp", "Cà Mau": "Cà Mau", "Sóc Trăng": "Sóc Trăng", "An Giang": "An Giang", 
+        "Sài Gòn": "Sài Gòn", "Bà Rịa - Vũng Tàu": "Vũng Tàu", "Lâm Đồng": "Lâm Đồng",
+        "Pháp": "Pháp", "Mỹ": "Mỹ", "Ý": "Ý", "Đức": "Đức", "Nhật Bản": "Nhật Bản", "Hàn Quốc": "Hàn Quốc", "Trung Quốc": "Trung Quốc",
+
+        // 3. Dishes
+        "Món Sợi": "Món Sợi", "bún": "Bún", "phở": "Phở", "hủ tiếu": "Hủ tiếu", "mì sợi": "Mì sợi", "bánh canh bột gạo": "Bánh canh", "bánh đa": "Bánh đa", "miến dong": "Miến dong", "miến/bún tàu": "Miến/Bún tàu",
+        "Món Nếp": "Món Nếp", "cơm": "Cơm", "xôi": "Xôi", "cốm": "Cốm", "bánh nếp": "Bánh nếp", "chè nếp": "Chè nếp", "nếp hấp": "Nếp hấp",
+        "Bánh Bột Gạo": "Bánh Bột Gạo", "bánh xèo": "Bánh xèo", "bánh bèo": "Bánh bèo", "bánh căn": "Bánh căn", "bánh cuốn": "Bánh cuốn", "bánh ướt": "Bánh ướt", "bánh hỏi": "Bánh hỏi", "bánh bò": "Bánh bò", "bánh đúc": "Bánh đúc",
+        "Bánh Bột Mì": "Bánh Bột Mì", "bánh mì": "Bánh mì", "bánh bao": "Bánh bao", "bánh quẩy": "Bánh quẩy", "bánh tiêu": "Bánh tiêu", "bánh su kem": "Bánh su kem", "bánh bông lan": "Bông lan", "donut": "Donut",
+        "Món Nước": "Món Nước", "súp": "Súp", "lẩu": "Lẩu", "cháo": "Cháo", "cà ri": "Cà ri", "hầm": "Hầm",
+        "Món Khô": "Món Khô", "xào": "Xào", "chiên": "Chiên", "nướng": "Nướng", "trộn": "Trộn", "hấp": "Hấp", "kho": "Kho", "rang": "Rang", "quay": "Quay", "luộc": "Luộc",
+        "Thức Uống": "Thức Uống", "cà phê": "Cà phê", "trà sữa": "Trà sữa", "nước ép/ sinh tố": "Nước ép/Sinh tố", "có cồn": "Có cồn", "nước có ga": "Nước có ga",
+        "Đồ Ăn Ngọt": "Đồ Ăn Ngọt", "chè": "Chè", "kem tươi": "Kem tươi", "kem cheese": "Kem cheese", "sữa chua": "Sữa chua", "trân châu": "Trân châu", "thạch": "Thạch", "kem trứng": "Kem trứng", "flan": "Bánh Flan",
+
+        // 4. Ingredients
+        "Thảo Mộc": "Thảo Mộc", "sả": "Sả", "hồi": "Hồi", "quế": "Quế", "gừng": "Gừng", "lá dứa": "Lá dứa", "vani": "Vani",
+        "Thịt Gia Súc": "Thịt Gia Súc", "thịt bò": "Thịt bò", "thịt heo": "Thịt heo", "thịt trâu": "Thịt trâu", "thịt dê": "Thịt dê", "thịt cừu": "Thịt cừu",
+        "Thịt Gia Cầm": "Thịt Gia Cầm", "thịt gà": "Thịt gà", "thịt vịt": "Thịt vịt", "thịt ngan": "Thịt ngan", "thịt ngỗng": "Thịt ngỗng", "thịt chim cút": "Chim cút",
+        "Hải sản": "Hải sản", "tôm": "Tôm", "mực": "Mực", "cá": "Cá", "nghêu": "Nghêu", "sò": "Sò", "ốc": "Ốc", "cua": "Cua",
+        "Món Chay": "Món Chay", "rau củ": "Rau củ", "đậu hũ": "Đậu hũ", "nấm": "Nấm", "chả chay": "Chả chay", "mì chay": "Mì chay", "cơm chay": "Cơm chay",
+        "Sữa, Trứng": "Sữa, Trứng", "sữa": "Sữa", "trứng gà": "Trứng gà", "trứng cút": "Trứng cút",
+        "Đậu - Hạt": "Đậu - Hạt", "đậu phộng": "Đậu phộng", "đậu đen": "Đậu đen", "đậu đỏ": "Đậu đỏ", "đậu ván": "Đậu ván", "ca cao": "Ca cao", "hạt sen": "Hạt sen",
+        "Nguyên Liệu Khác": "Nguyên Liệu Khác", "bắp": "Bắp", "rau má": "Rau má", "matcha": "Matcha", "cacao": "Cacao", "nước cốt dừa": "Nước cốt dừa", "dừa": "Dừa",
+
+        // 5. Occasion & Distance
+        "Thời điểm": "Thời điểm", "bữa sáng": "Bữa sáng", "buổi trưa": "Buổi trưa", "buổi đêm": "Buổi đêm", "ăn vặt": "Ăn vặt", "tráng miệng": "Tráng miệng",
+        "Gần tôi": "Gần tôi", "Xung quanh": "Xung quanh", "Dưới 1km": "Dưới 1km", "1km - 3km": "1km - 3km", "3km - 5km": "3km - 5km", "5km - 10km": "5km - 10km",
 
         "yes": "Có",
         "no": "Không",
