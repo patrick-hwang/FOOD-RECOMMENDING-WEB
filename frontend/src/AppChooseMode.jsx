@@ -9,7 +9,7 @@ import diceIMG from './assets/images/Mode-Icon/dice.png'
 import compassIMG from './assets/images/Mode-Icon/akinator.png'
 import axios from 'axios';
 import './AppChooseMode.css';
-import RestaurantDetail from './RestaurantDetail';
+import PopupRestaurantDetail from './PopupRestaurantDetail';
 import SearchResults from './Components/SearchResults';
 
 // Icons for results
@@ -115,6 +115,19 @@ function AppChooseMode({ onRandom, onTaste, currentUser }) {
         setLimit(10);
     };
 
+    const handleGetDirection = (item) => {
+        if (!item) return;
+        const coords = item.coords || (item.coordinates && item.coordinates.lat && item.coordinates.long
+            ? { lat: parseFloat(item.coordinates.lat), lng: parseFloat(item.coordinates.long) }
+            : null);
+        const parts = [item.name, item.address].filter(Boolean);
+        if (parts.length === 0 && coords) parts.push(`${coords.lat},${coords.lng}`);
+        const query = parts.join(' ').trim();
+        if (!query) return;
+        const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+        window.open(url, '_blank', 'noopener,noreferrer');
+    };
+
     const handleOpenDetail = (item) => setDetailItem(item);
     const handleCloseDetail = () => setDetailItem(null);
 
@@ -161,15 +174,12 @@ function AppChooseMode({ onRandom, onTaste, currentUser }) {
             {detailItem && (
                 <div className="cm-detail-overlay">
                     <div className="cm-detail-panel">
-                        <div className="cm-detail-scroll">
-                            <RestaurantDetail
-                                item={detailItem}
-                                onBack={handleCloseDetail}
-                                onShuffleAgain={handleCloseDetail}
-                                onGetDirection={() => { }}
-                                currentUser={currentUser}
-                            />
-                        </div>
+                        <PopupRestaurantDetail
+                            item={detailItem}
+                            onBack={handleCloseDetail}
+                            onGetDirection={() => handleGetDirection(detailItem)}
+                            currentUser={currentUser}
+                        />
                     </div>
                 </div>
             )}

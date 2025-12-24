@@ -262,6 +262,19 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
         });
     };
 
+    const handleGetDirection = (item) => {
+        if (!item) return;
+        const coords = item.coords || (item.coordinates && item.coordinates.lat && item.coordinates.long
+            ? { lat: parseFloat(item.coordinates.lat), lng: parseFloat(item.coordinates.long) }
+            : null);
+        const parts = [item.name, item.address].filter(Boolean);
+        if (parts.length === 0 && coords) parts.push(`${coords.lat},${coords.lng}`);
+        const query = parts.join(' ').trim();
+        if (!query) return;
+        const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+        window.open(url, '_blank', 'noopener,noreferrer');
+    };
+
     // --- FILTER SEARCH LOGIC ---
     const getFilteredHierarchy = () => {
         const hierarchy = HIERARCHICAL_TAGS[activeFilter.key] || [];
@@ -309,6 +322,7 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
                 onShuffleAgain={() => { setDetailItem(null); handleShuffle(); }} 
                 activeTags={[...allSelectedTagValues, ...detailSelectedTags]} 
                 onToggleTag={handleDetailTagToggle}
+                onGetDirection={() => handleGetDirection(detailItem)}
                 currentUser={currentUser}
                 onLogout={onLogout}
             />
