@@ -91,7 +91,7 @@ export const HIERARCHICAL_TAGS = {
         },
         {
             name: "Đậu - Hạt",
-            children: ["cà phê", "đậu phộng", "đậu đen", "đậu đỏ", "đậu ván", "ca cao", "hạt sen"]
+            children: ["đậu phộng", "đậu đen", "đậu đỏ", "đậu ván", "ca cao", "hạt sen"]
         },
         {
             name: "Nguyên Liệu Khác",

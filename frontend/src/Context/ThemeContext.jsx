@@ -3,7 +3,6 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-    // 1. Lấy trạng thái từ localStorage hoặc mặc định là false (Sáng)
     const [isDarkMode, setIsDarkMode] = useState(() => {
         const savedMode = localStorage.getItem('isDarkMode');
         return savedMode === 'true';

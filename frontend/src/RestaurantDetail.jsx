@@ -19,7 +19,7 @@ const DetailIcons = {
 };
 
 const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, activeTags = [], onToggleTag, currentUser, onLogout }) => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const { isDarkMode } = useTheme();
 
   // --- STATE QUẢN LÝ TAB ---
@@ -28,6 +28,36 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
 
   const API_URL = "http://127.0.0.1:8000/api/user";
   const userId = currentUser?.isGuest ? null : (currentUser?.phone || currentUser?.email || currentUser?.facebook_id);
+
+  // --- HELPER: Translate Address ---
+  const formatAddress = (addr) => {
+      if (!addr) return "";
+      if (lang === 'vi') return addr; // Keep original for Vietnamese
+
+      // Replace common Vietnamese address terms with English
+      return addr
+          .replace(/Quận/g, t('district') || 'District')
+          .replace(/Phường/g, t('ward') || 'Ward')
+          .replace(/Thành phố/g, t('city') || 'City')
+          .replace(/Tỉnh/g, t('province') || 'Province')
+          .replace(/Hẻm/g, t('lane') || 'Alley')
+          .replace(/Đường/g, t('street') || 'Street');
+  };
+
+  // --- HELPER: Translate Day of Week ---
+  const translateDay = (dayString) => {
+      const map = {
+          "Thứ Hai": "mon", "Thứ 2": "mon",
+          "Thứ Ba": "tue", "Thứ 3": "tue",
+          "Thứ Tư": "wed", "Thứ 4": "wed",
+          "Thứ Năm": "thu", "Thứ 5": "thu",
+          "Thứ Sáu": "fri", "Thứ 6": "fri",
+          "Thứ Bảy": "sat", "Thứ 7": "sat",
+          "Chủ Nhật": "sun", "CN": "sun"
+      };
+      // If we find a key, use t(key), otherwise return the original string
+      return map[dayString] ? t(map[dayString]) : dayString;
+  };
 
   // Xử lý tags từ backend: tags là object { category: [...], ... } hoặc mảng
   const getDisplayTags = () => {
@@ -146,7 +176,7 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
       if (typeof o === 'string') {
         return normalizeHours(o);
       }
-      const day = o?.day ?? '';
+      const day = translateDay(o?.day ?? '');
       const hours = normalizeHours(o?.hours ?? '');
       return [day, hours].filter(Boolean).join(': ');
     });
@@ -259,6 +289,7 @@ const RestaurantDetail = ({ item, onBack, onShuffleAgain, onGetDirection, active
               <div className="rd-address-row">
                 <div className="rd-icon-col"><DetailIcons.Pin /></div>
                 <span className="rd-text-info">{t('address')}: {item?.address || t('location_unknown')}</span>
+                {/* <span className="rd-text-info">{t('address')}: {formatAddress(item?.address) || t('location_unknown')}</span> */}
               </div>
 
               <div className="rd-address-row">

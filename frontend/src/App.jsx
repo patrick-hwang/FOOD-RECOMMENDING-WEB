@@ -79,7 +79,17 @@ function IntroSequence() {
 function App() {
   const GOOGLE_CLIENT_ID = '975848353478-mguhticg531ok092j9krom4mhb25j6at.apps.googleusercontent.com';
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(() => {
+    const saved = localStorage.getItem('currentUser'); // Matches the key used above
+    return saved ? JSON.parse(saved) : { isGuest: true };
+  });
+
+  const handleUserUpdate = (updatedData) => {
+    setCurrentUser(prevUser => ({
+      ...prevUser,
+      ...updatedData
+    }));
+  };
 
   // Xử lý đăng nhập thành công (User thật)
   const handleLoginSuccess = (user) => {
@@ -143,6 +153,7 @@ function App() {
                       onRandom={() => navigate('/random')}
                       onTaste={() => navigate('/taste')}
                       currentUser={currentUser}
+                      onLogout={handleLogout} // <--- ADD THIS LINE
                     />
                   }
                 />
@@ -179,6 +190,7 @@ function App() {
                       currentUser={currentUser}
                       onLogout={handleLogout}
                       onBack={() => navigate('/home')}
+                      onUserUpdate={handleUserUpdate} // <--- ADD PROP
                     />
                   }
                 />

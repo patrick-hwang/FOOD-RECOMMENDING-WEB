@@ -21,7 +21,7 @@ const Icons = {
     )
 };
 
-function AppChooseMode({ onRandom, onTaste, currentUser }) {
+function AppChooseMode({ onRandom, onTaste, currentUser, onLogout }) {
     const { t, lang } = useLanguage();
     const navigate = useNavigate();
 
@@ -35,27 +35,44 @@ function AppChooseMode({ onRandom, onTaste, currentUser }) {
     const [detailItem, setDetailItem] = useState(null);
     const [limit, setLimit] = useState(10);
     const [recentSearches, setRecentSearches] = useState(() => {
-        try {
-            const saved = localStorage.getItem('recentSearches');
-            return saved ? JSON.parse(saved) : [];
-        } catch {
-            return [];
+        // If Logged In: Show DB history (or empty if none). NEVER fallback to local.
+        if (currentUser && !currentUser.isGuest) {
+            return Array.isArray(currentUser.search_history) ? currentUser.search_history : [];
         }
+        // If Guest: User requested NOT to show anything
+        return []; 
     });
 
-    const addToSearchHistory = (query) => {
+    // Sync when user logs in/out
+    React.useEffect(() => {
+        if (currentUser && !currentUser.isGuest) {
+            setRecentSearches(Array.isArray(currentUser.search_history) ? currentUser.search_history : []);
+        } else {
+            setRecentSearches([]); // Clear for guest
+        }
+    }, [currentUser]);
+
+    const addToSearchHistory = async (query) => {
         const trimmedQuery = query.trim();
         if (!trimmedQuery) return;
 
-        // Greedy algorithm: Add most recent at the beginning
-        // Remove duplicates and keep only the latest occurrence
-        const updated = [trimmedQuery, ...recentSearches.filter(s => s.toLowerCase() !== trimmedQuery.toLowerCase())];
-        
-        // Keep only the 6 most recent searches (4 default + 2 recent)
-        const limited = updated.slice(0, 6);
-        
-        setRecentSearches(limited);
-        localStorage.setItem('recentSearches', JSON.stringify(limited));
+        // --- FIX 2: ONLY SAVE FOR LOGGED IN USERS ---
+        if (currentUser && !currentUser.isGuest) {
+            // Update UI
+            const updated = [trimmedQuery, ...recentSearches.filter(s => s.toLowerCase() !== trimmedQuery.toLowerCase())].slice(0, 6);
+            setRecentSearches(updated);
+
+            // Save to DB
+            const userId = currentUser.phone || currentUser.email || currentUser.facebook_id;
+            try {
+                await axios.post(`http://127.0.0.1:8000/api/user/${userId}/search_history`, { 
+                    query: trimmedQuery 
+                });
+            } catch (err) {
+                console.error("Failed to save search history to DB", err);
+            }
+        }
+        // If Guest: Do nothing (as requested)
     };
 
     const handleSearch = async (overrideLimit, { append = false } = {}) => {
@@ -170,7 +187,11 @@ function AppChooseMode({ onRandom, onTaste, currentUser }) {
     };
 
     return (
-        <div className="choose-mode-container">
+        <div className="choose-mode-container" style={{ position: 'relative', overflow: 'hidden' }}>
+            <div className="tm-bg-bubble bubble-1"></div>
+            <div className="tm-bg-bubble bubble-2"></div>
+            <div className="tm-bg-bubble bubble-3"></div>
+
             {detailItem && (
                 <div className="cm-detail-overlay">
                     <div className="cm-detail-panel">
@@ -250,6 +271,11 @@ function AppChooseMode({ onRandom, onTaste, currentUser }) {
                     canShowMore={canShowMore}
                     onOpenDetail={handleOpenDetail}
                     onShowMore={handleShowMore}
+                    
+                    // --- ADD THESE TWO LINES ---
+                    currentUser={currentUser}
+                    onLogout={onLogout}
+                    // ---------------------------
                 />
             ) : (
                 <>

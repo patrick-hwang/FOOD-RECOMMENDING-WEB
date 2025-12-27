@@ -3,6 +3,7 @@ import './Profile.css';
 import axios from 'axios';
 import defaultAvatar from './assets/images/logo.png';
 import RestaurantDetail from './RestaurantDetail';
+import PopupRestaurantDetail from './PopupRestaurantDetail';
 import { useLanguage } from './Context/LanguageContext';
 import { useTheme } from './Context/ThemeContext'; 
 import { useNotification } from './Context/NotificationContext';
@@ -22,7 +23,7 @@ const Icons = {
     Lock: () => <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
 };
 
-export default function ProfilePage({ currentUser, onLogout, onBack }) {
+export default function ProfilePage({ currentUser, onLogout, onBack, onUserUpdate }) {
     const { t, lang, switchLanguage } = useLanguage();
     const { isDarkMode, toggleTheme } = useTheme(); 
     const { isNotifOn, toggleNotification } = useNotification(); 
@@ -93,11 +94,25 @@ export default function ProfilePage({ currentUser, onLogout, onBack }) {
     };
 
     if (selectedItem) {
-        return <RestaurantDetail item={selectedItem} onBack={() => {setSelectedItem(null); fetchProfile();}} currentUser={currentUser} onLogout={onLogout} />;
+        return (
+            <PopupRestaurantDetail 
+                item={selectedItem} 
+                onBack={() => {setSelectedItem(null); fetchProfile();}} 
+                currentUser={currentUser} 
+                onLogout={onLogout} 
+            />
+        );
     }
 
     if (view === 'edit_profile') {
-        return <EditProfile currentUser={currentUser} profileData={profileData} onBack={() => {fetchProfile(); setView('settings');}} />;
+        return (
+            <EditProfile 
+                currentUser={currentUser} 
+                profileData={profileData} 
+                onBack={() => {fetchProfile(); setView('settings');}} 
+                onUserUpdate={onUserUpdate} // <--- PASS PROP DOWN
+            />
+        );
     }
 
     if (view === 'story') {
@@ -215,7 +230,12 @@ export default function ProfilePage({ currentUser, onLogout, onBack }) {
                                 <div key={idx} className="prof-card-grid" onClick={() => setSelectedItem(cleanItem)} 
                                      onContextMenu={(e) => { e.preventDefault(); setDeleteModal({show:true, item:cleanItem}); }}>
                                     <div className="prof-card-img-container">
-                                        <img src={cleanItem.imageUrl} alt=""/>
+                                        <img 
+                                            src={cleanItem.imageUrl} 
+                                            alt={cleanItem.name}
+                                            referrerPolicy="no-referrer" // <--- CRITICAL FIX
+                                            onError={(e) => { e.target.src = 'https://placehold.co/300x200?text=No+Image'; }} // <--- Fallback fix
+                                        />
                                         <div className="prof-card-bookmark-btn" onClick={(e) => { e.stopPropagation(); handleToggleSave(item); }}>
                                             <Icons.BookmarkFilled filled={isSaved} />
                                         </div>
@@ -253,7 +273,7 @@ export default function ProfilePage({ currentUser, onLogout, onBack }) {
 // ==============================================================================
 // 5. EDIT PROFILE COMPONENT (KHÔI PHỤC NGUYÊN BẢN)
 // ==============================================================================
-function EditProfile({ currentUser, profileData, onBack }) {
+function EditProfile({ currentUser, profileData, onBack, onUserUpdate }) {
     const { t } = useLanguage();
     const [formData, setFormData] = useState({
         username: profileData?.username || currentUser?.username || currentUser?.name || "",
@@ -264,6 +284,9 @@ function EditProfile({ currentUser, profileData, onBack }) {
         avatar: profileData?.avatar || currentUser?.avatar || defaultAvatar
     });
     const fileInputRef = useRef(null);
+    const videoRef = useRef(null);
+    const canvasRef = useRef(null);
+    const [isCameraOpen, setIsCameraOpen] = useState(false);
     const cameraInputRef = useRef(null);
     const [showAvatarMenu, setShowAvatarMenu] = useState(false);
 
@@ -283,9 +306,53 @@ function EditProfile({ currentUser, profileData, onBack }) {
         try {
             const userId = currentUser.phone || currentUser.email || currentUser.facebook_id;
             await axios.put(`http://127.0.0.1:8000/api/user/${userId}/update`, formData);
+            if (onUserUpdate) {
+                onUserUpdate(formData);
+            }
             alert(t('updated'));
             onBack();
-        } catch (e) { alert("Error updating"); }
+        } catch (e) { 
+            console.error(e); // It's good to log the error to see what happens
+            alert("Error updating"); 
+        }
+    };
+
+    const startCamera = async () => {
+        setShowAvatarMenu(false); // Close the menu
+        setIsCameraOpen(true);    // Open the camera overlay
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+            if (videoRef.current) videoRef.current.srcObject = stream;
+        } catch (err) {
+            console.error("Camera Error:", err);
+            setIsCameraOpen(false);
+            alert("Cannot access camera.");
+        }
+    };
+
+    const stopCamera = () => {
+        if (videoRef.current && videoRef.current.srcObject) {
+            videoRef.current.srcObject.getTracks().forEach(t => t.stop());
+        }
+        setIsCameraOpen(false);
+    };
+
+    const capturePhoto = () => {
+        const video = videoRef.current;
+        const canvas = canvasRef.current;
+        if (video && canvas) {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            
+            // Optional: Mirror the image
+            ctx.translate(canvas.width, 0);
+            ctx.scale(-1, 1);
+            
+            ctx.drawImage(video, 0, 0);
+            setFormData(prev => ({ ...prev, avatar: canvas.toDataURL('image/png') }));
+            stopCamera();
+        }
     };
 
     return (
@@ -353,7 +420,7 @@ function EditProfile({ currentUser, profileData, onBack }) {
                             <div className="avatar-menu-icon" style={{marginRight:10}}><Icons.ImgLib /></div>
                             <div className="avatar-menu-text">{t('import_lib')}</div>
                         </div>
-                        <div className="avatar-menu-item" onClick={() => cameraInputRef.current.click()}>
+                        <div className="avatar-menu-item" onClick={startCamera}>
                             <div className="avatar-menu-icon" style={{marginRight:10}}><Icons.PhotoCam /></div>
                             <div className="avatar-menu-text">{t('take_photo')}</div>
                         </div>
@@ -364,6 +431,34 @@ function EditProfile({ currentUser, profileData, onBack }) {
                     </div>
                 </div>
             )}
+            {isCameraOpen && (
+                <div style={{
+                    position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+                    backgroundColor: 'black', zIndex: 9999, display: 'flex', 
+                    flexDirection: 'column', alignItems: 'center', justifyContent: 'center'
+                }}>
+                    <video 
+                        ref={videoRef} autoPlay playsInline 
+                        style={{ width: '100%', maxHeight: '80%', objectFit: 'contain', transform: 'scaleX(-1)' }} 
+                    />
+                    <canvas ref={canvasRef} style={{ display: 'none' }} />
+                    
+                    <div style={{
+                        position: 'absolute', bottom: 30, width: '100%', 
+                        display: 'flex', justifyContent: 'space-around', alignItems: 'center'
+                    }}>
+                        <button onClick={stopCamera} style={{ color: 'white', background: 'transparent', border: 'none', fontSize: 16 }}>
+                            Cancel
+                        </button>
+                        <div onClick={capturePhoto} style={{
+                            width: 70, height: 70, borderRadius: '50%', backgroundColor: 'white',
+                            border: '4px solid rgba(255,255,255,0.5)', cursor: 'pointer'
+                        }}/>
+                        <div style={{ width: 50 }}></div>
+                    </div>
+                </div>
+            )}
+            {/* --------------------------------------- */}
         </div>
     );
 }

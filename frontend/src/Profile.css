@@ -304,21 +304,53 @@
 /* =========================================
    7. MODALS (Xóa & Menu Avatar)
    ========================================= */
-.delete-modal-overlay, .avatar-menu-overlay {
+.delete-modal-overlay {
     position: fixed; top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(4px);
     z-index: 20000;
     display: flex; justify-content: center; align-items: center;
 }
+.avatar-menu-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    
+    /* FIX 1: Ensure z-index is higher than the Settings screen (10000) */
+    z-index: 11000; 
+    
+    display: flex;
+    align-items: flex-end; /* Aligns card to bottom */
+    justify-content: center;
+    animation: fadeInOverlay 0.2s ease-out;
+}
 
-.delete-modal, .avatar-menu-card {
+.delete-modal {
     background: var(--bg-card);
     width: 88%; max-width: 340px;
     border-radius: 25px; padding: 30px;
     text-align: center;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
     animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.avatar-menu-card {
+    background: var(--bg-card);
+    width: 100%;
+    max-width: 500px; /* Prevent it from being too wide on desktop */
+    
+    /* Rounded Top Corners */
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    
+    padding: 0; /* Remove padding so hover hits the edge */
+    padding-bottom: 20px; /* Safe area at bottom */
+    
+    /* FIX 2: PREVENT HOVER FROM GOING OUTSIDE BORDER */
+    overflow: hidden; 
+    
+    box-shadow: 0 -5px 30px rgba(0,0,0,0.15);
+    animation: slideUpMenu 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes zoomIn {
@@ -338,13 +370,28 @@
     padding: 10px 0 25px 0;
 }
 .avatar-menu-item {
-    padding: 18px 25px; border-bottom: 1px solid var(--border-color);
-    cursor: pointer; color: var(--text-primary); font-weight: 700;
-    display: flex; align-items: center;
+    padding: 18px 25px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    color: var(--text-primary);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    transition: background 0.2s;
 }
 .avatar-menu-item:hover { background: var(--bg-secondary); }
 .avatar-menu-item:last-child { border-bottom: none; }
 .avatar-menu-item.delete { color: #FF5252; }
+
+@keyframes fadeInOverlay {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUpMenu {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
 
 /* =========================================
    8. NIGHT MODE (DARK THEME)

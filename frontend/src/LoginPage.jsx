@@ -26,6 +26,7 @@ function LoginPage({ onLoginSuccess, onGuestLogin }) {
   const [showGuestModal, setShowGuestModal] = useState(false);
   const { lang, switchLanguage, t } = useLanguage(); // Update destructuring
   const { isDarkMode, toggleTheme } = useTheme();    // Get theme hook
+  const [rememberMe, setRememberMe] = useState(false);
 
   const API_URL = "http://127.0.0.1:8000/api/auth";
 
@@ -48,26 +49,73 @@ function LoginPage({ onLoginSuccess, onGuestLogin }) {
 
   // --- FACEBOOK LOGIN ---
   const responseFacebook = async (response) => {
-    if (response.accessToken) {
+    console.log("Facebook Response:", response); // Debug: Check console to see structure
+
+    // FIX: Check both top-level and nested authResponse to ensure we get the token
+    const accessToken = response.accessToken || response.authResponse?.accessToken;
+    const userID = response.userID || response.authResponse?.userID;
+
+    if (accessToken) {
       setLoading(true);
       try {
+        // We only need to send the token and ID. 
+        // The backend will now fetch name/email/picture.
         const res = await axios.post(`${API_URL}/facebook`, {
-            accessToken: response.accessToken, userID: response.userID,
-            email: response.email, picture: response.picture?.data?.url
+            accessToken: accessToken, 
+            userID: userID
         });
+        
         onLoginSuccess(res.data.user);
-      } catch (err) { setErrorMsg("Facebook Login Failed"); } finally { setLoading(false); }
+      } catch (err) { 
+        console.error(err);
+        setErrorMsg("Facebook Login Failed"); 
+      } finally { 
+        setLoading(false); 
+      }
+    } else {
+        // Handle cancellation or failure
+        console.log("Facebook Login Cancelled or Failed", response);
+        // Optional: Show error if it wasn't just a cancel
+        if (response.status !== 'unknown') {
+            setErrorMsg("Facebook Login Cancelled");
+        }
     }
+  };
+
+  const validateForm = () => {
+    if (!formData.phone || !formData.password) {
+      setErrorMsg("Please enter User ID and Password");
+      return false;
+    }
+    return true;
   };
 
   // --- MANUAL LOGIN ---
   const handleLoginSubmit = async () => {
-    if (!formData.phone || !formData.password) return setErrorMsg("Missing info");
+    if (!validateForm()) return; // Now this works
     setLoading(true);
     try {
-        const res = await axios.post(`${API_URL}/login`, { phone: formData.phone, password: formData.password });
+      const res = await axios.post('http://127.0.0.1:8000/api/auth/login', {
+        phone: formData.phone,
+        password: formData.password
+      });
+
+      if (res.data.user) {
+        // Fix: Save to localStorage if "Remember Me" is checked
+        if (rememberMe) {
+          localStorage.setItem('currentUser', JSON.stringify(res.data.user));
+        } else {
+          localStorage.removeItem('currentUser');
+        }
+        
         onLoginSuccess(res.data.user);
-    } catch (err) { setErrorMsg(err.response?.data?.detail || "Login Failed"); } finally { setLoading(false); }
+      }
+    } catch (err) {
+      console.error(err);
+      setErrorMsg(err.response?.data?.detail || 'Login failed'); // Set error message
+    } finally {
+      setLoading(false);
+    }
   };
 
   // --- SIGNUP ---
@@ -76,8 +124,19 @@ function LoginPage({ onLoginSuccess, onGuestLogin }) {
     setLoading(true);
     try {
         await axios.post(`${API_URL}/register`, { username: formData.username, phone: formData.phone, password: formData.password });
-        alert(t('sign_up') + " Success!"); setView('login');
-    } catch (err) { setErrorMsg(err.response?.data?.detail || "Signup Failed"); } finally { setLoading(false); }
+        alert(t('sign_up') + " Success!"); 
+        setView('login');
+    } catch (err) { 
+        // --- FIX: Check for the specific code and translate ---
+        if (err.response?.data?.detail === 'USER_EXIST') {
+            setErrorMsg(t('user_exist'));
+        } else {
+            setErrorMsg(err.response?.data?.detail || "Signup Failed"); 
+        }
+        // -----------------------------------------------------
+    } finally { 
+        setLoading(false); 
+    }
   };
 
   // --- RESET PASSWORD ---
@@ -115,21 +174,27 @@ function LoginPage({ onLoginSuccess, onGuestLogin }) {
         <div className="login-illustration"><img src="https://placehold.co/200x200/e2e8f0/10b981?text=FoodRec" style={{borderRadius:'50%'}} alt=""/></div>
         <h1 className="login-title">{t('lets_in')}</h1>
         
-        <FacebookLogin appId="1575289767221956" autoLoad={false} fields="name,email,picture" callback={responseFacebook} 
-          render={({onClick})=>(<button className="social-btn" onClick={onClick}><FbIcon/> {t('continue_fb')}</button>)} />
+        <FacebookLogin 
+            appId="1575289767221956" 
+            autoLoad={false} 
+            fields="name,email,picture" 
+            onSuccess={responseFacebook}  // <--- CHANGED from 'callback' to 'onSuccess'
+            onFail={(error) => console.log('Login Failed!', error)}
+            render={({onClick})=>(<button className="social-btn" onClick={onClick}><FbIcon/> {t('continue_fb')}</button>)} 
+        />
         
         <button className="social-btn" onClick={()=>googleLogin()}><GoogleIcon/> {t('continue_gg')}</button>
         
         <div className="divider"><span>{t('or')}</span></div>
         
-        <button className="primary-btn" onClick={()=>setView('login')}>{t('sign_in_phone')}</button>
+        <button className="primary-btn" onClick={() => { setErrorMsg(''); setView('login'); }}>{t('sign_in_phone')}</button>
         
         {/* Nút Chế độ Khách */}
         <div style={{marginTop: '15px', cursor: 'pointer', color: '#666', fontSize: '0.9rem', textDecoration:'underline'}} onClick={() => setShowGuestModal(true)}>
             {t('continue_guest')}
         </div>
 
-        <div className="bottom-text">{t('dont_have_acc')} <span className="highlight-link" onClick={()=>setView('signup')}>{t('sign_up')}</span></div>
+        <div className="bottom-text">{t('dont_have_acc')} <span className="highlight-link" onClick={() => { setErrorMsg(''); setView('signup'); }}>{t('sign_up')}</span></div>
 
         {/* Modal Cảnh báo Guest */}
         {showGuestModal && (
@@ -151,17 +216,24 @@ function LoginPage({ onLoginSuccess, onGuestLogin }) {
   if (view === 'login') {
     return (
       <div className="login-container">
-        <button className="back-icon" onClick={()=>setView('welcome')}>←</button>
+        <button className="back-icon" onClick={() => { setErrorMsg(''); setView('welcome'); }}>←</button>
         <h1 className="login-title">{t('login_title')}</h1>
         {errorMsg && <div style={{color:'red',marginBottom:10}}>{errorMsg}</div>}
         <div className="input-group"><div className="input-icon"><PhoneIcon/></div><input type="text" className="custom-input" placeholder={t('phone_ph')} name="phone" value={formData.phone} onChange={handleChange}/></div>
         {renderPasswordInput('pass_ph')}
         <div className="form-options">
-          <label className="remember-me"><input type="checkbox"/> {t('remember_me')}</label>
+          <label className="remember-me">
+            <input 
+              type="checkbox" 
+              checked={rememberMe} 
+              onChange={(e) => setRememberMe(e.target.checked)} 
+            /> 
+            {t('remember_me')}
+          </label>
           <span className="forgot-pass" style={{cursor:'pointer'}} onClick={()=>{setErrorMsg(''); setView('forgot')}}>{t('forgot_pass')}</span>
         </div>
         <button className="primary-btn" onClick={handleLoginSubmit}>{loading?t('signing_in'):t('sign_in')}</button>
-        <div className="bottom-text">{t('dont_have_acc')} <span className="highlight-link" onClick={()=>setView('signup')}>{t('sign_up')}</span></div>
+        <div className="bottom-text">{t('dont_have_acc')} <span className="highlight-link" onClick={() => { setErrorMsg(''); setView('signup'); }}>{t('sign_up')}</span></div>
       </div>
     );
   }
@@ -169,14 +241,14 @@ function LoginPage({ onLoginSuccess, onGuestLogin }) {
   if (view === 'signup') {
     return (
       <div className="login-container">
-        <button className="back-icon" onClick={()=>setView('welcome')}>←</button>
+        <button className="back-icon" onClick={() => { setErrorMsg(''); setView('welcome'); }}>←</button>
         <h1 className="login-title">{t('create_acc')}</h1>
         {errorMsg && <div style={{color:'red',marginBottom:10}}>{errorMsg}</div>}
         <div className="input-group"><div className="input-icon"><UserIcon/></div><input type="text" className="custom-input" placeholder={t('name_ph')} name="username" value={formData.username} onChange={handleChange}/></div>
         <div className="input-group"><div className="input-icon"><PhoneIcon/></div><input type="text" className="custom-input" placeholder={t('phone_ph')} name="phone" value={formData.phone} onChange={handleChange}/></div>
         {renderPasswordInput('pass_ph')}
         <button className="primary-btn" onClick={handleSignupSubmit}>{loading?t('signing_up'):t('sign_up')}</button>
-        <div className="bottom-text">{t('already_have_acc')} <span className="highlight-link" onClick={()=>setView('login')}>{t('sign_in')}</span></div>
+        <div className="bottom-text">{t('already_have_acc')} <span className="highlight-link" onClick={() => { setErrorMsg(''); setView('login'); }}>{t('sign_in')}</span></div>
       </div>
     );
   }
@@ -184,7 +256,7 @@ function LoginPage({ onLoginSuccess, onGuestLogin }) {
   if (view === 'forgot') {
     return (
       <div className="login-container">
-        <button className="back-icon" onClick={()=>setView('login')}>←</button>
+        <button className="back-icon" onClick={() => { setErrorMsg(''); setView('login'); }}>←</button>
         <h1 className="login-title">{t('reset_pass')}</h1>
         <p style={{marginBottom:20,color:'#666',textAlign:'center',fontSize:'0.9rem'}}>{t('reset_desc')}</p>
         <div className="input-group"><div className="input-icon"><PhoneIcon/></div><input type="tel" className="custom-input" placeholder={t('phone_ph')} name="phone" value={formData.phone} onChange={handleChange}/></div>

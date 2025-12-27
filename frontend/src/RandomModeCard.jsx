@@ -238,28 +238,38 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
     };
 
     const handleDetailTagToggle = (rawTag) => {
-        
-        // Find the correct category key (e.g., 'price_range' for 'rẻ')
         const categoryKey = findCategoryForTag(rawTag);
+        
+        // --- FIX: Check if tag is selected GLOBALLY or LOCALLY ---
+        const isGlobal = allSelectedTagValues.includes(rawTag);
+        const isLocal = detailSelectedTags.includes(rawTag);
+        const isSelected = isGlobal || isLocal;
 
-        setDetailSelectedTags(prev => prev.includes(rawTag)
-            ? prev.filter(t => t !== rawTag)
-            : [...prev, rawTag]
-        );
-
-        setSelectedFilters(prev => {
-            // Use the DYNAMIC categoryKey, not hardcoded 'main_dishes'
-            const current = prev[categoryKey] || [];
-            const exists = current.includes(rawTag);
-            const updated = exists ? current.filter(t => t !== rawTag) : [...current, rawTag];
-            
-            if (updated.length === 0) {
-                const next = { ...prev };
-                delete next[categoryKey];
-                return next;
+        if (isSelected) {
+            // If selected anywhere, REMOVE it from both
+            if (isLocal) {
+                setDetailSelectedTags(prev => prev.filter(t => t !== rawTag));
             }
-            return { ...prev, [categoryKey]: updated };
-        });
+            if (isGlobal) {
+                setSelectedFilters(prev => {
+                    const list = prev[categoryKey] || [];
+                    const newList = list.filter(t => t !== rawTag);
+                    if (newList.length === 0) {
+                        const next = { ...prev };
+                        delete next[categoryKey];
+                        return next;
+                    }
+                    return { ...prev, [categoryKey]: newList };
+                });
+            }
+        } else {
+            // If NOT selected, ADD it to both (to maintain sync)
+            setDetailSelectedTags(prev => [...prev, rawTag]);
+            setSelectedFilters(prev => {
+                const list = prev[categoryKey] || [];
+                return { ...prev, [categoryKey]: [...list, rawTag] };
+            });
+        }
     };
 
     const handleGetDirection = (item) => {
@@ -283,12 +293,17 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
         const term = searchTerm.toLowerCase();
         // Filter logic: Nếu cha khớp OR con khớp thì hiện
         return hierarchy.map(parent => {
-            const parentMatch = parent.name.toLowerCase().includes(term);
-            const matchingChildren = parent.children.filter(c => c.toLowerCase().includes(term));
+            // FIX: Translate Parent Name before checking
+            const translatedParent = t(parent.name).toLowerCase();
+            const parentMatch = translatedParent.includes(term);
+
+            // FIX: Translate Children before checking
+            const hasMatchingChild = parent.children.some(c => 
+                t(c).toLowerCase().includes(term)
+            );
             
-            if (parentMatch || matchingChildren.length > 0) {
-                // Nếu search khớp con, tự động expand cha
-                return { ...parent, forceExpand: matchingChildren.length > 0 };
+            if (parentMatch || hasMatchingChild) {
+                return { ...parent, forceExpand: hasMatchingChild };
             }
             return null;
         }).filter(item => item !== null);
@@ -370,14 +385,14 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
         <div className="rm-container">
             {/* --- HEADER --- */}
             <div className="rm-sticky-header">
-                <div className="rm-header-top">
+                <div className="rm-header-nav">
                     <div className="rm-back-btn" onClick={onBack}><Icons.Back /></div>
-                    <div style={{flex: 1}}></div>
-                    {/* Theme & Language controls */}
-                    <div style={{display:'flex', alignItems:'center', gap:8}}>
+                    
+                    {/* Right Side Buttons */}
+                    <div className="rm-header-right">
                         <button className="rm-mini-btn" onClick={toggleTheme}>{isDarkMode ? '☀️' : '🌙'}</button>
-                        <button className={`rm-mini-btn ${lang==='vi'?'active':''}`} onClick={() => switchLanguage('vi')}>VI</button>
-                        <button className={`rm-mini-btn ${lang==='en'?'active':''}`} onClick={() => switchLanguage('en')}>EN</button>
+                        <button className={`rm-mini-btn ${lang === 'vi' ? 'active' : ''}`} onClick={() => switchLanguage('vi')}>VI</button>
+                        <button className={`rm-mini-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => switchLanguage('en')}>EN</button>
                         <Icons.Logo />
                     </div>
                 </div>
@@ -388,13 +403,22 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
                 <div className="rm-tags-area">
                     <span className="rm-tags-label">{t('selected_tags')}</span>
                     <div className="rm-tags-row">
-                        {visibleTags.map((tg) => (
-                            <div key={`${tg.key}-${tg.value}`} className="rm-tag-pill">
-                                #{t(tg.value)}
-                                <div className="rm-tag-close" onClick={() => removeTag(tg.key, tg.value)}><Icons.Close /></div>
-                            </div>
-                        ))}
-                        {hiddenCount > 0 && <button className="rm-more-btn" onClick={() => setShowAllTagsModal(true)}>More</button>}
+                        {/* 1. Scrollable Area for Tags */}
+                        <div className="rm-tags-scroll-view">
+                            {visibleTags.map((tg) => (
+                                <div key={`${tg.key}-${tg.value}`} className="rm-tag-pill">
+                                    <span className="rm-pill-text">#{t(tg.value)}</span>
+                                    <div className="rm-tag-close" onClick={() => removeTag(tg.key, tg.value)}><Icons.Close /></div>
+                                </div>
+                            ))}
+                        </div>
+                        
+                        {/* 2. "More" Button (Fixed on the right) */}
+                        {hiddenCount > 0 && (
+                            <button className="rm-more-btn" onClick={() => setShowAllTagsModal(true)}>
+                                +{hiddenCount} More
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>
@@ -446,26 +470,23 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
                         <div className="rm-tags-list-container">
                             {currentHierarchy.map((parent, idx) => {
                                 const isParentExpanded = expandedParents.includes(parent.name) || parent.forceExpand;
-                                const isParentSelected = selectedFilters[activeFilter.key]?.includes(parent.name);
+                                // const isParentSelected = selectedFilters[activeFilter.key]?.includes(parent.name);
 
                                 return (
                                     <div key={idx} className="rm-tag-group">
-                                        {/* DÒNG TAG CHA */}
-                                        <div className="rm-parent-row">
-                                            {/* Nút Tag Cha (Dạng Pill Vuông bo góc nhẹ) */}
-                                            <button 
-                                                className={`rm-pill-btn parent ${isParentSelected ? 'active' : ''}`} 
-                                                onClick={() => handleSelectTag(parent.name)}
-                                            >
+                                        {/* DÒNG TAG CHA - Click anywhere to EXPAND */}
+                                        <div 
+                                            className="rm-parent-row clickable" 
+                                            onClick={(e) => toggleParentExpand(parent.name, e)}
+                                        >
+                                            {/* Name of Parent Category */}
+                                            <div className="rm-pill-parent-text">
                                                 {t(parent.name)}
-                                            </button>
+                                            </div>
 
-                                            {/* Mũi tên mở rộng (Nằm tách biệt bên phải) */}
+                                            {/* Arrow Icon */}
                                             {parent.children && parent.children.length > 0 && (
-                                                <div 
-                                                    className={`rm-expand-arrow ${isParentExpanded ? 'rotated' : ''}`} 
-                                                    onClick={(e) => toggleParentExpand(parent.name, e)}
-                                                >
+                                                <div className={`rm-expand-arrow ${isParentExpanded ? 'rotated' : ''}`}>
                                                     <Icons.ChevronDown />
                                                 </div>
                                             )}
@@ -477,9 +498,13 @@ export default function RandomModeCard({ onBack, currentUser, onLogout }) {
                                                 {parent.children.map((child) => {
                                                     const isChildSelected = selectedFilters[activeFilter.key]?.includes(child);
                                                     
-                                                    // Logic ẩn hiện khi search
-                                                    if (searchTerm && !child.toLowerCase().includes(searchTerm.toLowerCase()) && !parent.name.toLowerCase().includes(searchTerm.toLowerCase())) return null;
-
+                                                    // Search Filter Logic
+                                                    if (searchTerm) {
+                                                        const term = searchTerm.toLowerCase();
+                                                        const childMatch = t(child).toLowerCase().includes(term);
+                                                        const parentMatch = t(parent.name).toLowerCase().includes(term);
+                                                        if (!childMatch && !parentMatch) return null;
+                                                    }
                                                     return (
                                                         <button 
                                                             key={child} 

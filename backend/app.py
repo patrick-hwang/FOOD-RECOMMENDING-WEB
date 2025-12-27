@@ -160,6 +160,9 @@ class UpdateProfileRequest(BaseModel):
 class HistoryRequest(BaseModel):
     restaurant_id: str
 
+class SearchHistoryRequest(BaseModel):
+    query: str
+
 class BookmarkRequest(BaseModel):
     restaurant_id: str
 
@@ -183,7 +186,7 @@ class SearchRequest(BaseModel):
 async def register(user: UserSignup):
     if collection_users is None: raise HTTPException (status_code=503)
     if collection_users.find_one({"phone": user.phone}):
-        raise HTTPException(status_code=400, detail="Số điện thoại đã được đăng ký")
+        raise HTTPException(status_code=400, detail="USER_EXIST")
     
     new_user = {
         "username": user.username,
@@ -243,25 +246,53 @@ async def google_login(payload: GoogleAuthRequest):
 @app.post("/api/auth/facebook")
 async def facebook_login(payload: FacebookAuthRequest):
     if collection_users is None: raise HTTPException(status_code=503)
-    existing_user = collection_users.find_one({"facebook_id": payload.userID})
-    user_key = payload.email if payload.email else payload.userID
     
-    if not existing_user:
-        new_user = {
-            "facebook_id": payload.userID, 
-            "username": payload.name, 
-            "email": payload.email, 
-            "avatar": payload.picture, 
-            "phone": user_key, 
-            "created_at": time.time(),
-            "login_type": "facebook", 
-            "history": [], 
-            "bookmarks": []
-        }
-        collection_users.insert_one(new_user)
-        return {"message": "FB Login", "user": convert_document(new_user)}
-    else:
-        return {"message": "FB Login", "user": convert_document(existing_user)}
+    # 1. Fetch User Info from Facebook Graph API using the token
+    try:
+        fb_url = f"https://graph.facebook.com/me?fields=name,email,picture&access_token={payload.accessToken}"
+        fb_res = requests.get(fb_url)
+        fb_data = fb_res.json()
+        
+        if "error" in fb_data:
+            raise HTTPException(status_code=400, detail="Invalid Facebook Token")
+
+        # Use data from Facebook (fallback to payload if needed)
+        fb_id = fb_data.get("id", payload.userID)
+        name = fb_data.get("name", payload.name)
+        email = fb_data.get("email", payload.email)
+        # Handle picture structure safely
+        picture = None
+        if "picture" in fb_data and "data" in fb_data["picture"]:
+             picture = fb_data["picture"]["data"].get("url")
+        else:
+             picture = payload.picture
+
+        existing_user = collection_users.find_one({"facebook_id": fb_id})
+        
+        # Determine unique key (Email or Facebook ID)
+        user_key = email if email else fb_id
+        
+        if not existing_user:
+            new_user = {
+                "facebook_id": fb_id, 
+                "username": name, 
+                "email": email, 
+                "avatar": picture, 
+                "phone": user_key, 
+                "created_at": time.time(),
+                "login_type": "facebook", 
+                "history": [], 
+                "bookmarks": []
+            }
+            collection_users.insert_one(new_user)
+            return {"message": "FB Login", "user": convert_document(new_user)}
+        else:
+            # Optional: Update avatar/name if changed
+            return {"message": "FB Login", "user": convert_document(existing_user)}
+
+    except Exception as e:
+        print(f"Facebook Login Error: {e}")
+        raise HTTPException(status_code=500, detail="Facebook Login Error")
 
 @app.post("/api/auth/reset-password")
 async def reset_password(payload: UserResetPassword):
@@ -328,6 +359,39 @@ async def add_history(phone: str, payload: HistoryRequest):
     
     collection_users.update_one(user_filter, {"$addToSet": {"history": payload.restaurant_id}})
     return {"message": "Added history"}
+
+@app.post("/api/user/{phone}/search_history")
+async def add_search_history(phone: str, payload: SearchHistoryRequest):
+    if collection_users is None: raise HTTPException(status_code=503)
+    
+    user_filter = {
+        "$or": [{"phone": phone}, {"email": phone}, {"facebook_id": phone}]
+    }
+    
+    # Logic: 
+    # 1. Remove the query if it exists (to prevent duplicates)
+    # 2. Push the new query to the front ($position: 0)
+    # 3. Keep only the last 6 items ($slice: 6)
+    collection_users.update_one(
+        user_filter,
+        {
+            "$pull": {"search_history": payload.query}
+        }
+    )
+    
+    collection_users.update_one(
+        user_filter,
+        {
+            "$push": {
+                "search_history": {
+                    "$each": [payload.query],
+                    "$position": 0,
+                    "$slice": 6 
+                }
+            }
+        }
+    )
+    return {"message": "Search history updated"}
 
 @app.delete("/api/user/{phone}/history")
 async def delete_history(phone: str, restaurant_id: Optional[str] = None):

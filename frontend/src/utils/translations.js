@@ -7,13 +7,13 @@ export const translations = {
         continue_fb: "Continue with Facebook",
         continue_gg: "Continue with Google",
         or: "or",
-        sign_in_phone: "Sign in with Phone number",
+        sign_in_phone: "Sign in with User ID",
         dont_have_acc: "Don’t have an account?",
         sign_up: "Sign up",
         sign_in: "Sign in",
         login_title: "Login to your account",
         create_acc: "Create new account",
-        phone_ph: "Phone number",
+        phone_ph: "User ID",
         pass_ph: "Password",
         name_ph: "Username",
         confirm_pass_ph: "Confirm Password",
@@ -22,7 +22,7 @@ export const translations = {
         already_have_acc: "Already have an account?",
         reset_pass: "Reset Password",
         new_pass_ph: "New Password",
-        reset_desc: "Enter your phone number and new password below.",
+        reset_desc: "Enter your User ID and new password below.",
         update_loading: "Updating...",
         signing_in: "Signing in...",
         signing_up: "Signing up...",
@@ -308,7 +308,6 @@ export const translations = {
 
         // Beans & Nuts (Đậu - Hạt)
         "Đậu - Hạt": "Beans & Nuts",
-        "cà phê": "Coffee Bean", // Note: appears in ingredients in tags.js
         "đậu phộng": "Peanut", 
         "đậu đen": "Black Bean", 
         "đậu đỏ": "Red Bean", 
@@ -380,7 +379,7 @@ export const translations = {
 
         hi: "Hi",
         search_placeholder: "What are you in the mood for?",
-        quick_picks_title: "Quick Picks for You",
+        quick_picks_title: "Recently Search",
         quick_pick_card: "Quick & Random", 
         quick_pick_desc: "Filters & random 3 spots",
         taste_card: "Test your Taste",
@@ -405,7 +404,17 @@ export const translations = {
         tap_tag_select: "Tap Tags to select",
         search_tag: "Search Tag...",
         location_unknown: "Unknown Location",
-        activehour_unknown: "Unknown Active Hour"
+        activehour_unknown: "Unknown Active Hour",
+        
+        mon: "Monday",
+        tue: "Tuesday",
+        wed: "Wednesday",
+        thu: "Thursday",
+        fri: "Friday",
+        sat: "Saturday",
+        sun: "Sunday",
+
+        user_exist: "User ID already exists"
     },
     vi: {
         // --- AUTH ---
@@ -413,13 +422,13 @@ export const translations = {
         continue_fb: "Tiếp tục với Facebook",
         continue_gg: "Tiếp tục với Google",
         or: "hoặc",
-        sign_in_phone: "Đăng nhập bằng SĐT",
+        sign_in_phone: "Đăng nhập bằng User ID",
         dont_have_acc: "Chưa có tài khoản?",
         sign_up: "Đăng ký",
         sign_in: "Đăng nhập",
         login_title: "Đăng nhập tài khoản",
         create_acc: "Tạo tài khoản mới",
-        phone_ph: "Số điện thoại",
+        phone_ph: "User ID",
         pass_ph: "Mật khẩu",
         name_ph: "Tên hiển thị",
         confirm_pass_ph: "Xác nhận mật khẩu",
@@ -428,7 +437,7 @@ export const translations = {
         already_have_acc: "Đã có tài khoản?",
         reset_pass: "Đặt lại mật khẩu",
         new_pass_ph: "Mật khẩu mới",
-        reset_desc: "Nhập số điện thoại và mật khẩu mới bên dưới.",
+        reset_desc: "Nhập User ID và mật khẩu mới bên dưới.",
         update_loading: "Đang cập nhật...",
         signing_in: "Đang đăng nhập...",
         signing_up: "Đang đăng ký...",
@@ -620,7 +629,7 @@ export const translations = {
         guest_action_alert: "Tính năng này cần tài khoản. Bạn có muốn đăng nhập ngay không?",
         hi: "Chào",
         search_placeholder: "Hôm nay bạn muốn ăn gì?",
-        quick_picks_title: "Gợi ý nhanh cho bạn",
+        quick_picks_title: "Tìm kiếm gần đây",
         quick_pick_card: "Chọn Nhanh & Random", 
         quick_pick_desc: "Lọc & random 3 địa điểm",
         taste_card: "Thử thách Khẩu vị",
@@ -645,7 +654,17 @@ export const translations = {
         tap_tag_select: "Bấm Tags để chọn",
         search_tag: "Tìm tag...",
         location_unknown: "Địa chỉ không xác định",
-        activehour_unknown: "Giờ mở cửa không xác định"
+        activehour_unknown: "Giờ mở cửa không xác định",
+
+        mon: "Thứ Hai",
+        tue: "Thứ Ba",
+        wed: "Thứ Tư",
+        thu: "Thứ Năm",
+        fri: "Thứ Sáu",
+        sat: "Thứ Bảy",
+        sun: "Chủ Nhật",
+
+        user_exist: "User ID đã tồn tại"
     }
 
 };

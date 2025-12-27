@@ -59,48 +59,54 @@ body.dark-mode {
     padding-bottom: 5px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.03);
     position: relative;
+    display: flex;
+    flex-direction: column; /* Stack rows vertically */
 }
 
-/* Header Top (Back btn & Logo) */
-.rm-header-top {
-    padding: 15px 20px;
-
-    /* Dùng biến màu nền */
-    background-color: var(--bg-primary); 
-    
-    /* Gradient bong bóng (giữ nguyên nhưng làm mờ đi chút ở dark mode) */
-    background-image: 
-        radial-gradient(circle at 10% 20%, rgba(76, 175, 80, 0.08) 0%, transparent 20%),
-        radial-gradient(circle at 90% -5%, rgba(76, 175, 80, 0.1) 0%, transparent 25%),
-        radial-gradient(circle at 85% 40%, rgba(76, 175, 80, 0.05) 0%, transparent 15%),
-        radial-gradient(circle at 0% 50%, rgba(76, 175, 80, 0.06) 0%, transparent 15%);
-    background-attachment: fixed;
-    transition: background-color 0.3s;
-}
-
-.rm-header-top {
+/* ROW 1: Navigation (Back Btn + Right Options) */
+.rm-header-nav {
     display: flex;
     align-items: center;
-}
-.rm-back-btn {
-    cursor: pointer;
-    width: 32px; height: 32px;
-    display: flex; align-items: center; justify-content: center;
+    justify-content: space-between; /* Push items to edges */
+    padding: 15px 20px 5px 20px;    /* Top padding */
+    width: 100%;
 }
 
-/* Titles */
+.rm-back-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px var(--shadow-color);
+    color: var(--text-primary);
+}
+
+.rm-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between buttons */
+}
+
+/* ROW 2: Titles (Centered, Below Nav) */
 .rm-titles {
     text-align: center;
-    margin-top: -28px;
+    padding: 5px 20px 10px 20px;
+    width: 100%;
 }
+
 .rm-titles h1 {
-    font-size: 40px;
+    font-size: 24px;
     font-weight: 800;
     color: var(--text-primary);
     margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
+
 .rm-titles p {
-    font-size: 14px;
+    font-size: 13px;
     color: var(--text-secondary);
     margin: 2px 0 0 0;
 }
@@ -120,16 +126,27 @@ body.dark-mode {
 /* Horizontal Scroll for Selected Tags */
 .rm-tags-row {
     display: flex;
-    flex-wrap: nowrap;
-    gap: 8px;
     align-items: center;
-    overflow-x: auto;
-    padding-bottom: 5px;
+    gap: 8px;
     width: 100%;
-    -ms-overflow-style: none;  /* IE/Edge */
-    scrollbar-width: none;     /* Firefox */
-    min-height: 37px; 
+    padding-bottom: 5px;
+    /* Removed overflow-x from here */
 }
+
+/* New Scroll Container inside the row */
+.rm-tags-scroll-view {
+    flex: 1; /* Takes all available space */
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    align-items: center;
+    
+    /* Hide scrollbar */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    min-height: 37px;
+}
+.rm-tags-scroll-view::-webkit-scrollbar { display: none; }
 .rm-tags-row::-webkit-scrollbar {
     display: none; /* Chrome/Safari */
 }
@@ -138,36 +155,45 @@ body.dark-mode {
 .rm-tag-pill {
     background: #00AA55;
     color: white;
-    padding: 5px 12px;
+    padding: 5px 4px 5px 12px; /* Adjusted padding */
     border-radius: 24px;
     font-size: 13px;
     font-weight: 600;
-    display: flex; align-items: center; gap: 8px;
+    display: flex; 
+    align-items: center; 
+    gap: 6px;
     box-shadow: 0 3px 6px rgba(0, 170, 85, 0.25);
-    white-space: nowrap;
     flex-shrink: 0;
+    max-width: 150px; /* Limit width */
+}
+.rm-pill-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
 }
 .rm-tag-pill:active { transform: scale(0.95); }
 
 .rm-tag-close {
-    width: 18px; height: 18px;
+    width: 20px; height: 20px;
     background: rgba(255,255,255,0.25);
     border-radius: 50%;
     display: flex; justify-content: center; align-items: center;
     cursor: pointer;
+    flex-shrink: 0; /* Icon never shrinks */
 }
 
 .rm-more-btn {
+    flex-shrink: 0; /* Never shrink */
     background: var(--bg-card);
     color: #00AA55;
     border: 1.5px solid #00AA55;
-    padding: 7px 14px;
+    padding: 6px 10px;
     border-radius: 24px;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     cursor: pointer;
     white-space: nowrap;
-    flex-shrink: 0;
 }
 
 /* =========================================
@@ -179,15 +205,14 @@ body.dark-mode {
     padding: 10px 20px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 15px; /* Reduced gap */
     -webkit-overflow-scrolling: touch;
     
-    /* Padding bottom lớn để không bị Bottom Bar che mất */
     padding-bottom: 160px; 
     padding-top: 15px;
 
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none;  /* IE/Edge */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 .rm-cards-container::-webkit-scrollbar {
@@ -196,44 +221,90 @@ body.dark-mode {
 
 .place-card {
     width: 100%;
-    height: 220px;
+    height: 110px; /* Reduced height (~half of 220px) */
     border-radius: 16px;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 4px 15px var(--shadow-color);
+    box-shadow: 0 4px 10px var(--shadow-color);
     flex-shrink: 0;
     cursor: pointer;
     background: var(--bg-card);
+    
+    /* Flex Row for Side-by-Side Layout */
+    display: flex; 
+    flex-direction: row; 
+    align-items: center;
 }
 
-.place-image-wrapper { width: 100%; height: 100%; position: relative; }
-.place-image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+.place-image-wrapper { 
+    width: 150px; 
+    height: 100%; 
+    position: relative; 
+    flex-shrink: 0; 
+}
+
+.place-image-wrapper img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+}
 
 .place-bookmark {
-    position: absolute; top: 10px; right: 10px;
-    background: rgba(255,255,255,0.95);
-    width: 36px; height: 36px;
-    border-radius: 10px;
-    display: flex; justify-content: center; align-items: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: absolute; 
+    top: 6px; 
+    left: 6px; 
+    right: auto; /* Reset right */
+    background: rgba(255,255,255,0.9);
+    width: 28px; 
+    height: 28px;
+    border-radius: 8px;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
     cursor: pointer; 
     z-index: 10;
     transition: transform 0.1s;
 }
 .place-bookmark:active { transform: scale(0.9); }
+.place-bookmark svg { width: 16px; height: 16px; }
 
 .place-info-overlay {
-    position: absolute; bottom: 0; left: 0; right: 0;
-    padding: 50px 15px 15px 15px;
-    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
-    color: white;
+    position: relative; /* Reset absolute */
+    bottom: auto; left: auto; right: auto;
+    padding: 10px 15px;
+    background: transparent; /* Remove gradient */
+    color: var(--text-primary);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden; /* Ensure text truncation works */
 }
+
 .place-name {
-    font-size: 22px; font-weight: 800;
-    margin: 0 0 5px 0;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    font-size: 16px; 
+    font-weight: 700;
+    margin: 0 0 6px 0;
+    text-shadow: none; /* Remove shadow */
+    color: var(--text-primary);
+    
+    /* Truncate text */
+    white-space: normal;          /* Allow wrapping */
+    display: -webkit-box;         /* Required for line clamping */
+    -webkit-line-clamp: 2;        /* Limit to max 2 lines */
+    -webkit-box-orient: vertical; /* Required for line clamping */
+    overflow: hidden;             /* Hide anything beyond 2 lines */
+    line-height: 1.3;
 }
-.place-rating { display: flex; align-items: center; gap: 2px; }
+
+.place-rating { 
+    display: flex; 
+    align-items: center; 
+    gap: 4px;
+    font-size: 13px;
+    color: var(--text-secondary); 
+}
 
 .rm-empty-state {
     text-align: center; color: #888; margin-top: 50px;
@@ -316,14 +387,30 @@ body.dark-mode {
     gap: 10px;
 }
 
+.rm-parent-row.clickable {
+    cursor: pointer;
+    padding: 8px 5px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+.rm-parent-row.clickable:hover {
+    background-color: var(--bg-secondary);
+}
+
+/* Parent Text Style (Not a button anymore) */
+.rm-pill-parent-text {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: 'Montserrat', sans-serif;
+}
+
 /* Button Mũi tên (Tách riêng) */
 .rm-expand-arrow {
-    width: 36px; height: 36px;
+    width: 32px; height: 32px;
     display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    transition: transform 0.3s;
     color: #666;
-    border-radius: 50%;
+    transition: transform 0.3s;
 }
 .rm-expand-arrow:hover { background: #f0f0f0; }
 .rm-expand-arrow.rotated { transform: rotate(180deg); }
@@ -541,11 +628,31 @@ body.dark-mode {
 }
 @keyframes slideUpSheet { from { transform: translateY(100%); } to { transform: translateY(0); }}
 
-.rm-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.rm-modal-body { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; max-height: 40vh; overflow-y: auto; }
+.rm-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.rm-modal-body { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 8px; /* Reduced gap */
+    margin-bottom: 20px; 
+    max-height: 40vh; 
+    overflow-y: auto;
+
+    /* Hide Scrollbar */
+    -ms-overflow-style: none;  /* IE/Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.rm-modal-body::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
 .rm-modal-footer { text-align: center; }
 .rm-clear-btn { background: none; border: none; color: #F44336; font-weight: 700; font-size: 16px; cursor: pointer; }
-.rm-tag-pill.large { font-size: 14px; padding: 8px 14px; }
+.rm-tag-pill.large { 
+    font-size: 13px; /* Smaller font */
+    padding: 6px 10px; /* Reduced padding */
+    height: auto;
+    max-width: 100%; /* Ensure it doesn't overflow screen width */
+}
 
 /* =========================================
    7. MINI BUTTONS (THEME & LANGUAGE TOGGLE)
@@ -598,4 +705,13 @@ body.dark-mode .rm-expand-arrow:hover {
 
 body.dark-mode .rm-tags-label {
     color: var(--text-primary);
+}
+
+.rm-tags-list-container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.rm-tags-list-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
 }

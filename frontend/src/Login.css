@@ -221,3 +221,9 @@ input[type="password"]::-ms-clear {
     padding: 5px 10px; border-radius: 8px; cursor: pointer;
 }
 .rm-mini-btn.active { background: #4CAF50; color: white; border-color: #4CAF50; }
+
+body.dark-mode .custom-input:focus {
+  background-color: var(--bg-secondary) !important; /* Keeps background dark */
+  color: var(--text-primary) !important;            /* Keeps text white */
+  border-color: #10b981;                            /* Keeps the green border */
+}

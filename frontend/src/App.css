@@ -395,3 +395,19 @@ body {
   transform: scale(1.05);
   background-color: #fef2f2;
 }
+
+body.dark-mode .entrance-slide-rect.top {
+  /* Change from transparent (#D9D9D933) to SOLID Light Gray */
+  /* This prevents the black background from showing through */
+  background: #e0e0e0 !important; 
+  
+  /* Force text to stay Dark Green (instead of turning white) */
+  color: #3c5148 !important; 
+}
+
+/* Optional: If you want the bottom "New Cravings" bar to also be solid/bright */
+body.dark-mode .entrance-slide-rect.bottom {
+  /* Solid Green instead of transparent green */
+  background: #668D4C !important; 
+  color: #ffffff !important;
+}
