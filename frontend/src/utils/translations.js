@@ -26,7 +26,7 @@ export const translations = {
         update_loading: "Updating...",
         signing_in: "Signing in...",
         signing_up: "Signing up...",
-        
+
         // --- ONBOARDING ---
         ob_title_0: "WELCOME TO\nFoodRec!👋",
         ob_desc_0: "\"Welcome to FoodRec. We turn your cravings into concrete plans. Whether you need a Quick Pick or a personalized Flavor Profile match, your perfect meal is just a tap away.\"",
@@ -122,7 +122,7 @@ export const translations = {
         "miền Nam": "Southern",
         "Tây Nguyên": "Highlands",
         "nước ngoài": "Foreign",
-        
+
         "món ăn nước": "Soup/Liquid",
         "món khô": "Dry dish",
         "sợi": "Noodle",
@@ -133,12 +133,12 @@ export const translations = {
         "thịt gia súc": "Red Meat",
         "thịt gia cầm": "Poultry",
         "món chay": "Vegetarian",
-        
+
         "không gian": "Space",
         "vật chất": "Decor",
         "âm thanh": "Sound",
         "giá tiền": "Price",
-        
+
         "siêu rẻ": "Super Cheap",
         "rẻ": "Cheap",
         "bình dân": "Affordable",
@@ -158,185 +158,185 @@ export const translations = {
         "cao cấp": "High-end",
 
         // 2. Origin (Nguồn gốc)
-        "Việt Nam": "Vietnam", 
+        "Việt Nam": "Vietnam",
         "Quốc tế": "International",
-        
+
         // Regions & Cities
         "Hà Nội": "Hanoi", "Hải Phòng": "Hai Phong",
-        "Phú Yên": "Phu Yen", "Huế": "Hue", "Quảng Ngãi": "Quang Ngai", 
-        "Đà Nẵng": "Da Nang", "Quảng Nam": "Quang Nam", "Khánh Hòa": "Khanh Hoa", 
-        "Phan Rang": "Phan Rang", "Bình Định": "Binh Dinh", "Nghệ An": "Nghe An", 
-        "Hà Tĩnh": "Ha Tinh", "Tiền Giang": "Tien Giang", "Đồng Tháp": "Dong Thap", 
-        "Cà Mau": "Ca Mau", "Sóc Trăng": "Soc Trang", "An Giang": "An Giang", 
+        "Phú Yên": "Phu Yen", "Huế": "Hue", "Quảng Ngãi": "Quang Ngai",
+        "Đà Nẵng": "Da Nang", "Quảng Nam": "Quang Nam", "Khánh Hòa": "Khanh Hoa",
+        "Phan Rang": "Phan Rang", "Bình Định": "Binh Dinh", "Nghệ An": "Nghe An",
+        "Hà Tĩnh": "Ha Tinh", "Tiền Giang": "Tien Giang", "Đồng Tháp": "Dong Thap",
+        "Cà Mau": "Ca Mau", "Sóc Trăng": "Soc Trang", "An Giang": "An Giang",
         "Sài Gòn": "Saigon", "Bà Rịa - Vũng Tàu": "Vung Tau", "Lâm Đồng": "Lam Dong",
 
         // International Countries
-        "Pháp": "French", "Mỹ": "American", "Ý": "Italian", "Đức": "German", 
+        "Pháp": "French", "Mỹ": "American", "Ý": "Italian", "Đức": "German",
         "Nhật Bản": "Japanese", "Hàn Quốc": "Korean", "Trung Quốc": "Chinese",
 
         // 3. Main Dishes (Món ăn)
         // Noodle Dishes (Món Sợi)
         "Món Sợi": "Noodles",
-        "bún": "Rice Vermicelli (Bun)", 
-        "phở": "Pho", 
-        "hủ tiếu": "Hu Tieu", 
-        "mì sợi": "Egg Noodles", 
-        "bánh canh bột gạo": "Thick Noodles (Banh Canh)", 
-        "bánh đa": "Red Noodles (Banh Da)", 
-        "miến dong": "Glass Noodles", 
+        "bún": "Rice Vermicelli (Bun)",
+        "phở": "Pho",
+        "hủ tiếu": "Hu Tieu",
+        "mì sợi": "Egg Noodles",
+        "bánh canh bột gạo": "Thick Noodles (Banh Canh)",
+        "bánh đa": "Red Noodles (Banh Da)",
+        "miến dong": "Glass Noodles",
         "miến/bún tàu": "Cellophane Noodles",
 
         // Sticky Rice (Món Nếp)
         "Món Nếp": "Sticky Rice",
-        "cơm": "Rice", 
-        "xôi": "Sticky Rice", 
-        "cốm": "Green Rice", 
-        "bánh nếp": "Sticky Rice Cake", 
-        "chè nếp": "Sticky Rice Sweet Soup", 
+        "cơm": "Rice",
+        "xôi": "Sticky Rice",
+        "cốm": "Green Rice",
+        "bánh nếp": "Sticky Rice Cake",
+        "chè nếp": "Sticky Rice Sweet Soup",
         "nếp hấp": "Steamed Sticky Rice",
 
         // Rice Cakes (Bánh Bột Gạo)
         "Bánh Bột Gạo": "Rice Cakes",
-        "bánh xèo": "Vietnamese Pancake (Banh Xeo)", 
-        "bánh bèo": "Water Fern Cake (Banh Beo)", 
-        "bánh căn": "Mini Pancake (Banh Can)", 
-        "bánh cuốn": "Steamed Rolls (Banh Cuon)", 
-        "bánh ướt": "Wet Cake (Banh Uot)", 
-        "bánh hỏi": "Weave Noodles (Banh Hoi)", 
-        "bánh bò": "Honeycomb Cake", 
+        "bánh xèo": "Vietnamese Pancake (Banh Xeo)",
+        "bánh bèo": "Water Fern Cake (Banh Beo)",
+        "bánh căn": "Mini Pancake (Banh Can)",
+        "bánh cuốn": "Steamed Rolls (Banh Cuon)",
+        "bánh ướt": "Wet Cake (Banh Uot)",
+        "bánh hỏi": "Weave Noodles (Banh Hoi)",
+        "bánh bò": "Honeycomb Cake",
         "bánh đúc": "Plain Rice Flan",
 
         // Wheat Cakes (Bánh Bột Mì)
         "Bánh Bột Mì": "Wheat Cakes/Breads",
-        "bánh mì": "Banh Mi", 
-        "bánh bao": "Bao Bun", 
-        "bánh quẩy": "Fried Dough Stick", 
-        "bánh tiêu": "Hollow Donut", 
-        "bánh su kem": "Cream Puff", 
-        "bánh bông lan": "Sponge Cake", 
+        "bánh mì": "Banh Mi",
+        "bánh bao": "Bao Bun",
+        "bánh quẩy": "Fried Dough Stick",
+        "bánh tiêu": "Hollow Donut",
+        "bánh su kem": "Cream Puff",
+        "bánh bông lan": "Sponge Cake",
         "donut": "Donut",
 
         // Liquid/Soup Dishes (Món Nước)
         "Món Nước": "Soup/Liquid",
-        "súp": "Soup", 
-        "lẩu": "Hotpot", 
-        "cháo": "Congee", 
-        "cà ri": "Curry", 
+        "súp": "Soup",
+        "lẩu": "Hotpot",
+        "cháo": "Congee",
+        "cà ri": "Curry",
         "hầm": "Stew",
 
         // Dry Dishes (Món Khô)
         "Món Khô": "Dry Dishes",
-        "xào": "Stir-fried", 
-        "chiên": "Fried", 
-        "nướng": "Grilled", 
-        "trộn": "Mixed", 
-        "hấp": "Steamed", 
-        "kho": "Braised", 
-        "rang": "Roasted", 
-        "quay": "Rotisserie", 
+        "xào": "Stir-fried",
+        "chiên": "Fried",
+        "nướng": "Grilled",
+        "trộn": "Mixed",
+        "hấp": "Steamed",
+        "kho": "Braised",
+        "rang": "Roasted",
+        "quay": "Rotisserie",
         "luộc": "Boiled",
 
         // Beverages (Thức Uống)
         "Thức Uống": "Beverages",
-        "cà phê": "Coffee", 
-        "trà sữa": "Milk Tea", 
-        "nước ép/ sinh tố": "Juice/Smoothie", 
-        "có cồn": "Alcoholic", 
+        "cà phê": "Coffee",
+        "trà sữa": "Milk Tea",
+        "nước ép/ sinh tố": "Juice/Smoothie",
+        "có cồn": "Alcoholic",
         "nước có ga": "Soft Drinks",
 
         // Desserts (Đồ Ăn Ngọt)
         "Đồ Ăn Ngọt": "Desserts",
-        "chè": "Sweet Soup (Che)", 
-        "kem tươi": "Ice Cream", 
-        "kem cheese": "Cream Cheese", 
-        "sữa chua": "Yogurt", 
-        "trân châu": "Boba/Tapioca", 
-        "thạch": "Jelly", 
-        "kem trứng": "Egg Cream", 
+        "chè": "Sweet Soup (Che)",
+        "kem tươi": "Ice Cream",
+        "kem cheese": "Cream Cheese",
+        "sữa chua": "Yogurt",
+        "trân châu": "Boba/Tapioca",
+        "thạch": "Jelly",
+        "kem trứng": "Egg Cream",
         "flan": "Flan",
 
         // 4. Ingredients (Nguyên liệu)
         // Herbs (Thảo Mộc)
         "Thảo Mộc": "Herbs",
-        "sả": "Lemongrass", 
-        "hồi": "Star Anise", 
-        "quế": "Cinnamon", 
-        "gừng": "Ginger", 
-        "lá dứa": "Pandan", 
+        "sả": "Lemongrass",
+        "hồi": "Star Anise",
+        "quế": "Cinnamon",
+        "gừng": "Ginger",
+        "lá dứa": "Pandan",
         "vani": "Vanilla",
 
         // Red Meat (Thịt Gia Súc)
         "Thịt Gia Súc": "Red Meat",
-        "thịt bò": "Beef", 
-        "thịt heo": "Pork", 
-        "thịt trâu": "Buffalo", 
-        "thịt dê": "Goat", 
+        "thịt bò": "Beef",
+        "thịt heo": "Pork",
+        "thịt trâu": "Buffalo",
+        "thịt dê": "Goat",
         "thịt cừu": "Lamb",
 
         // Poultry (Thịt Gia Cầm)
         "Thịt Gia Cầm": "Poultry",
-        "thịt gà": "Chicken", 
-        "thịt vịt": "Duck", 
-        "thịt ngan": "Muscovy Duck", 
-        "thịt ngỗng": "Goose", 
+        "thịt gà": "Chicken",
+        "thịt vịt": "Duck",
+        "thịt ngan": "Muscovy Duck",
+        "thịt ngỗng": "Goose",
         "thịt chim cút": "Quail",
 
         // Seafood (Hải sản)
         "Hải sản": "Seafood",
-        "tôm": "Shrimp", 
-        "mực": "Squid", 
-        "cá": "Fish", 
-        "nghêu": "Clam", 
-        "sò": "Scallop", 
-        "ốc": "Snail", 
+        "tôm": "Shrimp",
+        "mực": "Squid",
+        "cá": "Fish",
+        "nghêu": "Clam",
+        "sò": "Scallop",
+        "ốc": "Snail",
         "cua": "Crab",
 
         // Vegetarian (Món Chay)
         "Món Chay": "Vegetarian",
-        "rau củ": "Vegetables", 
-        "đậu hũ": "Tofu", 
-        "nấm": "Mushroom", 
-        "chả chay": "Veggie Sausage", 
-        "mì chay": "Veggie Noodles", 
+        "rau củ": "Vegetables",
+        "đậu hũ": "Tofu",
+        "nấm": "Mushroom",
+        "chả chay": "Veggie Sausage",
+        "mì chay": "Veggie Noodles",
         "cơm chay": "Veggie Rice",
 
         // Dairy & Eggs (Sữa, Trứng)
         "Sữa, Trứng": "Dairy & Eggs",
-        "sữa": "Milk", 
-        "trứng gà": "Chicken Egg", 
+        "sữa": "Milk",
+        "trứng gà": "Chicken Egg",
         "trứng cút": "Quail Egg",
 
         // Beans & Nuts (Đậu - Hạt)
         "Đậu - Hạt": "Beans & Nuts",
-        "đậu phộng": "Peanut", 
-        "đậu đen": "Black Bean", 
-        "đậu đỏ": "Red Bean", 
-        "đậu ván": "Hyacinth Bean", 
-        "ca cao": "Cacao", 
+        "đậu phộng": "Peanut",
+        "đậu đen": "Black Bean",
+        "đậu đỏ": "Red Bean",
+        "đậu ván": "Hyacinth Bean",
+        "ca cao": "Cacao",
         "hạt sen": "Lotus Seed",
 
         // Other Ingredients (Nguyên Liệu Khác)
         "Nguyên Liệu Khác": "Other Ingredients",
-        "bắp": "Corn", 
-        "rau má": "Pennywort", 
-        "matcha": "Matcha", 
-        "nước cốt dừa": "Coconut Milk", 
+        "bắp": "Corn",
+        "rau má": "Pennywort",
+        "matcha": "Matcha",
+        "nước cốt dừa": "Coconut Milk",
         "dừa": "Coconut",
 
         // 5. Occasion (Dịp)
         "Thời điểm": "Time",
-        "bữa sáng": "Breakfast", 
-        "buổi trưa": "Lunch", 
-        "buổi đêm": "Late Night/Dinner", 
-        "ăn vặt": "Snack", 
+        "bữa sáng": "Breakfast",
+        "buổi trưa": "Lunch",
+        "buổi đêm": "Late Night/Dinner",
+        "ăn vặt": "Snack",
         "tráng miệng": "Dessert",
 
         // 6. Distance
-        "Gần tôi": "Near Me", 
+        "Gần tôi": "Near Me",
         "Xung quanh": "Around",
-        "Dưới 1km": "Under 1km", 
-        "1km - 3km": "1km - 3km", 
-        "3km - 5km": "3km - 5km", 
+        "Dưới 1km": "Under 1km",
+        "1km - 3km": "1km - 3km",
+        "3km - 5km": "3km - 5km",
         "5km - 10km": "5km - 10km",
 
         // 7. General / Database Fields
@@ -368,20 +368,20 @@ export const translations = {
         guest_warning_body: "As a guest, your History and Saved places will NOT be stored. You can only use Random Pick and Search.",
         guest_confirm: "Continue",
         cancel: "Cancel",
-        
+
         // Profile Guest State
         login_req_title: "Login Required",
         login_req_desc: "Please login to view your History and Saved places.",
         login_now: "Login Now",
-        
+
         // Alerts
         guest_action_alert: "This feature requires an account. Do you want to login now?",
 
         hi: "Hi",
         search_placeholder: "What are you in the mood for?",
         quick_picks_title: "Recently Search",
-        quick_pick_card: "Quick & Random", 
-        quick_pick_desc: "Filters & random 3 spots",
+        quick_pick_card: "Quick & Random",
+        quick_pick_desc: "Filters & random 4 spots",
         taste_card: "Test your Taste",
         taste_desc: "Quizzes for personalized recommendations",
         tm_title: "Test Your Taste",
@@ -405,7 +405,7 @@ export const translations = {
         search_tag: "Search Tag...",
         location_unknown: "Unknown Location",
         activehour_unknown: "Unknown Active Hour",
-        
+
         mon: "Monday",
         tue: "Tuesday",
         wed: "Wednesday",
@@ -537,7 +537,7 @@ export const translations = {
         "miền Nam": "Miền Nam",
         "Tây Nguyên": "Tây Nguyên",
         "nước ngoài": "Nước ngoài",
-        
+
         "món ăn nước": "Món nước",
         "món khô": "Món khô",
         "sợi": "Món sợi",
@@ -548,7 +548,7 @@ export const translations = {
         "thịt gia súc": "Thịt gia súc",
         "thịt gia cầm": "Thịt gia cầm",
         "món chay": "Món chay",
-        
+
         "không gian": "Không gian",
         "vật chất": "Vật chất",
         "âm thanh": "Âm thanh",
@@ -564,13 +564,13 @@ export const translations = {
         "đại gia": "Đại gia",
 
         "Phân khúc": "Phân khúc", "siêu rẻ": "Siêu rẻ", "rẻ": "Rẻ", "bình dân": "Bình dân", "sang": "Sang trọng", "nhà hàng": "Nhà hàng", "cao cấp": "Cao cấp",
-        
+
         // 2. Origin
         "Việt Nam": "Việt Nam", "Quốc tế": "Quốc tế",
-        "Hà Nội": "Hà Nội", "Hải Phòng": "Hải Phòng", "Phú Yên": "Phú Yên", "Huế": "Huế", "Quảng Ngãi": "Quảng Ngãi", 
-        "Đà Nẵng": "Đà Nẵng", "Quảng Nam": "Quảng Nam", "Khánh Hòa": "Khánh Hòa", "Phan Rang": "Phan Rang", 
-        "Bình Định": "Bình Định", "Nghệ An": "Nghệ An", "Hà Tĩnh": "Hà Tĩnh", "Tiền Giang": "Tiền Giang", 
-        "Đồng Tháp": "Đồng Tháp", "Cà Mau": "Cà Mau", "Sóc Trăng": "Sóc Trăng", "An Giang": "An Giang", 
+        "Hà Nội": "Hà Nội", "Hải Phòng": "Hải Phòng", "Phú Yên": "Phú Yên", "Huế": "Huế", "Quảng Ngãi": "Quảng Ngãi",
+        "Đà Nẵng": "Đà Nẵng", "Quảng Nam": "Quảng Nam", "Khánh Hòa": "Khánh Hòa", "Phan Rang": "Phan Rang",
+        "Bình Định": "Bình Định", "Nghệ An": "Nghệ An", "Hà Tĩnh": "Hà Tĩnh", "Tiền Giang": "Tiền Giang",
+        "Đồng Tháp": "Đồng Tháp", "Cà Mau": "Cà Mau", "Sóc Trăng": "Sóc Trăng", "An Giang": "An Giang",
         "Sài Gòn": "Sài Gòn", "Bà Rịa - Vũng Tàu": "Vũng Tàu", "Lâm Đồng": "Lâm Đồng",
         "Pháp": "Pháp", "Mỹ": "Mỹ", "Ý": "Ý", "Đức": "Đức", "Nhật Bản": "Nhật Bản", "Hàn Quốc": "Hàn Quốc", "Trung Quốc": "Trung Quốc",
 
@@ -630,8 +630,8 @@ export const translations = {
         hi: "Chào",
         search_placeholder: "Hôm nay bạn muốn ăn gì?",
         quick_picks_title: "Tìm kiếm gần đây",
-        quick_pick_card: "Chọn Nhanh & Random", 
-        quick_pick_desc: "Lọc & random 3 địa điểm",
+        quick_pick_card: "Chọn Nhanh & Random",
+        quick_pick_desc: "Lọc & random 4 địa điểm",
         taste_card: "Thử thách Khẩu vị",
         taste_desc: "Trắc nghiệm tìm quán chuẩn gu",
         tm_title: "Thử thách Khẩu vị",
