@@ -1026,4 +1026,6 @@ async def get_results_batch(payload: QuestionModeRequest):
     }
 
 if __name__ == "__main__":
-    uvicorn.run("app:app", host="127.0.0.1", port=8000, reload=True)
+    # Use PORT from environment for Render/containers and bind to 0.0.0.0
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=False)
