@@ -1025,6 +1025,11 @@ async def get_results_batch(payload: QuestionModeRequest):
         "remaining_count": len(all_places_simple)
     }
 
+# Simple health check for Render
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
+
 if __name__ == "__main__":
     # Use PORT from environment for Render/containers and bind to 0.0.0.0
     port = int(os.environ.get("PORT", 8000))
